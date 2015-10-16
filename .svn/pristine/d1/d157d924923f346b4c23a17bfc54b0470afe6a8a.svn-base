@@ -1,0 +1,238 @@
+package com.common.base;
+
+import java.util.Map;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.baosteel.qcsh.constants.ConstantsAPI;
+import com.baosteel.qcsh.model.BaoGangData;
+import com.baosteel.qcsh.model.User;
+import com.baosteel.qcsh.ui.activity.my.LoginActivity;
+import com.baosteel.qcsh.ui.activity.prodcut.TongueTipProductDetailsActivity;
+import com.baosteel.qcsh.ui.popwindow.SelectApplyReasonWindow;
+import com.baosteel.qcsh.ui.popwindow.SelectApplyReasonWindow.IOnItemClick;
+import com.baosteel.qcsh.utils.ImageManager;
+import com.common.utils.DeviceUtils;
+
+/**
+ * 所有Fragment基类
+ * @author 刘远祺
+ *
+ * @todo TODO
+ *
+ * @date 2015-9-1
+ */
+public class BaseFragment extends Fragment{
+	
+	protected final String TAG = this.getClass().getSimpleName();
+    
+    /**上下文**/
+	public FragmentActivity mContext;
+    protected View fragmentView;
+	
+	@Override
+	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		this.mContext = getActivity();
+		bindView();
+    }
+
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		
+		//清空图片缓存
+		ImageManager.clearCache();
+	}
+	
+	public void bindView(){
+		
+	}
+	
+    protected View findViewById(int Id){
+        try{
+            return fragmentView.findViewById(Id);
+        }catch (Exception e){
+        	e.printStackTrace();
+            return null;
+        }
+    }
+	
+	/**
+	 * 显示toast
+	 * @param msg
+	 */
+	protected void showToast(String msg){
+		if(null != mContext){
+			Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	/**
+	 * 获取textview文本 
+	 * @param tv
+	 * @return
+	 */
+	protected String getText(TextView tv){
+		try{
+			return tv.getText().toString().trim();
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	protected String getTag(View view){
+		try{
+			return view.getTag().toString().trim();
+		}catch(Exception e){
+			e.printStackTrace();
+			return "";
+		}
+	}
+	
+	/**
+     * 监听originTextView文本值变化，有值showTextView显示相对应的字数值
+     * @param originTextView
+     * @param showTextView
+     * @param maxLength 最大字数
+     */
+    protected void setTextChangeListener(TextView originTextView,  final TextView showTextView,final int maxLength) {
+        if (null == originTextView || null == showTextView) {
+            return;
+        }
+        originTextView.addTextChangedListener(new TextWatcher() {
+            public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+            }
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
+            public void afterTextChanged(Editable arg0) {
+                String text = arg0.toString().trim();
+                int textLength=text.length();
+                String showText=textLength+"/"+maxLength;
+                showTextView.setText(showText);
+            }
+        });
+    }
+    
+    /**
+	 * 判断文件内容是否为空
+	 * @param text
+	 * @return
+	 */
+	protected boolean isNull(TextView text){
+		if(null == text){
+			return true;
+		}
+		return isNull(getText(text));
+	}
+	
+	/**
+	 * 判断文本是否为空
+	 * @param text
+	 * @return
+	 */
+	protected boolean isNull(String text){
+		return TextUtils.isEmpty(text);
+	}
+	
+	/**
+     * 显示申请理由
+     * @param view
+     * @param dataMap
+     */
+    public void showReasonPopwindow(View view, Map<String, String> dataMap, String checkedKey, boolean showBottomTip, IOnItemClick onItenClick){
+        SelectApplyReasonWindow pop = new SelectApplyReasonWindow(mContext, dataMap, checkedKey, showBottomTip, onItenClick);
+
+        if (!pop.isShowing()) {
+            pop.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+            
+            int height = pop.getHeight();
+            int screenHeight = DeviceUtils.getHeightMaxPx(mContext);
+            int maxHeight = ((screenHeight/3)*2);
+            if(height > maxHeight){
+            	height = maxHeight;
+            	pop.setHeight(height);
+            }
+        }
+    }
+    
+    /**
+     * 判断用户是否已经登录
+     * @return
+     */
+    public boolean userIsLogin(){
+    	return userIsLogin(false);
+    }
+    
+    /**
+     * 判断用户是否已经登录
+     * @return
+     */
+    public boolean userIsLogin(boolean startLoginActivity){
+    	
+    	User user = BaoGangData.getInstance().getUser();
+    	
+    	//判断缓存用户是否存在
+    	if(null != user && !TextUtils.isEmpty(user.userId)){
+    		return true;
+    	}
+    	
+    	if(startLoginActivity){
+    		//跳转到登录界面
+    		Intent intent = new Intent(mContext, LoginActivity.class);
+    		startActivity(intent);
+    		showToast("请登录");
+    	}
+    	
+    	return false;
+    }
+    
+    /**
+     * 跳转到商品详情
+     * @param productId
+     * @param goodsGenreType
+     */
+    public void startToProductDetailActivity(String productId, int goodsGenreType){
+    	
+    	Intent intent = null;
+    	
+    	switch (goodsGenreType) {
+		case ConstantsAPI.Goods_Genre_Normal:
+			
+			//实物商品
+			intent = new Intent(getActivity(), TongueTipProductDetailsActivity.class);
+			intent.putExtra(TongueTipProductDetailsActivity.GOOOS_ID, productId);
+			startActivity(intent);
+			
+			break;
+		case ConstantsAPI.Goods_Genre_Service:
+
+			//服务商品
+			intent = new Intent(getActivity(), TongueTipProductDetailsActivity.class);
+			intent.putExtra(TongueTipProductDetailsActivity.GOOOS_ID, productId);
+			startActivity(intent);
+			
+			break;
+		default:
+			
+			//实物商品
+			intent = new Intent(getActivity(), TongueTipProductDetailsActivity.class);
+			intent.putExtra(TongueTipProductDetailsActivity.GOOOS_ID, productId);
+			startActivity(intent);
+			
+			break;
+		}
+    }
+}

@@ -1,0 +1,69 @@
+package com.baosteel.qcsh.ui.activity.home.safetrip.carmaintain;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.ui.adapter.RemindListAdapter;
+import com.common.base.BaseCameraFragment;
+
+/**
+ * 提醒列表
+ * Created by kuangyong on 15/9/14.
+ */
+public class RemindListFragment extends BaseCameraFragment {
+
+    private ListView lv_remind;//提醒列表
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        fragmentView = inflater.inflate(R.layout.fragment_remind_list, null);
+        return fragmentView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        findView();
+        setListener();
+        initView();
+    }
+
+    private void findView() {
+        lv_remind= (ListView) findViewById(R.id.lv_remind);
+    }
+
+    private void setListener() {
+        lv_remind.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(null!=listener){
+                    listener.onItemClick(parent,view,position,id);
+                }
+            }
+        });
+    }
+
+    private void initView() {
+        RemindListAdapter adapter=new RemindListAdapter(mContext);
+        lv_remind.setAdapter(adapter);
+    }
+
+    public interface OnListItemClickListener {
+        void onItemClick(AdapterView<?> parent, View view, int position, long id);
+    }
+
+    /**
+     * 列表item点击事件的回调
+     */
+    private OnListItemClickListener listener;
+
+    public void setOnItemClickListener(OnListItemClickListener listener){
+        this.listener=listener;
+    }
+
+}

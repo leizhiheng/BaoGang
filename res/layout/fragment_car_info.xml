@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_80"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <ImageView
+            android:id="@+id/iv_brand"
+            android:layout_width="@dimen/dp_70"
+            android:layout_height="@dimen/dp_40"
+            android:src="@drawable/img_car_brand"
+            android:scaleType="centerInside"/>
+        <TextView
+            android:id="@+id/tv_car_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="奥迪A1 2.2L 2015年生产"
+            android:textColor="@color/black"
+            android:textSize="@dimen/commen_text_size_15" />
+
+    </LinearLayout>
+    <include
+        layout="@layout/common_line_gray"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:id="@+id/layout_time"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="新车上路时间"
+            android:textColor="@color/black"
+            android:textSize="@dimen/commen_text_size_14" />
+
+        <TextView
+            android:id="@+id/tv_noway_time"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical|right"
+            android:text="2015年01月"
+            android:textColor="@color/black"
+            android:textSize="@dimen/commen_text_size_14" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dp_12"
+            android:paddingLeft="@dimen/dp_8"
+            android:paddingTop="@dimen/dp_12"
+            android:src="@drawable/icon_arrow_right_gray" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_0.1"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:background="#D3D3D3" />
+
+    <LinearLayout
+        android:id="@+id/layout_production_month"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="生产月份"
+            android:textColor="@color/black"
+            android:textSize="@dimen/commen_text_size_14" />
+
+        <TextView
+            android:id="@+id/tv_production_month"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical|right"
+            android:text="1月份生产"
+            android:textColor="@color/black"
+            android:textSize="@dimen/commen_text_size_14" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dp_12"
+            android:paddingLeft="@dimen/dp_8"
+            android:paddingTop="@dimen/dp_12"
+            android:src="@drawable/icon_arrow_right_gray" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_0.1"
+        android:background="#D3D3D3" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#E5E2E4"
+        android:paddingBottom="@dimen/dp_5"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingTop="@dimen/dp_5"
+        android:text="上次保养时间"
+        android:textColor="#848385"
+        android:textSize="@dimen/commen_text_size_12" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_0.1"
+        android:background="#D3D3D3" />
+    <LinearLayout
+        android:id="@+id/layout_pre_time"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="保养时间"
+            android:textColor="@color/black"
+            android:textSize="@dimen/commen_text_size_14" />
+
+        <TextView
+            android:id="@+id/tv_pre_time"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical|right"
+            android:text="2015年01月"
+            android:textColor="@color/black"
+            android:textSize="@dimen/commen_text_size_14" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dp_12"
+            android:paddingLeft="@dimen/dp_8"
+            android:paddingTop="@dimen/dp_12"
+            android:src="@drawable/icon_arrow_right_gray" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_0.1"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:background="#D3D3D3" />
+    <LinearLayout
+        android:id="@+id/layout_pre_licheng"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="保养里程数（km）"
+            android:textColor="@color/black"
+            android:textSize="@dimen/commen_text_size_14" />
+
+        <TextView
+            android:id="@+id/tv_pre_licheng"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical|right"
+            android:text="10000"
+            android:textColor="@color/black"
+            android:textSize="@dimen/commen_text_size_14" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dp_12"
+            android:paddingLeft="@dimen/dp_8"
+            android:paddingTop="@dimen/dp_12"
+            android:src="@drawable/icon_arrow_right_gray" />
+    </LinearLayout>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_0.1"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:background="#D3D3D3" />
+    <LinearLayout
+        android:id="@+id/layout_cur_licheng"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="当前里程数（km）"
+            android:textColor="@color/black"
+            android:textSize="@dimen/commen_text_size_14" />
+
+        <TextView
+            android:id="@+id/tv_cur_licheng"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical|right"
+            android:text="10000"
+            android:textColor="@color/black"
+            android:textSize="@dimen/commen_text_size_14" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dp_12"
+            android:paddingLeft="@dimen/dp_8"
+            android:paddingTop="@dimen/dp_12"
+            android:src="@drawable/icon_arrow_right_gray" />
+    </LinearLayout>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_0.1"
+        android:background="#D3D3D3" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#E5E2E4">
+        <TextView
+            android:id="@+id/btn_del_car"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/dp_40"
+            android:textColor="@color/white"
+            android:text="删除当前车辆"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_20"
+            android:gravity="center"
+            android:textSize="@dimen/commen_text_size_16"
+            android:background="@drawable/common_radius_green"/>
+
+    </LinearLayout>
+
+</LinearLayout>

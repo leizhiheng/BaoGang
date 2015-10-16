@@ -1,0 +1,219 @@
+package com.baosteel.qcsh.ui.activity.my;
+
+import org.json.JSONObject;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.EditText;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.api.RequestCallback;
+import com.baosteel.qcsh.api.RequestClient;
+import com.baosteel.qcsh.constants.ConstantsAPI;
+import com.baosteel.qcsh.model.BaoGangData;
+import com.baosteel.qcsh.model.User;
+import com.baosteel.qcsh.utils.JSONParseUtils;
+import com.baosteel.qcsh.utils.Preferences;
+import com.baosteel.qcsh.utils.Preferences.PreKey;
+import com.common.base.BaseActivity;
+import com.common.utils.NetworkUtils;
+import com.common.view.topbar.HeadView;
+import com.google.gson.Gson;
+
+/**
+ * 登录界面
+ * @author 刘远祺
+ *
+ */
+public class LoginActivity extends BaseActivity implements OnClickListener {
+
+	/**标题栏**/
+	private HeadView mHeadView;
+	
+	/**用户名**/
+	private EditText userNameEt;
+	
+	/**密码**/
+	private EditText passwordEt;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_login);
+		
+		//初始化控件
+		initView();
+		
+		//初始化数据
+		initData();
+	}
+
+
+	/**
+	 * 初始化控件
+	 */
+	private void initView(){
+		
+		//标题
+		mHeadView = (HeadView) findViewById(R.id.headview);
+		mHeadView.setTitle("账户登录");
+		mHeadView.showRightImageBtn(View.VISIBLE, null);
+		mHeadView.setHeadViewBackGroundColor(getResources().getColor(R.color.index_red));
+		
+		//用户名密码
+		userNameEt = (EditText)findViewById(R.id.userNameEt);
+		passwordEt = (EditText)findViewById(R.id.passwordEt);
+
+		//点击事件,登录，快速注册，找回密码，微信登录，QQ登录
+		findViewById(R.id.login_button).setOnClickListener(this);
+		findViewById(R.id.phone_fast_regist_tv).setOnClickListener(this);
+		findViewById(R.id.found_password_tv).setOnClickListener(this);
+		findViewById(R.id.weixin_login_tv).setOnClickListener(this);
+		findViewById(R.id.qq_login_tv).setOnClickListener(this);
+	}
+
+	/**
+	 * 初始化数据
+	 */
+	private void initData() {
+		
+		//取记住登录的用户名，密码
+		String userName = Preferences.getString(PreKey.USERNAME);
+		String password = Preferences.getString(PreKey.PASSWORD);
+		
+		if(!TextUtils.isEmpty(userName)){
+			userNameEt.setText(userName);
+			passwordEt.setText(password);
+		}
+		
+	}
+
+
+	public void onClick(View v){
+		Intent intent = null;
+		switch (v.getId()) {
+		case R.id.login_button:
+			
+			//登录
+			if(validate()){
+				postLogin();
+			}
+			
+			break;
+		case R.id.phone_fast_regist_tv:
+			
+			//手机快速注册
+			startActivity(new Intent(mContext, PhoneRegistActivity.class));
+			
+			break;
+		
+		case R.id.found_password_tv:
+			
+			//找回密码-进入密码修改界面
+			intent = new Intent(mContext, UpdatePasswordActivity.class);
+			intent.putExtra(UpdatePasswordActivity.EXTRA_MANAGER_PW_TYPE, UpdatePasswordActivity.MANAGER_PW_FORGET);
+			startActivity(intent);
+			
+			break;
+		case R.id.weixin_login_tv:
+			
+			//微信登录
+			
+			
+			break;
+		case R.id.qq_login_tv:
+			
+			//QQ登录
+			
+			
+			break;
+			
+		}
+	}
+	
+	/**
+	 * 登录前的验证
+	 * @return
+	 */
+	private boolean validate(){
+		
+		if(isNull(userNameEt)){
+			showToast("请输入账号名");
+			return false;
+		}
+
+		if(isNull(passwordEt)){
+			showToast("请输入密码");
+			return false;
+		}
+		
+		return true;
+	}
+	
+	
+	/**
+	 * 登录
+	 */
+	private void postLogin(){
+		
+		//验证不成功直接返回
+		if(!validate()){
+			return;
+		}
+		
+		//拼参数
+		String userName = getText(userNameEt);
+		String password = getText(passwordEt);
+		String phoneIp = NetworkUtils.getIpAddress(mContext);
+		String client = ConstantsAPI.Client_Android;
+		String shopping_id = Preferences.getString(PreKey.SHOPPINGIDS);
+		
+		//调登录接口
+		RequestClient.appLogin(mContext, userName, password, phoneIp, client, shopping_id, new RequestCallback<JSONObject>() {
+			
+			@Override
+			public void onResponse(JSONObject response) {
+				
+				if(JSONParseUtils.isSuccessRequest(mContext, response)){
+
+					JSONObject returnMap = response.optJSONObject("returnMap");
+					
+					//解析userId
+					Gson gson = new Gson();
+					User user = gson.fromJson(returnMap.toString(), User.class);
+					if(null != user && !TextUtils.isEmpty(user.userId)){
+						
+						showToast("登录成功");
+						
+						//保存用户名，密码
+						String userName = getText(userNameEt);
+						String password = getText(passwordEt);
+						Preferences.putString(PreKey.USERNAME, userName);
+						Preferences.putString(PreKey.PASSWORD, password);
+						
+						//登录成功
+						BaoGangData.getInstance().setUser(user);
+						
+						//保存用户信息-本地
+						Preferences.putString(PreKey.USER, response.toString());
+						Preferences.removeKey(PreKey.SHOPPINGIDS);
+						
+						//跳转到主界面
+						startToMainActivity(4);
+						
+						//完成
+						finish();
+					}else{
+						
+						//登录失败，用户信息解析错误
+						showToast("获取用户信息失败");
+					}
+				}
+			}
+		});
+		
+	}
+}

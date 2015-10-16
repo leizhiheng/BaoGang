@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <com.common.view.topbar.HeadView
+        android:id="@+id/headview"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_46" />
+
+    <include
+        layout="@layout/common_line_gray"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_0.1"
+        android:background="#D3D3D3" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_40"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="输入验证码查询营业执照信息"
+            android:textColor="#666666"
+            android:textSize="@dimen/commen_text_size_14" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/et_code"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_35"
+                android:layout_weight="1"
+                android:background="@drawable/common_radius_transparent_strok_gray"
+                android:gravity="center_vertical"
+                android:hint="输入验证码"
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingRight="@dimen/dp_10"
+                android:textColor="#666666"
+                android:textColorHint="#d4d4d4"
+                android:textSize="@dimen/commen_text_size_14" />
+
+            <ImageView
+                android:id="@+id/iv_code"
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:padding="@dimen/dp_1"
+                android:background="@drawable/shape_radius_gray_full_black" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="right">
+            <TextView
+                android:id="@+id/btn_next"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_40"
+                android:gravity="center_vertical|right"
+                android:text="换一张"
+                android:layout_marginRight="@dimen/dp_20"
+                android:drawablePadding="@dimen/dp_10"
+                android:drawableLeft="@drawable/icon_shuaxin"
+                android:textColor="#999999"
+                android:textSize="@dimen/commen_text_size_14" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.01dp"
+        android:background="#D3D3D3" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/gray6">
+
+        <TextView
+            android:id="@+id/btn_query"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_20"
+            android:background="@drawable/selector_radiu_brickred"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="@color/white"
+            android:textSize="@dimen/commen_text_size_16" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,70 @@
+package com.baosteel.qcsh.ui.fragment.myorder;
+
+import android.os.Bundle;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.ui.view.TitleBar;
+import com.common.base.BaseFragment;
+
+/**
+ * 
+ * @description 订单详情 - 待消费
+ * @author blue
+ * @Time 2015-9-30
+ *
+ */
+public class OrderDetailNotComsumeFragment extends OrderDetailBaseFragment implements OnClickListener{
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		
+		initData();
+		initView();
+		
+		loadData();
+	}
+
+	private void initData() {
+		
+	}
+	
+	private void initView() {
+        mBtn_order_right.setOnClickListener(this);
+        mBtn_order_center.setOnClickListener(this);
+        
+        mBtn_order_right.setVisibility(View.VISIBLE);
+        mBtn_order_center.setVisibility(View.VISIBLE);
+        mLin_service_order.setVisibility(View.VISIBLE);
+        mTv_order_state.setText("待消费");
+        mBtn_order_center.setText("取消订单");
+        mBtn_order_right.setText("确认收货");
+	}
+	
+	private void loadData() {
+		
+	}
+	
+	@Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.btn_order_center:
+
+            	//取消订单
+            	queryAppOrderStatusCancelReason();
+                break;
+            case R.id.btn_order_right:
+                Toast.makeText(mContext, "确认收货", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+}

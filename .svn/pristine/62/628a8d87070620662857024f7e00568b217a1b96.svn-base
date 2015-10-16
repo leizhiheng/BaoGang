@@ -1,0 +1,267 @@
+package com.baosteel.qcsh.ui.fragment.myorder;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONObject;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.api.RequestCallback;
+import com.baosteel.qcsh.api.RequestClient;
+import com.baosteel.qcsh.constants.ConstantsOrder;
+import com.baosteel.qcsh.dialog.SingleSelectListDialog;
+import com.baosteel.qcsh.dialog.SingleSelectListDialog.onOkClickListener;
+import com.baosteel.qcsh.model.BaoGangData;
+import com.baosteel.qcsh.model.CancelOrderReason;
+import com.baosteel.qcsh.model.OrderDetailData;
+import com.baosteel.qcsh.model.OrderProduct;
+import com.baosteel.qcsh.ui.adapter.EntityAndServiceOrderAdapter;
+import com.baosteel.qcsh.ui.adapter.OrderProductsAdapter;
+import com.baosteel.qcsh.utils.JSONParseUtils;
+import com.common.base.BaseFragment;
+import com.common.view.other.ListViewInScrollView;
+
+public class OrderDetailBaseFragment extends BaseFragment{
+
+	private String mOrderId;
+	
+	protected OrderDetailData mOrderDetailData;
+	protected boolean isSettedView;
+	/** 订单中商品列表 **/
+	protected ListViewInScrollView mListView;
+	public TextView mTv_order_state;
+    public TextView mTv_service_tips;
+    public TextView mTv_order_price;
+    public TextView mTv_shipment;
+    public LinearLayout mLin_back_order;
+    public TextView mTv_payment_tips;
+    public TextView mTv_good_receiver;
+    public TextView mTv_good_send_address;
+    public TextView mTv_user_info;
+    public TextView mTv_address;
+    public LinearLayout mLin_service_order;
+    public TextView mTv_time;
+    public RelativeLayout mRel_logistics;
+    public com.common.view.other.ListViewInScrollView mListview;
+    public LinearLayout mLin_begin;
+    public Button mBtn_again_buy;
+    public Button mBtn_refunds;
+    public TextView mTv_bill_header;
+    public TextView mTv_bill_detail;
+    public TextView mTv_send_way;
+    public TextView mTv_receive_place;
+    public TextView mTv_seller_phone;
+    public TextView mTv_price;
+    public TextView mTv_shipment_price;
+    public TextView mTv_cash;
+    public TextView mTv_gift;
+    public TextView mTv_heath;
+    public TextView mTv_qicai;
+    public TextView mTv_rear_pay;
+    public Button mBtn_order_right;
+    public Button mBtn_order_center;
+    public Button mBtn_order_left;
+
+	/** 订单中商品列表的适配器 **/
+	protected OrderProductsAdapter mAdapter;
+	protected List<OrderProduct> mProducts;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		fragmentView = inflater.inflate(R.layout.fragment_order_detail, null);
+		return fragmentView;
+	}
+
+	@Override
+	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		initData();
+		initView();
+
+	}
+
+	private void initData() {
+		mProducts = new ArrayList<OrderProduct>();
+		mAdapter = new OrderProductsAdapter(mContext);
+	}
+
+	private void initView() {
+		mListView = (ListViewInScrollView) findViewById(R.id.listview);
+		mListView.setAdapter(mAdapter);
+
+		mTv_order_state = (TextView) findViewById(R.id.tv_order_state);
+        mTv_service_tips = (TextView) findViewById(R.id.tv_service_tips);
+        mTv_order_price = (TextView) findViewById(R.id.tv_order_price);
+        mTv_shipment = (TextView) findViewById(R.id.tv_shipment);
+        mLin_back_order = (LinearLayout) findViewById(R.id.lin_back_order);
+        mTv_payment_tips = (TextView) findViewById(R.id.tv_payment_tips);
+        mTv_good_receiver = (TextView) findViewById(R.id.tv_good_receiver);
+        mTv_good_send_address = (TextView) findViewById(R.id.tv_good_send_address);
+        mTv_user_info = (TextView) findViewById(R.id.tv_user_info);
+        mTv_address = (TextView) findViewById(R.id.tv_address);
+        mLin_service_order = (LinearLayout) findViewById(R.id.lin_service_order);
+        mTv_time = (TextView) findViewById(R.id.tv_time);
+        mRel_logistics = (RelativeLayout) findViewById(R.id.rel_logistics);
+        mListview = (com.common.view.other.ListViewInScrollView) findViewById(R.id.listview);
+        mLin_begin = (LinearLayout) findViewById(R.id.lin_begin);
+        mBtn_again_buy = (Button) findViewById(R.id.btn_again_buy);
+        mBtn_refunds = (Button) findViewById(R.id.btn_refunds);
+        mTv_bill_header = (TextView) findViewById(R.id.tv_bill_header);
+        mTv_bill_detail = (TextView) findViewById(R.id.tv_bill_detail);
+        mTv_send_way = (TextView) findViewById(R.id.tv_send_way);
+        mTv_receive_place = (TextView) findViewById(R.id.tv_receive_place);
+        mTv_seller_phone = (TextView) findViewById(R.id.tv_seller_phone);
+        mTv_price = (TextView) findViewById(R.id.tv_price);
+        mTv_shipment_price = (TextView) findViewById(R.id.tv_shipment_price);
+        mTv_cash = (TextView) findViewById(R.id.tv_cash);
+        mTv_gift = (TextView) findViewById(R.id.tv_gift);
+        mTv_heath = (TextView) findViewById(R.id.tv_heath);
+        mTv_qicai = (TextView) findViewById(R.id.tv_qicai);
+        mTv_rear_pay = (TextView) findViewById(R.id.tv_rear_pay);
+        mBtn_order_right = (Button) findViewById(R.id.btn_order_right);
+        mBtn_order_center = (Button) findViewById(R.id.btn_order_center);
+        mBtn_order_left = (Button) findViewById(R.id.btn_order_left);
+    
+
+	}
+	
+	public void setOrderId(String orderId) {
+		mOrderId = orderId;
+	}
+	
+	public void setOrderDetailData(OrderDetailData data) {
+		mOrderDetailData = data;
+		
+		setView();
+	}
+	
+	public void setView() {
+		mTv_order_price.setText(mOrderDetailData.getPrice());
+		mTv_shipment.setText(mOrderDetailData.getShipment());
+		mTv_user_info.setText(mOrderDetailData.getName()+"    "+mOrderDetailData.getTelephone());
+		mTv_address.setText(mOrderDetailData.getAddress());
+		
+		mProducts.addAll(mOrderDetailData.getGoodsInfoList());
+		mAdapter.notifyDataSetChanged();
+		
+		mTv_bill_header.setText(mOrderDetailData.getInvoiceStart());
+		mTv_bill_detail.setText(mOrderDetailData.getInvoiceContent());
+		mTv_price.setText(mOrderDetailData.getPrice());
+		mTv_shipment_price.setText(mOrderDetailData.getShipment());
+		mTv_cash.setText(mOrderDetailData.getCashCouponPrice());
+		mTv_gift.setText(mOrderDetailData.getGiftCard());
+		mTv_heath.setText(mOrderDetailData.getHealthPoint());
+		mTv_qicai.setText(mOrderDetailData.getSevenColorCoin());
+		mTv_rear_pay.setText(mOrderDetailData.getPrice());
+	}
+	
+	/**
+	 * 获取订单取消理由
+	 */
+	private List<CancelOrderReason> mCancelOrderReasons;
+	protected void queryAppOrderStatusCancelReason() {
+		RequestClient.queryAppOrderStatusCancelReason(mContext, new RequestCallback<JSONObject>() {
+
+			@Override
+			public void onResponse(JSONObject response) {
+				if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+					mCancelOrderReasons = JSONParseUtils.getCancelOrderReasons(response);
+					final SingleSelectListDialog dialog = new SingleSelectListDialog(mContext);
+					dialog.setDatas(mCancelOrderReasons);
+					dialog.setonOkClickListener(new onOkClickListener() {
+						
+						@Override
+						public void onOkClick(int position) {
+							closeReason = mCancelOrderReasons.get(position).getName();
+							queryAppOrderStatusCancel();
+						}
+					});
+					dialog.show();
+				}
+			}
+		});
+	}
+	
+	/**
+	 * 确认收货
+	 * @param userId 用户Id
+	 * @param orderId 订单Id
+	 */
+	protected void queryAppOrderStatusConfirm() {
+		RequestClient.queryAppOrderStatusConfirm(mContext, "21", "1", new RequestCallback<JSONObject>() {
+
+			@Override
+			public void onResponse(JSONObject response) {
+				if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+					Toast.makeText(mContext, "已确认收货", Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(mContext, JSONParseUtils.getString(response, "msg"), Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
+	}
+	
+	private String userId;//用户Id
+	private String orderId;//订单Id
+	private String orderType;//订单类型(1实物2服务)
+	private String closeReason;//订单取消理由
+	
+	/**
+	 * 订单状态-取消 接口
+	 * @param userId 用户Id
+	 * @param orderId 订单Id
+	 * @param orderType订单类型(1实物2服务)
+	 * @param closeReason 订单取消理由
+	 */
+	protected void queryAppOrderStatusCancel() {
+		RequestClient.queryAppOrderStatusCancel(mContext, BaoGangData.getInstance().getUserId(), mOrderId, ConstantsOrder.ORDER_TYPE_ENTITY+"", closeReason, new RequestCallback<JSONObject>() {
+
+			@Override
+			public void onResponse(JSONObject response) {
+				if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+					
+				} else {
+					Toast.makeText(mContext, JSONParseUtils.getString(response, "msg"), Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
+	}
+	
+	/**
+	 * 订单状态-删除 接口
+	 * @param userId 用户Id
+	 * @param orderId 订单Id
+	 * @param orderType订单类型(1实物2服务)
+	 * @param closeReason 订单取消理由
+	 */
+	protected void queryAppOrderStatusDel() {
+		RequestClient.queryAppOrderStatusDel(mContext, BaoGangData.getInstance().getUserId(), mOrderId, new RequestCallback<JSONObject>() {
+
+			@Override
+			public void onResponse(JSONObject response) {
+				if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+				} else {
+					Toast.makeText(mContext, JSONParseUtils.getString(response, "msg"), Toast.LENGTH_SHORT).show();
+				}
+				
+			}
+		});
+	}
+
+}
+
+

@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_color"
+    android:orientation="vertical" >
+
+    <com.baosteel.qcsh.ui.view.TitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/destinationRl"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="@dimen/dp_70"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:gravity="left|center_vertical"
+                    android:text="目的地"
+                    android:textColor="@color/grayfont"
+                    android:textSize="@dimen/sp_14" />
+
+                <TextView
+                    android:id="@+id/destinationTv"
+                    android:layout_width="@dimen/dp_100"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:gravity="left|center_vertical"
+                    android:hint="请选择区域"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp_5"
+                android:drawablePadding="@dimen/dp_5"
+                android:drawableRight="@drawable/com_black_arraw"
+                android:gravity="right"
+                android:paddingRight="@dimen/dp_10"
+                android:textSize="@dimen/sp_14" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0.5"
+            android:background="@color/line" />
+
+        <RelativeLayout
+            android:id="@+id/beginTimeRl"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="@dimen/dp_70"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:gravity="left|center_vertical"
+                    android:text="入住日期"
+                    android:textColor="@color/grayfont"
+                    android:textSize="@dimen/sp_14" />
+
+                <TextView
+                    android:id="@+id/beginTimeTv"
+                    android:layout_width="@dimen/dp_100"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:gravity="left|center_vertical"
+                    android:hint="请选择日期"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/beginTimeTipTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp_5"
+                android:drawablePadding="@dimen/dp_5"
+                android:drawableRight="@drawable/com_black_arraw"
+                android:gravity="right"
+                android:paddingRight="@dimen/dp_10"
+                android:text="今天"
+                android:textColor="@color/grayfont"
+                android:textSize="@dimen/sp_12" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0.5"
+            android:background="@color/line" />
+
+        <RelativeLayout
+            android:id="@+id/leaveDateRl"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="@dimen/dp_70"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:gravity="left|center_vertical"
+                    android:text="离店日期"
+                    android:textColor="@color/grayfont"
+                    android:textSize="@dimen/sp_14" />
+
+                <TextView
+                    android:id="@+id/leaveDateTv"
+                    android:layout_width="@dimen/dp_100"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:gravity="left|center_vertical"
+                    android:hint="请选择日期"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/totalDayTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp_5"
+                android:drawablePadding="@dimen/dp_5"
+                android:drawableRight="@drawable/com_black_arraw"
+                android:gravity="right"
+                android:paddingRight="@dimen/dp_10"
+                android:text="共2天"
+                android:textColor="@color/grayfont"
+                android:textSize="@dimen/sp_12" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0.5"
+            android:background="@color/line" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_20"
+            android:background="@color/bg_color" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0.5"
+            android:background="@color/line" />
+
+        <RelativeLayout
+            android:id="@+id/keywordsRl"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="@dimen/dp_70"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:gravity="left|center_vertical"
+                    android:text="关键字"
+                    android:textColor="@color/grayfont"
+                    android:textSize="@dimen/sp_14" />
+
+                <TextView
+                    android:id="@+id/keywordsTv"
+                    android:layout_width="@dimen/dp_100"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:gravity="left|center_vertical"
+                    android:hint="酒店名/地名"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp_5"
+                android:drawablePadding="@dimen/dp_5"
+                android:drawableRight="@drawable/com_black_arraw"
+                android:gravity="right"
+                android:paddingRight="@dimen/dp_10"
+                android:textSize="@dimen/sp_14" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0.5"
+            android:background="@color/line" />
+
+        <RelativeLayout
+            android:id="@+id/priceStartRl"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="@dimen/dp_70"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:gravity="left|center_vertical"
+                    android:text="星级价格"
+                    android:textColor="@color/grayfont"
+                    android:textSize="@dimen/sp_14" />
+
+                <TextView
+                    android:id="@+id/priceStartTv"
+                    android:layout_width="@dimen/dp_100"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:gravity="left|center_vertical"
+                    android:hint="价格/星级"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp_5"
+                android:drawablePadding="@dimen/dp_5"
+                android:drawableRight="@drawable/com_black_arraw"
+                android:gravity="right"
+                android:paddingRight="@dimen/dp_10"
+                android:textSize="@dimen/sp_14" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0.5"
+            android:background="@color/line" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/startSearchBtn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_30"
+        android:background="@drawable/common_btn_yellow_selector"
+        android:gravity="center"
+        android:text="开始搜索"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_16" />
+
+</LinearLayout>

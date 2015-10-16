@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/radio_group"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/title_bar_bg_voilet"
+    android:orientation="horizontal"
+    android:paddingRight="@dimen/dp_40" >
+
+    <RadioButton
+        android:id="@+id/btn_left"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/selector_left_corner_8_voilet"
+        android:button="@null"
+        android:gravity="center"
+        android:padding="@dimen/dp_2"
+        android:textColor="@color/color_text_voilet_white"
+        android:textSize="@dimen/sp_14" />
+
+    <RadioButton
+        android:id="@+id/btn_mid"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:button="@null"
+        android:visibility="gone"
+        android:gravity="center"
+        android:padding="@dimen/dp_8"
+        android:textColor="@color/color_text_voilet_white"
+        android:textSize="@dimen/sp_14" />
+    <RadioButton
+        android:id="@+id/btn_right"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/selector_right_corner_8_voilet"
+        android:button="@null"
+        android:gravity="center"
+        android:padding="@dimen/dp_8"
+        android:textColor="@color/color_text_voilet_white"
+        android:textSize="@dimen/sp_14" />
+
+</RadioGroup>

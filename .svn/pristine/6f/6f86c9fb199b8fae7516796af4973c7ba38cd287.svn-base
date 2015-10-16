@@ -1,0 +1,383 @@
+package com.baosteel.qcsh.ui.activity.cart;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.api.RequestCallback;
+import com.baosteel.qcsh.api.RequestClient;
+import com.baosteel.qcsh.model.BaoGangData;
+import com.baosteel.qcsh.model.CarItem;
+import com.baosteel.qcsh.model.ConsigneeInfo;
+import com.baosteel.qcsh.model.DeliverCommit;
+import com.baosteel.qcsh.model.MemberReceiveAddressJson;
+import com.baosteel.qcsh.model.PayModel;
+import com.baosteel.qcsh.model.ShoppingCar;
+import com.baosteel.qcsh.ui.activity.OnlinePaymentActivity;
+import com.baosteel.qcsh.ui.view.TitleBar;
+import com.baosteel.qcsh.ui.view.UISwitchButton;
+import com.baosteel.qcsh.utils.JSONParseUtils;
+import com.baosteel.qcsh.utils.StringUtils;
+import com.common.base.BaseActivity;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by jws on 2015/9/11.
+ * 确认订单页面
+ */
+public class ConfirmOrderActivity extends BaseActivity implements View.OnClickListener {
+
+
+    private static final int request_code_deliver = 1;
+    private static final int request_code_address = 2;
+
+    /**
+     * 区分是从购物车进来的还是从立即购买进来的
+     * **/
+    public static final String ORDER_FROM_TYPE = "order_type";
+
+
+    /**
+     * 购物车id集合
+     **/
+    public static final String SHOPPING_IDS = "shopping_ids";
+
+    private TitleBar mTitle_bar;
+    
+    private RelativeLayout mRel_noAddress_info;
+    private RelativeLayout mRel_address_info;
+    private RelativeLayout mRel_cash_volume;
+    private RelativeLayout mRel_deliver_method;
+    private RelativeLayout mRel_product_inventory;
+    private TextView mTv_name;
+    private TextView mTv_phone;
+    private TextView mTv_address;
+    private TextView tv_total_price;
+    private TextView tv_price;
+    private UISwitchButton mBtn_switch;
+    private TextView mTv_gohome;
+    private TextView mTv_invoice_name;
+    private TextView mTv_goods_num;
+    private TextView mTv_shipment;
+    private RelativeLayout mRel_invoice_detail;
+    private RelativeLayout mRel_invoice_name;
+    private Button mBtn_pay;
+    private ConsigneeInfo consigneeInfo;//重新定义的联系人信息
+    private MemberReceiveAddressJson consignee;
+    private List<DeliverCommit> deliverCommit;
+    private int shipment = 0;
+    private double price = 0;
+    private List<ShoppingCar> shoppingCarts;
+    private String shoppingId;
+    int orderType = 0;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_confirm_order);
+        
+        //初始化控件
+        initViews();
+        
+        //初始化数据
+        initData();
+    }
+
+    
+    /**
+     * 初始化控件
+     */
+    private void initViews() {
+    	
+        mTitle_bar = (TitleBar) findViewById(R.id.title_bar);
+        
+        
+        mRel_product_inventory = (RelativeLayout) findViewById(R.id.rel_product_inventory);
+        mRel_address_info = (RelativeLayout) findViewById(R.id.rel_address_info);
+        mRel_noAddress_info = (RelativeLayout) findViewById(R.id.rel_no_address_info);
+        mRel_cash_volume = (RelativeLayout) findViewById(R.id.rel_cash_volume);
+        mRel_deliver_method = (RelativeLayout) findViewById(R.id.rel_deliver_method);
+        
+        
+        mBtn_pay = (Button) findViewById(R.id.btn_pay);
+        mTitle_bar = (com.baosteel.qcsh.ui.view.TitleBar) findViewById(R.id.title_bar);
+        mTv_name = (TextView) findViewById(R.id.tv_name);
+        mTv_phone = (TextView) findViewById(R.id.tv_phone);
+        mTv_address = (TextView) findViewById(R.id.tv_address);
+        mTv_gohome = (TextView) findViewById(R.id.tv_gohome);
+        
+        
+        tv_total_price = (TextView) findViewById(R.id.tv_total_price);
+        tv_price = (TextView) findViewById(R.id.tv_price);
+        mBtn_switch = (com.baosteel.qcsh.ui.view.UISwitchButton) findViewById(R.id.btn_switch);
+        mTv_invoice_name = (TextView) findViewById(R.id.tv_invoice_name);
+        mRel_invoice_detail = (RelativeLayout) findViewById(R.id.rel_invoice_detail);
+        mRel_invoice_name = (RelativeLayout) findViewById(R.id.rel_invoice_name);
+        
+        
+        mTv_goods_num = (TextView) findViewById(R.id.tv_goods_num);
+        mTv_shipment = (TextView) findViewById(R.id.tv_shipment);
+    }
+
+
+    /**
+     * 初始化数据
+     */
+    private void initData() {
+    	
+        mTitle_bar.setTitle("确认订单");
+        
+        mTitle_bar.setBackgroud(R.color.index_red);
+        mRel_address_info.setOnClickListener(this);
+        mRel_noAddress_info.setOnClickListener(this);
+        mRel_cash_volume.setOnClickListener(this);
+        mBtn_pay.setOnClickListener(this);
+        mRel_deliver_method.setOnClickListener(this);
+        mRel_product_inventory.setOnClickListener(this);
+        
+        mBtn_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (compoundButton.isChecked()) {
+                    mRel_invoice_name.setVisibility(View.VISIBLE);
+                    mRel_invoice_detail.setVisibility(View.VISIBLE);
+                } else {
+                    mRel_invoice_name.setVisibility(View.GONE);
+                    mRel_invoice_detail.setVisibility(View.GONE);
+                }
+            }
+        });
+        shoppingId = getIntent().getExtras().getString(SHOPPING_IDS);
+        String prices = getIntent().getExtras().getString("price");
+        orderType = getIntent().getExtras().getInt(ORDER_FROM_TYPE);
+        if (!StringUtils.isEmpty(prices)) price = Double.parseDouble(prices);
+        initOrderInfo();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.rel_address_info:
+               
+            	//收货地址-进入收货地址列表
+            	startActivityForResult(new Intent(mContext, ConsigneeInfoActivity.class).putExtra("type", "order"), request_code_address);
+                break;
+            case R.id.rel_no_address_info:
+                
+            	//收货地址-进入新增收货地址
+            	Intent intentAdd = new Intent(mContext, AddAddressActivity.class);
+            	startActivityForResult(intentAdd, request_code_address);
+               
+                break;
+            case R.id.rel_cash_volume:
+                startActivity(new Intent(getBaseContext(), CashVolumeActivity.class));
+                break;
+            case R.id.btn_pay:
+            	
+            	//付款
+                commitOrderInfo();
+
+                break;
+            case R.id.rel_deliver_method:
+            	
+            	//配送方式
+            	Intent intentDeliver = new Intent(mContext, DeliverMethodActivity.class);
+            	intentDeliver.putExtra("id", shoppingId);
+                startActivityForResult(intentDeliver, request_code_deliver);
+               
+                break;
+            case R.id.rel_product_inventory:
+            	
+            	//查看商品清单
+                ShoppingCar shoppingCar = shoppingCarts.get(0);
+                Intent intent = new Intent();
+                intent.setClass(mContext,ProductInventoryActivity.class);
+                intent.putExtra("orderType",orderType);
+                if(orderType==0){
+                    intent.putExtra("shoppingCar",shoppingCar);
+                }else{
+                    intent.putExtra("id",shoppingId);
+                }
+                startActivity(intent);
+                
+                break;
+
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (RESULT_OK != resultCode) {
+            //不是成功回调
+            return;
+        }
+
+        switch (requestCode) {
+            case request_code_address:
+            	
+            	//收货地址
+                consigneeInfo = (ConsigneeInfo) data.getSerializableExtra("ConsigneeInfo");
+                Log.i("test", consigneeInfo.getName() + "---------");
+
+                mTv_name.setText(consigneeInfo.getName());
+                mTv_address.setText("送货地址：" + consigneeInfo.getAddress());
+                mTv_phone.setText(consigneeInfo.getPhone());
+                
+                
+                break;
+            case request_code_deliver:
+            	
+            	//配送方式
+                deliverCommit = data.getParcelableArrayListExtra("delive");
+                mTv_gohome.setText(getDeliverName(deliverCommit));
+                shipment = data.getIntExtra("shipment", 0);
+                mTv_shipment.setText("¥" + shipment * 1.00);
+                tv_total_price.setText(price + shipment + "元");
+                
+                break;
+
+        }
+    }
+
+    private String getDeliverName(List<DeliverCommit> deliverCommit){
+        String method = "";
+        boolean pickup = false;
+        boolean takeup = false;
+        for (int i = 0; i <deliverCommit.size() ; i++) {
+            if(deliverCommit.get(i).getType()==1){
+                method = "送货上门";
+                pickup = true;
+            }else if(deliverCommit.get(i).getType()==2){
+                method = "上门自提";
+                takeup= true;
+            }
+        }
+        if(pickup&&takeup){
+            method = "送货上门、上门自提";
+        }
+        return method;
+    }
+
+    /**
+     * 初始化订单信息
+     **/
+    private void initOrderInfo() {
+        if (!userIsLogin()) {
+            return;
+        }
+
+        String userId = BaoGangData.getInstance().getUser().userId;
+        String shoppingId = getIntent().getExtras().getString(SHOPPING_IDS);
+        RequestClient.submitAppShoppingCartInit(mContext, userId, shoppingId,orderType, new RequestCallback<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+                        Object returnMap = response.optJSONObject("returnMap").get("shoppingList");
+                        shoppingCarts = JSONParseUtils.fromJsonArray(returnMap.toString(), ShoppingCar.class);
+                        Object consigneeReturnMap = response.optJSONObject("returnMap").get("address");
+                        consignee = JSONParseUtils.fromJson(consigneeReturnMap.toString(), MemberReceiveAddressJson.class);
+                        mTv_name.setText(consignee.getReceiveUserRealName());
+                        mTv_address.setText("送货地址：" + consignee.getAddressDetail());
+                        mTv_phone.setText(consignee.getUserTelephone());
+                        mTv_goods_num.setText("共" + getGoodsCount(shoppingCarts) + "件");
+                        tv_price.setText("¥" + getIntent().getExtras().getString("price"));
+                        mTv_shipment.setText("¥" + shipment * 1.0);
+                        tv_total_price.setText(price +shipment+ "元");
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+    }
+
+
+
+    /**
+     * 获取商品的总数量
+     **/
+    private int getGoodsCount(List<ShoppingCar> carItemList) {
+        int num = 0;
+        for (int i = 0; i < carItemList.size(); i++) {
+            List<CarItem> itemList = carItemList.get(i).getCarItem();
+            for (int j = 0; j < itemList.size(); j++) {
+                num += itemList.get(j).getNum();
+            }
+        }
+        return num;
+    }
+
+    private void commitOrderInfo() {
+        if (!userIsLogin()) {
+            return;
+        }
+        String userId = BaoGangData.getInstance().getUser().userId;
+        String address_id;
+        if (consigneeInfo != null) {
+            address_id = consigneeInfo.getId();
+        } else {
+            address_id = consignee.getMemberReceiveAddressId();
+        }
+        if (consigneeInfo == null && consignee.getAddressDetail() == null) {
+            showToast("配送地址不能为空");
+            return;
+        }
+        int order_type = 1;
+        String serviceTime = "";
+        if (deliverCommit == null) {
+            showToast("配送方式不能为空");
+            return;
+        }
+        RequestClient.submitAppShoppingCart(mContext, address_id, userId, order_type, shoppingId, deliverCommit, serviceTime, 2, new RequestCallback<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                	//{"type":1,"returnMap":[{"orderId":"166","number":"20151012173030409"}],"msg":"成功","order_pay_id":16}
+                    if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+                    	showToast("提交成功");
+                        
+                    	//解析数据
+                    	Object returnMap = response.get("returnMap");
+                        ArrayList<PayModel> payModel = JSONParseUtils.fromJsonArray(returnMap.toString(), PayModel.class);
+                        
+                        //订单id，订单支付id，订单编号，订单支付总金额
+                        String orderId = payModel.get(0).getOrderId();
+                        String orderPayId = JSONParseUtils.getString(response, "order_pay_id");
+                        String orderNo = payModel.get(0).getNumber();
+                        String orderPay = JSONParseUtils.getString(response, "pay_price");
+                       
+                        //跳转支付界面
+                        Intent intent = new Intent(mContext, OnlinePaymentActivity.class);
+                        intent.putExtra(OnlinePaymentActivity.EXTRA_ORDER_CODE, orderNo);
+                        intent.putExtra(OnlinePaymentActivity.EXTRA_ORDER_ID, orderId);
+                        intent.putExtra(OnlinePaymentActivity.EXTRA_ORDER_PAY_ID, orderPayId);
+                        intent.putExtra(OnlinePaymentActivity.EXTRA_ORDER_PRICE, orderPay);
+                        startActivity(intent);
+                        
+                        //结束当前界面
+                        finish();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+    }
+
+}

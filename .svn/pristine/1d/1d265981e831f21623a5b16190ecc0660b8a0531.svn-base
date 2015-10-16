@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <include layout="@layout/actionbar_common_back" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fadingEdge="none"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/receiverLayout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_26"
+                android:background="@color/bg_color"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:gravity="center"
+                    android:text="消息设置"
+                    android:textColor="@color/grayfont"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px_1"
+                android:background="@color/gray" />
+
+            <LinearLayout
+                android:id="@+id/account_detail_msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:gravity="center"
+                        android:text="新消息提醒"
+                        android:textSize="@dimen/sp_14" />
+
+                    <CheckBox
+                        android:layout_width="@dimen/dp_51"
+                        android:layout_height="@dimen/dp_31"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/dp_10"
+                        android:background="@drawable/selector_toggle_bg"
+                        android:button="@null"
+                        android:checked="true"
+                        android:textSize="@dimen/sp_14" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/px_1"
+                    android:background="@color/gray" />
+
+                <RelativeLayout
+                    android:id="@+id/account_sex_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_30"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:gravity="center"
+                        android:text="开启后可接收新消息信息"
+                        android:textColor="@color/grayfont"
+                        android:textSize="@dimen/sp_11" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px_1"
+                android:background="@color/gray" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_26"
+                android:background="@color/bg_color"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:gravity="center"
+                    android:text="提示音效"
+                    android:textColor="@color/grayfont"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px_1"
+                android:background="@color/gray" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:gravity="center"
+                        android:text="铃声"
+                        android:textSize="@dimen/sp_14" />
+
+                    <CheckBox
+                        android:layout_width="@dimen/dp_51"
+                        android:layout_height="@dimen/dp_31"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/dp_10"
+                        android:background="@drawable/selector_toggle_bg"
+                        android:button="@null"
+                        android:checked="true"
+                        android:textSize="@dimen/sp_14" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/px_1"
+                    android:background="@color/gray" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_30"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:gravity="center"
+                        android:text="通知时铃声提醒"
+                        android:textColor="@color/grayfont"
+                        android:textSize="@dimen/sp_11" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/px_1"
+                    android:background="@color/gray" />
+                
+                
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:gravity="center"
+                        android:text="震动"
+                        android:textSize="@dimen/sp_14" />
+
+                    <CheckBox
+                        android:layout_width="@dimen/dp_51"
+                        android:layout_height="@dimen/dp_31"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/dp_10"
+                        android:background="@drawable/selector_toggle_bg"
+                        android:button="@null"
+                        android:checked="true"
+                        android:textSize="@dimen/sp_14" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/px_1"
+                    android:background="@color/gray" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_30"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:gravity="center"
+                        android:text="通知时震动提醒"
+                        android:textColor="@color/grayfont"
+                        android:textSize="@dimen/sp_11" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/px_1"
+                    android:background="@color/gray" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

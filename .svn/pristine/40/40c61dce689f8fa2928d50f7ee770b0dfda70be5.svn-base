@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="D:\sls_project\sls_branches\BaoGang\assets"/></dataSet><dataSet config="debug"><source path="D:\sls_project\sls_branches\BaoGang\build-types\debug\assets"/></dataSet></merger>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_color"
+    android:orientation="vertical" >
+
+    <com.common.view.topbar.HeadView
+        android:id="@+id/headview"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_46" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:background="#fffffe">
+        <ImageView
+            android:layout_width="@dimen/dp_100"
+            android:layout_height="@dimen/dp_100"
+            android:src="@drawable/icon_store_gray"
+            android:layout_marginTop="@dimen/dp_30"
+            android:scaleType="centerInside"/>
+
+        <TextView
+            android:id="@+id/tv_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#A1A2A3"
+            android:text="该商品过期不存在"
+            android:layout_marginTop="@dimen/dp_10"
+            android:textSize="@dimen/sp_15"/>
+
+    </LinearLayout>
+
+</LinearLayout>

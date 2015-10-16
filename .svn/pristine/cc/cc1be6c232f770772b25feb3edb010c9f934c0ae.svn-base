@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_51"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50" 
+        android:background="@color/index_red">
+
+        <TextView
+            android:id="@+id/tv_headview_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white"
+            android:text="标题"
+            android:textSize="@dimen/sp_17" />
+
+        <LinearLayout
+            android:id="@+id/layout_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:id="@+id/iv_headview_goback"
+                android:layout_width="@dimen/dp_20"
+                android:layout_height="@dimen/dp_20"
+                android:layout_marginLeft="@dimen/dp_8"
+                android:background="@null"
+                android:contentDescription="@null"
+                android:paddingBottom="@dimen/dp_10"
+                android:src="@drawable/com_return"
+                android:paddingLeft="@dimen/dp_8"
+                android:paddingTop="@dimen/dp_10" />
+
+            <TextView
+                android:id="@+id/iv_headview_goback_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@null"
+                android:paddingBottom="@dimen/dp_10"
+                android:paddingLeft="@dimen/dp_2"
+                android:paddingRight="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_10"
+                android:text="返回"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_16" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/imgbtn_right"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:paddingBottom="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_12"
+            android:paddingRight="@dimen/dp_12"
+            android:paddingTop="@dimen/dp_10"
+            android:scaleType="centerInside"
+            android:visibility="gone" />
+
+        <FrameLayout
+            android:id="@+id/rightBtn_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/right_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingBottom="@dimen/dp_10"
+                android:paddingLeft="@dimen/dp_8"
+                android:paddingRight="@dimen/dp_8"
+                android:paddingTop="@dimen/dp_10"
+                android:textColor="@color/white"
+                android:text="注册" />
+        </FrameLayout>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/px_1"
+        android:layout_below="@id/top" 
+        android:background="@color/gray">
+    </View>
+
+</RelativeLayout><!-- From: file:/D:/sls_project/sls_branches/BaoGang/res/layout/common_titlebar_view.xml -->

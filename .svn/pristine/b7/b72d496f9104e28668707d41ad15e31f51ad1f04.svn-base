@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.common.view.topbar.HeadView
+        android:id="@+id/headview"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_46" />
+
+    <FrameLayout
+        android:id="@+id/fragment_selecte_car_info"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        />
+
+</LinearLayout>

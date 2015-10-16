@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.common.view.topbar.HeadView
+        android:id="@+id/headview"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_46" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#E5E2E4"
+        android:paddingBottom="@dimen/dp_5"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingTop="@dimen/dp_5"
+        android:text="上传行驶证/驾驶证照片"
+        android:textColor="#848385"
+        android:textSize="@dimen/commen_text_size_12" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_0.1"
+        android:background="#D3D3D3" />
+
+    <GridView
+        android:id="@+id/gv_imgs"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:numColumns="5"
+        android:padding="@dimen/dp_10" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_0.1"
+        android:background="#D3D3D3" />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#E5E2E4"
+        android:paddingBottom="@dimen/dp_5"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingTop="@dimen/dp_5"
+        android:text="联系信息"
+        android:textColor="#848385"
+        android:textSize="@dimen/commen_text_size_12" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_0.1"
+        android:background="#D3D3D3" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical"
+            android:text="联系人："
+            android:textColor="@color/black"
+            android:textSize="@dimen/commen_text_size_14" />
+
+        <EditText
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="@dimen/dp_5"
+            android:layout_weight="1"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="请输入真实姓名"
+            android:text=""
+            android:textSize="@dimen/commen_text_size_14" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_0.1"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:background="#D3D3D3" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical"
+            android:text="联系方式："
+            android:textColor="@color/black"
+            android:textSize="@dimen/commen_text_size_14" />
+
+        <EditText
+            android:id="@+id/tv_usre_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="@dimen/dp_5"
+            android:layout_weight="1"
+            android:background="@null"
+            android:inputType="phone"
+            android:gravity="center_vertical"
+            android:hint="请输入常用联系电话"
+            android:text=""
+            android:textSize="@dimen/commen_text_size_14" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_0.1"
+        android:background="#D3D3D3" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#E5E2E4"
+        >
+
+        <TextView
+            android:id="@+id/btn_feedback"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_20"
+            android:background="@drawable/common_radius_green"
+            android:gravity="center"
+            android:text="立即反馈"
+            android:textColor="@color/white"
+            android:textSize="@dimen/commen_text_size_16" />
+
+    </LinearLayout>
+
+</LinearLayout>

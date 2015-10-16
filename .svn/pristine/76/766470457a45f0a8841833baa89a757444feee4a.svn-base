@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:id="@+id/tv_detail_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_15"
+        android:paddingBottom="@dimen/dp_15"
+        android:text="缴费单位"
+        android:textColor="@color/black_light"
+        android:textSize="@dimen/sp_14" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/tv_detail_item_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_15"
+        android:paddingBottom="@dimen/dp_15"
+        android:paddingLeft="@dimen/dp_30"
+        android:text="上海市电力公司"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sp_14" >
+    </TextView>
+
+</LinearLayout>

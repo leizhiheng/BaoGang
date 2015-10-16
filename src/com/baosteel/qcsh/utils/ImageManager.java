@@ -1,0 +1,181 @@
+package com.baosteel.qcsh.utils;
+
+import java.io.File;
+import java.util.List;
+
+import android.text.TextUtils;
+import android.widget.ImageView;
+
+import com.baosteel.qcsh.api.URLs;
+import com.common.utils.LogUtil;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.DiscCacheUtil;
+import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.assist.MemoryCacheUtil;
+
+/**
+ * 图片获取统一管理类
+ * <p><b>内部封装ImageLoader实现</b></p>
+ */
+public class ImageManager {
+
+	public static void Load(String imgUrl, ImageView imageView) {
+		LoadWithServer(imgUrl, "", imageView);
+	}
+
+	public static void Load(String imgUrl, ImageView imageView, DisplayImageOptions o) {
+		LoadWithServer(imgUrl, "", imageView, o);
+	}
+
+	
+	/**
+     * 从服务器获取图片并显示
+     * <p><b>统一获取方式，用来处理省流量的模式</b></p>
+     * @param imgUrl 图片地址
+     * @param imageView 展示的View
+     */
+	public static void LoadWithServer(String imgUrl, ImageView imageView) {
+		LoadWithServer(imgUrl, "", imageView, null);
+	}
+	
+    /**
+     * 从服务器获取图片并显示
+     * <p><b>统一获取方式，用来处理省流量的模式</b></p>
+     * @param imgUrl 图片地址
+     * @param imageView 展示的View
+     */
+	public static void LoadWithServer(String imgUrl, String picSize, ImageView imageView) {
+		LoadWithServer(imgUrl, picSize, imageView, null);
+	}
+    
+	
+	/**
+     * 从服务器获取图片并显示
+     * <p><b>统一获取方式，用来处理省流量的模式</b></p>
+     * @param imgUrl 图片地址
+     * @param imageView 展示的View
+     * @param o DisplayImageOptions
+     */
+	public static void LoadWithServer(String imgUrl, ImageView imageView, DisplayImageOptions o) {
+		LoadWithServer(imgUrl, "", imageView, o, null);
+	}
+	
+	/**
+     * 从服务器获取图片并显示
+     * <p><b>统一获取方式，用来处理省流量的模式</b></p>
+     * @param imgUrl 图片地址
+     * @param imageView 展示的View
+     * @param o DisplayImageOptions
+     */
+	public static void LoadWithServer(String imgUrl, String picSize, ImageView imageView, DisplayImageOptions o) {
+		LoadWithServer(imgUrl, picSize, imageView, o, null);
+	}
+	
+    /**
+     * 从服务器获取图片并显示
+     * <p><b>统一获取方式，用来处理省流量的模式</b></p>
+     * @param imgUrl 图片地址
+     * @param imageView 展示的View
+     * @param o DisplayImageOptions
+     * @param loadingListener ImageLoadingListener  加载监听
+     */
+	public static void LoadWithServer(String imgUrl, String picSize, final ImageView imageView, final DisplayImageOptions o, final ImageLoadingListener loadingListener) {
+		
+		if(TextUtils.isEmpty(imgUrl)){
+			LogUtil.i("ImageManager", "图片地址为空，不加载图片....");
+			return;
+		}
+		
+		final String mWrapImagUrl = wrapImagUrl(imgUrl, picSize);
+		LogUtil.d("ImageManager", "正在加载图片  "+mWrapImagUrl);
+		ImageLoader.getInstance().displayImage(mWrapImagUrl, imageView, o, loadingListener);
+	}
+    /**
+     * 从服务器获取图片
+     * <p><b>用于下载之类的不需要展示控件</b></p>
+     * @param imgUrl 图片地址
+     * @param loadingListener ImageLoadingListener  加载监听
+     */
+    public static void LoadWithoutImageView(String imgUrl,ImageLoadingListener loadingListener){
+        ImageLoader.getInstance().loadImage(wrapImagUrl(imgUrl, ""),loadingListener);
+    }
+
+	/**
+	 * 该图片是否已被缓存
+	 *
+	 * @param wrapImagUrl
+	 *            被包装过的url
+	 * @return boolean
+	 */
+	private static boolean hasCache(String wrapImagUrl) {
+		List<String> keys = MemoryCacheUtil.findCacheKeysForImageUri(
+				wrapImagUrl, ImageLoader.getInstance().getMemoryCache());
+		if (keys == null || keys.size() < 1) {
+			File cache = DiscCacheUtil.findInCache(wrapImagUrl, ImageLoader
+					.getInstance().getDiscCache());
+			if (cache == null) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * 清除缓存
+	 */
+	public static void clearCache(){
+		ImageLoader.getInstance().clearMemoryCache();
+	}
+	
+	/**
+	 * 包装图片url,添加域名。 <b>如果url本身包含主域名就不用额外添加域名.<b/>
+	 * <p/>
+	 * "http://site.com/image.png" // from Web<br/>
+	 * "file:///mnt/sdcard/image.png" // from SD card<br/>
+	 * "file:///mnt/sdcard/video.mp4" // from SD card (video thumbnail)<br/>
+	 * "content://media/external/images/media/13" // from content provider<br/>
+	 * "content://media/external/video/media/13" // from content provider (video
+	 * thumbnail)<br/>
+	 * "assets://image.png" // from assets<br/>
+	 * "drawable://" + R.drawable.img // from drawables (non-9patch images)<br/>
+	 * <p/>
+	 *
+	 * @param originUrl 原始url
+	 * @param picSize 图片尺寸  只允许 numXnum如200X200
+	 * @return String
+	 */
+	private static String wrapImagUrl(String originUrl, String picSize) {
+
+        if(TextUtils.isEmpty(originUrl)){
+            return "";
+        }
+
+        //拼接图片，按照尺寸拼接(只处理网络图片)
+        if(!TextUtils.isEmpty(picSize) && !isLocalFile(originUrl)){
+        	originUrl = StringUtils.addPicSizeInImgUrl(originUrl, picSize);
+        }
+        
+		String wrappedUrl;
+		if (originUrl.startsWith("http") || originUrl.startsWith("https")
+				|| originUrl.startsWith("file://")
+				|| originUrl.startsWith("content://")
+				|| originUrl.startsWith("assets://")
+				|| originUrl.startsWith("drawable://")) {
+			wrappedUrl = originUrl;
+		} else {
+			wrappedUrl = URLs.IMAGE_URL + originUrl;
+		}
+		return wrappedUrl;
+	}
+	
+	private static boolean isLocalFile(String originUrl){
+		if (originUrl.startsWith("file://")
+				|| originUrl.startsWith("content://")
+				|| originUrl.startsWith("assets://")
+				|| originUrl.startsWith("drawable://")) {
+			return true;
+		}
+		return false;
+	}
+}

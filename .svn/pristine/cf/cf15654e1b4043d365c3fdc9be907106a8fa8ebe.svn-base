@@ -1,0 +1,344 @@
+package com.baosteel.qcsh.ui.activity.home.healthy;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONObject;
+
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
+
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.Poi;
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.api.RequestCallback;
+import com.baosteel.qcsh.api.RequestClient;
+import com.baosteel.qcsh.constants.Constants;
+import com.baosteel.qcsh.database.bean.TopProduct;
+import com.baosteel.qcsh.dialog.TopbarMenuPopwindow;
+import com.baosteel.qcsh.ui.activity.common.BaiduMapActivity;
+import com.baosteel.qcsh.ui.activity.common.SearchActivity;
+import com.baosteel.qcsh.ui.activity.home.happyliving.DecorationReserveActivity;
+import com.baosteel.qcsh.ui.activity.home.happyliving.HappyLivingActivity;
+import com.baosteel.qcsh.ui.activity.home.happyliving.HomeMallActivity;
+import com.baosteel.qcsh.ui.activity.home.happyliving.HomemakingServiceActivity;
+import com.baosteel.qcsh.ui.activity.home.happyliving.HouseDetailActivity;
+import com.baosteel.qcsh.ui.activity.home.happyliving.IamHouseHolderActivity;
+import com.baosteel.qcsh.ui.activity.home.happyliving.IamRoomerActivity;
+import com.baosteel.qcsh.ui.activity.home.happyliving.MyHappyLivingActivity;
+import com.baosteel.qcsh.ui.activity.home.happyliving.NimblePaymentActivity;
+import com.baosteel.qcsh.ui.activity.home.happyliving.PropertyServiceActivity;
+import com.baosteel.qcsh.ui.adapter.TopProdectAdapter;
+import com.baosteel.qcsh.ui.view.MyGridView;
+import com.baosteel.qcsh.utils.BaiduMapUtil;
+import com.baosteel.qcsh.utils.BaiduMapUtil.OnLocateLResultistener;
+import com.baosteel.qcsh.utils.JSONParseUtils;
+import com.common.base.BaseActivity;
+import com.common.utils.DeviceUtils;
+import com.common.view.banner.BannerData;
+import com.common.view.banner.BannerView;
+import com.common.view.banner.IOnBannerItenClick;
+import com.common.view.fastlink.FastLinkData;
+import com.common.view.fastlink.FastLinkView;
+import com.common.view.fastlink.LnkToolsGridViewAdapter.BackItemClickListener;
+import com.common.view.scrolllayout.PageControlView;
+import com.common.view.scrolllayout.ScrollLayout;
+import com.common.view.scrollview.NestScrollView;
+import com.common.view.viewflow.CircleFlowIndicator;
+import com.common.view.viewflow.ViewFlow;
+
+@SuppressLint("NewApi")
+public class HealthyHomeActivity extends BaseActivity implements IOnBannerItenClick, BackItemClickListener, OnClickListener {
+
+	private View mTitleView;
+    private NestScrollView mScrollView;
+    private View mViewSearch;
+	private ImageView mModoIcon;
+	private ImageView mRightIcon;
+	private ImageView mBtnBack;
+	/**
+     * Banner轮播图
+     **/
+    private BannerView bannerView;
+    /**
+     * 快速导航
+     **/
+    private FastLinkView fastLinkView;
+    /**
+     * 热门榜单
+     **/
+    private MyGridView myGridView;
+    
+    /**
+     * Adapter for myGridView
+     */
+    private TopProdectAdapter mAdapter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tongue);
+        //初始化控件
+        initView();
+
+        // 初始化数据
+        initData();
+        
+        // 获取数据
+        loadData();
+
+    }
+
+    private void initView() {
+
+    	mTitleView = findViewById(R.id.index_sousuo_linlayout);
+    	mTitleView.setBackgroundColor(Constants.getTypeColor(Constants.TYPE_HEALTH));
+    	mModoIcon = (ImageView) findViewById(R.id.activity_index_sousuo_iv);
+    	mModoIcon.setImageResource(R.drawable.icon_healthy);
+
+    	mRightIcon = (ImageView) findViewById(R.id.home_location_imageview);
+    	mRightIcon.setImageResource(R.drawable.icon_3point);
+    	mRightIcon.setOnClickListener(this);
+
+    	mBtnBack = (ImageView) findViewById(R.id.btn_back);
+    	mBtnBack.setOnClickListener(this);
+    	
+    	mViewSearch = findViewById(R.id.ab_search);
+    	mViewSearch.setOnClickListener(this);
+    	
+    	mScrollView = (NestScrollView) findViewById(R.id.home_body_scrollview);
+    	scrollToTop();
+
+        //轮播图
+        ViewFlow viewFlow = (ViewFlow) findViewById(R.id.mHomeViewflow);// 获得viewFlow对象
+        CircleFlowIndicator indic = (CircleFlowIndicator) findViewById(R.id.mHomeViewflowindic); // viewFlow下的indic
+        bannerView = new BannerView(mContext, viewFlow, indic);
+        bannerView.setOnItemClickListener(this);
+
+        //快速导航图
+        ScrollLayout mScrollLayout = (ScrollLayout) findViewById(R.id.ScrollLayoutTest);
+        PageControlView pageControl = (PageControlView) findViewById(R.id.pageControl);
+        int mHeight = mScrollLayout.getLayoutParams().height;
+        ScrollLayout.LayoutParams layoutParams = mScrollLayout.getLayoutParams();
+//        layoutParams.height = mHeight / 2;
+        mScrollLayout.setLayoutParams(layoutParams);
+        fastLinkView = new FastLinkView(mContext, mScrollLayout, pageControl);
+        fastLinkView.setOntemClickListener(this);
+
+        myGridView = (MyGridView) findViewById(R.id.gv_top_list);
+
+        myGridView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				startActivity(new Intent(HealthyHomeActivity.this, HealthProductDetailActivity.class));
+			}
+		});
+
+    }
+
+    /**
+     * 初始化数据
+     */
+    private void initData() {
+    	mAdapter = new TopProdectAdapter(this, getData());
+    	mAdapter.setIsShowSaleVolume(false);
+    }
+    
+    /**
+     * 
+     * @Description 使ScrollView滑动到顶部
+     * @Author blue
+     * @Time 2015-10-13
+     */
+    private void scrollToTop() {
+    	mScrollView.post(new Runnable() {
+ 			
+ 			@Override
+ 			public void run() {
+ 				mScrollView.scrollTo(0, 0);
+ 			}
+ 		});
+    }
+    
+    private void loadData() {
+
+    	// 获取Banner图
+    	loadBannerData();
+    	
+    	// 获取快速导航数据
+    	loadFastLinkData();
+    }
+
+    /**
+     * 加载数据
+     */
+    public void loadFastLinkData() {
+
+    	 int type = getIntent().getIntExtra("type",0);
+         RequestClient.queryAppClassify(mContext, type, new RequestCallback<JSONObject>() {
+
+             @Override
+             public void onResponse(JSONObject response) {
+
+                 if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+
+                     // 解析模块下的数据
+                	 List<FastLinkData> list = JSONParseUtils.getTypeFastLinkDatas(response);
+                     if (list.size() > 0) fastLinkView.refreshData(list);
+                 }
+                 scrollToTop();
+             }
+         });
+    	
+    	
+        //构造FastLink假数据
+        List<FastLinkData> fastList = new ArrayList<FastLinkData>();
+        fastList.add(new FastLinkData(0, "体检预定", R.drawable.ic_healthy_tj_reserve));
+        fastList.add(new FastLinkData(1, "体检报告",R.drawable.ic_healthy_tj_report));
+        fastList.add(new FastLinkData(2, "养老现床",R.drawable.ic_healthy_ready_bed));
+        fastList.add(new FastLinkData(3, "养老期床",R.drawable.ic_healthy_future_bed));
+        fastList.add(new FastLinkData(4, "特需服务", R.drawable.ic_healthy_special));
+        fastList.add(new FastLinkData(5, "社区健康",R.drawable.ic_healthy_community_health));
+        fastList.add(new FastLinkData(6, "健康商城",R.drawable.ic_healthy_mall));
+        fastLinkView.refreshData(fastList);
+//
+        myGridView.setAdapter(mAdapter);
+
+    }
+
+    private List<TopProduct> getData() {
+        List<TopProduct> list = new ArrayList<TopProduct>();
+        list.add(new TopProduct("莱利 奥利斯他片24片，排油抗肥胖减肥药品", R.drawable.ic_healthy_product, "￥396.00", 157+""));
+        list.add(new TopProduct("莱利 奥利斯他片24片，排油抗肥胖减肥药品", R.drawable.ic_healthy_product, "￥396.00", 157+""));
+        list.add(new TopProduct("莱利 奥利斯他片24片，排油抗肥胖减肥药品", R.drawable.ic_healthy_product, "￥396.00", 157+""));
+        list.add(new TopProduct("莱利 奥利斯他片24片，排油抗肥胖减肥药品", R.drawable.ic_healthy_product, "￥396.00", 157+""));
+        list.add(new TopProduct("莱利 奥利斯他片24片，排油抗肥胖减肥药品", R.drawable.ic_healthy_product, "￥396.00", 157+""));
+        list.add(new TopProduct("莱利 奥利斯他片24片，排油抗肥胖减肥药品", R.drawable.ic_healthy_product, "￥396.00", 157+""));
+        return list;
+    }
+
+    @Override
+    public void onBannerItemClick(BannerData data, int position) {
+//        showToast("点击了第" + position + "项数据");
+    }
+
+    @Override
+    public void onFastLinkItemClick(FastLinkData bean) {
+    	Class clazz = null;
+        switch (bean.getId()) {
+            case 0:
+//            	clazz = PhysicalExaminationReserveActivity.class;
+            	BaiduMapUtil.getInstance().setOnLocateLResultistener(new OnLocateLResultistener() {
+					
+					@Override
+					public void onLocateResult(BDLocation location) {
+						Intent intent = new Intent(mContext, BaiduMapActivity.class);
+						intent.putExtra(BaiduMapActivity.EXTRA_BDLOCATION, location);
+						startActivity(intent);
+						BaiduMapUtil.getInstance().stop();
+					}
+				});
+            	BaiduMapUtil.getInstance().start();
+                break;
+            case 1:
+            	clazz = PhysicalExaminationReportActivity.class;
+                break;
+            case 2:
+            	clazz = BeadhouseReadyBedActivity.class;
+                break;
+            case 3:
+            	clazz = BeadhouseFutureBedActivity.class;
+            	break;
+            case 4:
+            	clazz = SpecialServiceActivity.class;
+                break;
+            case 5:
+            	clazz = CommunityHealthyActivity.class;
+            	break;
+            case 6:
+            	clazz = HealthyMallActivity.class;
+            	break;
+        }
+        if (clazz != null) startActivity(new Intent(this, clazz));
+//        showToast("点击了第" + bean.getName() + "项数据");
+    }
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.btn_back:
+			finish();
+			break;
+		case R.id.home_location_imageview:
+			TopbarMenuPopwindow popwindow = new TopbarMenuPopwindow(this);
+			popwindow.showAsDropDown(mTitleView, DeviceUtils.getWidthMaxPx(this) - popwindow.getWidth(), 0);
+			break;
+		case R.id.ab_search:
+			Intent intent = new Intent(this, SearchActivity.class);
+			startActivity(intent);
+			break;
+		default:
+			break;
+		}
+	}
+	
+	/**
+	 * 
+	 * @Description 下载Banner图
+	 * @Author blue
+	 * @Time 2015-9-24
+	 */
+	private void loadBannerData()  {
+		
+		RequestClient.queryAPPBanner(this, 15, 1, new RequestCallback<JSONObject>() {
+			
+			@Override
+			public void onResponse(JSONObject response) {
+				if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+					
+					bannerView.refreshData(JSONParseUtils.getBannerDatas(response));
+				
+				} else {
+					/*
+					 * 如果请求错误，将返回的错误信息显示出来
+					 */
+					Toast.makeText(HealthyHomeActivity.this, JSONParseUtils.getResponseMsg(response), Toast.LENGTH_SHORT).show();
+				}
+				scrollToTop();
+			}
+			
+			@Override
+			public void onFinish() {
+				super.onFinish();
+				
+				if (bannerView.getCount() == 0) {
+//		    		Toast.makeText(HealthyHomeActivity.this, "服务器无数据，使用模拟数据", Toast.LENGTH_SHORT).show();
+		    		//构造Banner假数据
+		            List<BannerData> dataList = new ArrayList<BannerData>();
+		            dataList.add(new BannerData());
+		            dataList.add(new BannerData());
+		            dataList.add(new BannerData());
+		            dataList.add(new BannerData());
+		            dataList.add(new BannerData());
+		            dataList.add(new BannerData());
+		            dataList.add(new BannerData());
+		            bannerView.refreshData(dataList);
+				}
+				
+			}
+		});
+	}
+}
+

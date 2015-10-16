@@ -1,0 +1,117 @@
+package com.baosteel.qcsh.ui.adapter;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.baosteel.qcsh.R;
+
+/**
+ * 汽车品牌列表适配器
+ * Created by kuangyong on 15/9/15.
+ */
+public class CarBrandListAdapter extends BaseExpandableListAdapter{
+
+    private Context context;
+
+    public CarBrandListAdapter(Context context){
+        this.context=context;
+    }
+
+    @Override
+    public int getGroupCount() {
+        return 3;
+    }
+
+    @Override
+    public int getChildrenCount(int groupPosition) {
+        return 4;
+    }
+
+    @Override
+    public Object getGroup(int groupPosition) {
+        return null;
+    }
+
+    @Override
+    public Object getChild(int groupPosition, int childPosition) {
+        return null;
+    }
+
+    @Override
+    public long getGroupId(int groupPosition) {
+        return 0;
+    }
+
+    @Override
+    public long getChildId(int groupPosition, int childPosition) {
+        return 0;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return false;
+    }
+
+    @Override
+    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+        GroupHolder holder;
+        if(null==convertView){
+            holder=new GroupHolder();
+            convertView= LayoutInflater.from(context).inflate(R.layout.adapter_car_info_group,null);
+            holder.tv_group= (TextView) convertView.findViewById(R.id.tv_group);
+            convertView.setTag(holder);
+        }else{
+            holder= (GroupHolder) convertView.getTag();
+        }
+        String group="";
+        if(0==groupPosition){
+            group="A";
+        }else if(1==groupPosition){
+            group="B";
+        }else if(2==groupPosition){
+            group="C";
+        }
+        holder.tv_group.setText(group);
+        return convertView;
+    }
+
+    @Override
+    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        ChildHolder holder;
+        if(null==convertView){
+            holder=new ChildHolder();
+            convertView= LayoutInflater.from(context).inflate(R.layout.adapter_car_info_brand,null);
+            holder.tv_brand= (TextView) convertView.findViewById(R.id.tv_brand);
+            holder.child_diver= (View) convertView.findViewById(R.id.child_diver);
+            holder.iv_brand= (ImageView) convertView.findViewById(R.id.iv_brand);
+            convertView.setTag(holder);
+        }else{
+            holder= (ChildHolder) convertView.getTag();
+        }
+        holder.child_diver.setVisibility(View.VISIBLE);
+        if(3==childPosition){
+            holder.child_diver.setVisibility(View.GONE);
+        }
+        return convertView;
+    }
+
+    @Override
+    public boolean isChildSelectable(int groupPosition, int childPosition) {
+        return true;
+    }
+
+    static class GroupHolder{
+        TextView tv_group;//组别
+    }
+
+    static class ChildHolder{
+        TextView tv_brand;//车品牌
+        View child_diver;;//分割线
+        ImageView iv_brand;//品牌图片
+    }
+}

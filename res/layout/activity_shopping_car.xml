@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_color" >
+
+    <LinearLayout
+        android:id="@+id/lin_islogin"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:layout_below="@+id/title_bar"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="@dimen/dp_70"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_10"
+            android:background="@drawable/common_gorage_radius"
+            android:text="登录"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="现在登录后，您购物车的商品会被永久保存"
+            android:textSize="@dimen/sp_14" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/vo"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.5"
+        android:layout_below="@+id/lin_islogin"
+        android:background="@color/line" />
+
+    
+    <RelativeLayout
+        android:id="@+id/rel_price"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        android:visibility="gone"
+        android:paddingBottom="@dimen/dp_5" >
+
+        <View
+            android:id="@+id/vos"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0.5"
+            android:layout_alignParentTop="true"
+            android:background="@color/line" />
+
+        <ImageView
+            android:id="@+id/img_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/dp_10"
+            android:src="@drawable/test_no_check" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_toLeftOf="@+id/btn_shopcar_commit"
+            android:layout_toRightOf="@+id/img_check"
+            android:gravity="right"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/tv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="合计：¥576.00"
+                android:textColor="@color/btn_color"
+                android:textSize="@dimen/sp_16" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_1"
+                android:text="不含运费"
+                android:textColor="#999999"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_shopcar_commit"
+            android:layout_width="@dimen/dp_120"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_5"
+            android:background="@drawable/shopcar_btn_style"
+            android:text="提交订单"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+    
+    <com.common.view.scrollview.NestScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/rel_price"
+        android:layout_below="@id/vo" >
+
+        <com.common.view.listview.MyListView
+            android:id="@+id/lv_shopping_car"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/vo"
+            android:layout_height="match_parent"
+            android:dividerHeight="@dimen/dp_10" />
+    </com.common.view.scrollview.NestScrollView>
+
+    
+
+</RelativeLayout>

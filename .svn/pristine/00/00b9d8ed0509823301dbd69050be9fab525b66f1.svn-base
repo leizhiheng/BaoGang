@@ -1,0 +1,167 @@
+package com.baosteel.qcsh.ui.activity.prodcut;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ScrollView;
+import android.widget.TextView;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.api.RequestCallback;
+import com.baosteel.qcsh.api.RequestClient;
+import com.baosteel.qcsh.database.bean.TopProduct;
+import com.baosteel.qcsh.model.QueryAppGoodsCommentBean;
+import com.baosteel.qcsh.ui.adapter.AppraiseListAdapter;
+import com.baosteel.qcsh.ui.adapter.ClassRecomendAdapter;
+import com.baosteel.qcsh.utils.JSONParseUtils;
+import com.baosteel.qcsh.utils.Utils;
+import com.common.base.BaseFragment;
+import com.common.net.uploadimg.ImageData;
+import com.common.view.listview.MyListView;
+import com.common.view.pulltorefresh.PullToRefreshBase;
+import com.common.view.pulltorefresh.PullToRefreshScrollView;
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 舌尖宝商品详情-评价
+ * Created by kuangyong on 15/9/1.
+ */
+public class TongueTipAppraiseFragment extends BaseFragment implements  PullToRefreshBase.OnRefreshListener2<ScrollView>{
+    // --------------------产品轮换图---------
+    public static final String GOODS_ID="";                                     //商品id
+    private MyListView lvappraise;
+    private TextView tvappraise;
+    private PullToRefreshScrollView scrollView;
+    private String goodsId="85";                                                //商品id
+    private int pageNum = 1;                                                    //起始页，默认值1
+    private int pageSize = 10;                                                  //每页数据量，默认值100
+    private boolean showDialog = true;                                          //是否显示进度框
+    private AppraiseListAdapter adapter;
+    private QueryAppGoodsCommentBean commentBean;                               //评价列表数据
+
+
+    public static TongueTipAppraiseFragment newInstance(String goodsId) {
+        TongueTipAppraiseFragment fragment = new TongueTipAppraiseFragment();
+        Bundle args = new Bundle();
+        args.putString(GOODS_ID, goodsId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    private TongueTipAppraiseFragment(){}
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            goodsId = getArguments().getString(GOODS_ID);
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        fragmentView = inflater.inflate(R.layout.layout_fragment_tonguetip_appraise, null);
+        return fragmentView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        findView();
+        setListener();
+        getQueryAppGoodsComment();
+    }
+
+    private void findView() {
+        lvappraise = (MyListView) findViewById(R.id.lv_appraise);
+        tvappraise = (TextView) findViewById(R.id.tv_appraise);
+        scrollView = (PullToRefreshScrollView) findViewById(R.id.scrollView);
+    }
+
+    private void setListener() {
+        scrollView.setEnabled(false);
+        scrollView.setMode(PullToRefreshBase.Mode.BOTH);
+        scrollView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        scrollView.getLoadingLayoutProxy().setLastUpdatedLabel(Utils.getCurrTiem());
+        scrollView.getLoadingLayoutProxy().setPullLabel("往下拉更新数据...");
+        scrollView.getLoadingLayoutProxy().setRefreshingLabel("正在载入中...");
+        scrollView.getLoadingLayoutProxy().setReleaseLabel("放开更新数据...");
+
+        // 下拉刷新数据
+        scrollView.setOnRefreshListener(this);
+        adapter=new AppraiseListAdapter(mContext);
+        lvappraise.setAdapter(adapter);
+    }
+
+    /**
+     * 获取商品评价
+     */
+    private void getQueryAppGoodsComment(){
+        goodsId="85";
+        RequestClient.queryAppGoodsComment(mContext, goodsId,pageNum + "", pageSize + "", new RequestCallback<JSONObject>(showDialog) {
+
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
+
+                        //只有首次加载数据才显示对话框
+                        showDialog = false;
+
+                        scrollView.onRefreshComplete();
+                    }
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+
+                            //解析数据
+                            commentBean = new Gson().fromJson(response.toString(), QueryAppGoodsCommentBean.class);
+                            if (null == commentBean) {
+                                return ;
+                            }
+                            initView();
+
+                            //第一页，下拉刷新操作
+                            if (pageNum <= 1) {
+                                adapter.refreshData(commentBean.getReturnMap().getList());
+                            } else {
+
+                                //第二页后，上拉加载数据
+                                adapter.appendData(commentBean.getReturnMap().getList());
+                            }
+
+                            //无下一页数据,判断是否还有下一页
+                            PullToRefreshBase.Mode mode = (commentBean.getReturnMap().getList().size() < pageSize) ? PullToRefreshBase.Mode.PULL_FROM_START : PullToRefreshBase.Mode.BOTH;
+                            scrollView.setMode(mode);
+
+                            //pageIndex++
+                            if (commentBean.getReturnMap().getList().size() >= pageSize) {
+                                pageNum++;
+                            }
+                        }
+                    }
+                });
+    }
+
+    private void initView() {
+        tvappraise.setText("宝贝评价（" + commentBean.getReturnMap().getTotal() + "）");
+    }
+
+    @Override
+    public void onPullDownToRefresh(PullToRefreshBase<ScrollView> refreshView) {
+        getQueryAppGoodsComment();
+    }
+
+    @Override
+    public void onPullUpToRefresh(PullToRefreshBase<ScrollView> refreshView) {
+        pageNum=1;
+        getQueryAppGoodsComment();
+    }
+}

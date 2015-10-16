@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_color"
+    android:orientation="vertical">
+
+    <com.baosteel.qcsh.ui.view.TitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_below="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp_10"
+                android:text="现金卷发售单位：七彩生活自营商家" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_0.5"
+                android:background="@color/line" />
+
+            <ListView
+                android:id="@+id/lv_no_use_cash"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0.5"
+            android:background="@color/line" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0.5"
+            android:layout_marginTop="@dimen/dp_10"
+            android:background="@color/line" />
+
+        <ListView
+            android:id="@+id/lv_use_cash"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/g_write_color" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="以使用一张优惠卷，可优惠20元"
+            android:textColor="@color/gr_l_color"
+            android:textSize="@dimen/sp_12" />
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_55"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:text="应付金额："
+            android:textColor="@color/font_color" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tv9"
+            android:text="¥888888.00"
+            android:textColor="@color/orange_red" />
+
+        <Button
+            android:id="@+id/btn_pay"
+            android:layout_width="@dimen/dp_120"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@color/g_orage_color"
+            android:text="付款"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+</RelativeLayout>

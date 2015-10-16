@@ -1,0 +1,83 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <LinearLayout
+            android:id="@+id/btn_contact_service"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:src="@drawable/icon_zaixiankefu"
+                android:scaleType="centerInside"/>
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/dp_5"
+                android:text="联系客服"
+                android:textColor="#333333"
+                android:textSize="@dimen/sp_15" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="@dimen/dp_0.1"
+            android:layout_height="fill_parent"
+            android:background="#C1C2C3" />
+
+        <LinearLayout
+            android:id="@+id/btn_phone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:src="@drawable/icon_dianhuakefu"
+                android:scaleType="centerInside"/>
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/dp_5"
+                android:text="电话联系"
+                android:textColor="#333333"
+                android:textSize="@dimen/sp_15" />
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_0.1"
+        android:background="#C1C2C3" />
+    <TextView
+        android:id="@+id/btn_cancel"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_50"
+        android:background="@drawable/selector_btn_white"
+        android:gravity="center"
+        android:padding="@dimen/dp_10"
+        android:text="取消"
+        android:textColor="#333333"
+        android:textSize="@dimen/sp_15" />
+
+</LinearLayout>

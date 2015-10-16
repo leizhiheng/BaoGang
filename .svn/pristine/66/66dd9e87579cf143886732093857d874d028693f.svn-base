@@ -1,0 +1,337 @@
+package com.baosteel.qcsh.ui.activity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONObject;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.baosteel.qcsh.AppContext;
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.api.RequestCallback;
+import com.baosteel.qcsh.api.RequestClient;
+import com.baosteel.qcsh.dialog.VersionTipDialog;
+import com.baosteel.qcsh.model.BaoGangData;
+import com.baosteel.qcsh.model.UpdateInfo;
+import com.baosteel.qcsh.ui.adapter.FragmentTabAdapter;
+import com.baosteel.qcsh.ui.fragment.cart.CartFragmentLayout;
+import com.baosteel.qcsh.ui.fragment.classify.ClassifyFragment;
+import com.baosteel.qcsh.ui.fragment.home.HomeFragment;
+import com.baosteel.qcsh.ui.fragment.my.MyFragment;
+import com.baosteel.qcsh.ui.view.TabView;
+import com.baosteel.qcsh.utils.JSONParseUtils;
+import com.baosteel.qcsh.utils.Preferences;
+import com.baosteel.qcsh.utils.Preferences.PreKey;
+import com.baosteel.qcsh.utils.UpdateVersionTool;
+import com.common.base.BaseMainActivity;
+import com.google.gson.Gson;
+
+/**
+ * 主界面
+ * 
+ * @author liuyuanqi
+ * 
+ */
+public class MainActivity extends BaseMainActivity {
+
+	/** 搜索界面界面回调数据 **/
+	public static final int REQUEST_CODE_SEARCH = 100;
+
+	/**Tab索引**/
+	public static final String TAB_INDEX = "tab_index";
+	
+	/**首页**/
+	private TabView tab1;
+	
+	/**分类**/
+	private TabView tab2;
+	
+	/**购物车**/
+	private TabView tab3;
+	
+	/**我的主页**/
+	private TabView tab4;
+	
+	/**当前tab**/
+	private TabView curTab;
+	
+	/**购物车数量**/
+	private TextView cartCountTv;
+	
+	/** fragment适配器 **/
+	private FragmentTabAdapter tabAdapter;
+	
+	private UpdateInfo mUpdateInfo;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.activity_main);
+
+		//初始化控件
+		initView();
+		
+		// 得到所有的fragment
+		List<Fragment> fragments = getFragments();
+
+		// 得到Fragment的适配器
+		tabAdapter = new FragmentTabAdapter(this, fragments, R.id.tab_content);
+		tabAdapter.init();
+		
+		//版本检测
+		loadVersionInfo();
+		
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		if (mUpdateInfo != null && mUpdateInfo.getForceUpdate().equals("1")) {
+			updateApk(mUpdateInfo);
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		Intent intent = getIntent();
+		if(null != intent && intent.hasExtra(TAB_INDEX)){
+			
+			//选中tab
+			int defaultValue = tabAdapter.getCurrentTab();
+			int tabIndex = intent.getIntExtra(TAB_INDEX, defaultValue);
+			if(defaultValue != tabIndex){
+				tabAdapter.checkedIndex(tabIndex);
+			}
+		}
+		
+		//手动调resume
+		tabAdapter.getCurrentFragment().onResume();
+		
+		//查询购物车数量
+		queryAppShoppingCartNum();
+	}
+
+	/**
+	 * 初始化控件
+	 */
+	private void initView() {
+		
+		//首页
+		ImageView mMyauction_imageview = (ImageView) findViewById(R.id.tab_home_imageview);
+		TextView mMyauction_textview = (TextView) findViewById(R.id.tab_home_textview);
+		tab1 = new TabView();
+		tab1.setView(mMyauction_imageview, mMyauction_textview);
+		tab1.setIcon(R.drawable.icon_home_on, R.drawable.icon_home_in);
+		tab1.setTextColor(getResources().getColor(R.color.gray), getResources().getColor(R.color.white));
+		
+		//分类
+		ImageView mAucscene_imageview = (ImageView) findViewById(R.id.tab_class_imageview);
+		TextView mAucscene_textview = (TextView) findViewById(R.id.tab_aucscene_textview);
+		tab2 = new TabView();
+		tab2.setView(mAucscene_imageview, mAucscene_textview);
+		tab2.setIcon(R.drawable.icon_class_on, R.drawable.icon_class_in);
+		tab2.setTextColor(getResources().getColor(R.color.gray), getResources().getColor(R.color.white));
+		
+		//购物车
+		ImageView mSetting_imageview = (ImageView) findViewById(R.id.tab_cart_imageview);
+		TextView mSetting_textview = (TextView) findViewById(R.id.tab_setting_textview);
+		tab3 = new TabView();
+		tab3.setView(mSetting_imageview, mSetting_textview);
+		tab3.setIcon(R.drawable.icon_cart_on, R.drawable.icon_cart_in);
+		tab3.setTextColor(getResources().getColor(R.color.gray), getResources().getColor(R.color.white));
+	
+		//我的
+		ImageView mMy_imageview = (ImageView) findViewById(R.id.tab_my_imageview);
+		TextView mMy_textview = (TextView) findViewById(R.id.tab_my_textview);
+		tab4 = new TabView();
+		tab4.setView(mMy_imageview, mMy_textview);
+		tab4.setIcon(R.drawable.icon_my_on, R.drawable.icon_my_in);
+		tab4.setTextColor(getResources().getColor(R.color.gray), getResources().getColor(R.color.white));
+		
+		//默认显示第一个tab
+		curTab = tab1;
+		
+		//购物车数量
+		cartCountTv = (TextView)findViewById(R.id.tab_cart_count_textview);
+	}
+	
+
+	/**
+	 * 得到所有的Fragment
+	 * 
+	 * @return
+	 */
+	private List<Fragment> getFragments() {
+
+		List<Fragment> list = new ArrayList<Fragment>();
+
+		// 主页
+		list.add(new HomeFragment());
+
+		// 分类
+		list.add(new ClassifyFragment());
+
+		// 购物车
+		list.add(new CartFragmentLayout());
+
+		// 我的
+		list.add(new MyFragment());
+		
+		return list;
+	}
+
+	@Override
+	protected void onActivityResult(int arg0, int arg1, Intent arg2) {
+		Fragment fragment = tabAdapter.getCurrentFragment();
+		if (null != fragment) {
+			fragment.onActivityResult(arg0, arg1, arg2);
+		}
+	}
+
+
+	public Fragment getFragment(int index) {
+		return tabAdapter.getFragment(index);
+	}
+
+	/**
+	 * 选中tabView
+	 * @param tabView
+	 */
+	private void selectTab(TabView tabView){
+		if(null != tabView && !tabView.equals(curTab)){
+			curTab.clickIn();
+			tabView.clickOn();
+			curTab = tabView;
+		}
+	}
+
+	public void onClick(View v) {
+
+		switch (v.getId()) {
+		case R.id.tab_home_llayout:
+			
+			// 首页
+			tabAdapter.checkedIndex(0);
+			selectTab(tab1);
+			
+			break;
+		case R.id.tab_class_llayout:
+			
+			// 分类
+			tabAdapter.checkedIndex(1);
+			selectTab(tab2);
+			
+			break;
+		case R.id.tab_cart_llayout:
+			
+			// 购物车
+			tabAdapter.checkedIndex(2);
+			selectTab(tab3);
+			
+			break;
+		case R.id.tab_my_llayout:
+			
+			// 我的
+			tabAdapter.checkedIndex(3);
+			selectTab(tab4);
+			
+			break;
+		}
+	}
+	
+	/**
+	 * 
+	 * @Description 获取版本信息
+	 * @Author blue
+	 * @Time 2015-9-28
+	 */
+	private void loadVersionInfo() {
+		String versionNum = UpdateVersionTool.getVersionCode(this)+"";
+		RequestClient.queryAppUpdateVersion(this, versionNum, "1", new RequestCallback<JSONObject>() {
+
+			@Override
+			public void onResponse(JSONObject response) {
+				Log.d(TAG, "queryAppUpdateVersion onResponse = "+response.toString());
+				if (JSONParseUtils.isSuccessRequest(MainActivity.this, response)) {
+					Gson gson = new Gson();
+					mUpdateInfo = gson.fromJson(JSONParseUtils.getString(response, "returnMap"), UpdateInfo.class);
+					Log.d(TAG, "local version code = "+UpdateVersionTool.getVersionCode(MainActivity.this)+", version name = "+mUpdateInfo.getVersionName()+", version num = "+mUpdateInfo.getVersionNum()+", update url = "+mUpdateInfo.getDownloadAddress()+", update tip = "+mUpdateInfo.getUpdateTip());
+					updateApk(mUpdateInfo);
+				}
+			}
+		});
+	}
+	
+	/**
+	 * 查询购物车数量
+	 */
+	public void queryAppShoppingCartNum() {
+		
+		//用户ID，购物车ID
+		String userId = BaoGangData.getInstance().getUserId();
+		String shoppingIds = Preferences.getString(PreKey.SHOPPINGIDS);
+		if(TextUtils.isEmpty(userId) && TextUtils.isEmpty(shoppingIds)){
+			
+			//既没有userid，也没有shoppingid则不做任何处理(不显示购物车数量)
+			cartCountTv.setVisibility(View.GONE);
+			
+			return;
+		}
+		
+		RequestClient.queryAppShoppingCartNum(this, userId, shoppingIds, new RequestCallback<JSONObject>(false) {
+
+			@Override
+			public void onResponse(JSONObject response) {
+				if (JSONParseUtils.isSuccessRequest(MainActivity.this, response)) {
+					
+					//购物车数量
+					int count = response.optInt("returnMap");
+					
+					int vis = (count <= 0) ? View.GONE : View.VISIBLE;
+					cartCountTv.setVisibility(vis);
+					
+					String text = count > 99 ? "99+" : String.valueOf(count);
+					cartCountTv.setText(text);
+				}
+			}
+		});
+	}
+	
+	
+	
+	/**
+	 * 是否有版本更新
+	 * @param updateInfo
+	 */
+	private void updateApk(final UpdateInfo updateInfo) {
+		Log.d(TAG, "local version code = "+(UpdateVersionTool.getVersionCode(this)) + " , remote version code = "+updateInfo.getVersionNum()+", remote version name = "+updateInfo.getVersionName());
+		try {
+			if (UpdateVersionTool.getVersionCode(this) >= Float.parseFloat(updateInfo.getVersionNum())) {
+				
+			} else {
+				VersionTipDialog dialog = new VersionTipDialog(this, updateInfo);
+				dialog.show();
+				if (mUpdateInfo.getForceUpdate().equals("1")) {
+					dialog.setCancelable(false);
+				}
+				AppContext.isHasUpdate = true;
+			}
+		} catch (Exception e) {
+			showToast("服务器上应用版本号格式错误");
+			e.printStackTrace();
+		}
+		
+	}
+}

@@ -1,0 +1,187 @@
+package com.baosteel.qcsh.ui.fragment.commen;
+
+import android.os.AsyncTask;
+import android.os.Bundle;
+
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.utils.Utils;
+import com.common.base.BaseFragment;
+import com.common.view.pulltorefresh.PullToRefreshBase;
+import com.common.view.pulltorefresh.PullToRefreshBase.OnLastItemVisibleListener;
+import com.common.view.pulltorefresh.PullToRefreshBase.OnRefreshListener;
+import com.common.view.pulltorefresh.PullToRefreshListView;
+import com.common.view.pulltorefresh.PullToRefreshBase.OnRefreshListener2;
+
+/**
+ * 
+ * @description 这个Fragment中封装了一个可下拉刷新的listView.
+ * 				ListView的Adapter由外部设置.
+ * @author blue
+ * @Time 2015-9-2
+ *
+ */
+public class RefreshListFragment extends BaseFragment{
+
+	/**
+	 * 
+	 * @description 通过回调接口将下拉刷新时间通知到外部
+	 * @author blue
+	 * @Time 2015-9-2
+	 *
+	 */
+	public interface OnRefreshLisenter{
+		void onRefresh();
+	}
+	private OnRefreshLisenter mRefreshLisenter;
+	public void setOnRefreshLisenter(OnRefreshLisenter lisenter) {
+		mRefreshLisenter = lisenter;
+	}
+	/**
+	 * 下拉刷新ListView
+	 */
+	private PullToRefreshListView mListView;
+	
+	/**
+	 * mListView的Adapter,由外部传入
+	 */
+	private BaseAdapter mAdapter;
+	
+	private OnItemClickListener mOnItemClickListener;
+	@Override
+	public View onCreateView(LayoutInflater inflater,
+			ViewGroup container, Bundle savedInstanceState) {
+		fragmentView = inflater.inflate(R.layout.fragment_refresh_list, null);
+		return fragmentView;
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		Log.d("zhiheng", "init listview and setAdater");
+		mListView = (PullToRefreshListView) fragmentView.findViewById(R.id.refresh_listview);
+		mListView.setAdapter(mAdapter);
+		
+		setListener();
+
+	}
+	
+	private void setListener() {
+		
+		mListView.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载更多");
+		mListView.getLoadingLayoutProxy(false, true).setReleaseLabel("松开加载");
+		mListView.getLoadingLayoutProxy(false, true).setRefreshingLabel("正在加载...");
+		if (mOnItemClickListener != null) mListView.setOnItemClickListener(mOnItemClickListener);
+//		mListView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
+//			@Override
+//			public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+//				
+//			}
+//
+//			@Override
+//			public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+//				if (mRefreshLisenter != null) {
+//					mRefreshLisenter.onRefresh();
+//				}
+//				mListView.onRefreshComplete();
+//				mAdapter.notifyDataSetChanged();
+//			}
+//		});
+		
+		mListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+
+			@Override
+			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+				int size = mAdapter.getCount();
+				new GetDataTask().execute();
+				refreshView.getRefreshableView().setSelection(size);
+			}
+		});
+		
+		// 添加滑动到底部的监听器
+//		mListView.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
+//            
+//            @Override
+//            public void onLastItemVisible() {
+//            	if (mRefreshLisenter != null) {
+//					mRefreshLisenter.onRefresh();
+//				}
+//            	mListView.onRefreshComplete();
+//				mAdapter.notifyDataSetChanged();
+//            }
+//        });
+        
+		mListView.isScrollingWhileRefreshingEnabled();//看刷新时是否允许滑动
+        //在刷新时允许继续滑动
+		mListView.setScrollingWhileRefreshingEnabled(true);
+		mListView.setMode(PullToRefreshBase.Mode.BOTH);//设置刷新模式：下拉、上拉或两者皆可
+	}
+	
+	private class GetDataTask extends AsyncTask<Void, Void, String[]> {
+
+		@Override
+		protected String[] doInBackground(Void... params) {
+			// Simulates a background job.
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String[] result) {
+			if (mRefreshLisenter != null) {
+				mRefreshLisenter.onRefresh();
+			}
+			
+			mAdapter.notifyDataSetChanged();
+
+			// Call onRefreshComplete when the list has been refreshed.
+			mListView.onRefreshComplete();
+
+			super.onPostExecute(result);
+		}
+	}
+	
+	public void onRefreshComplete() {
+		Log.d(TAG, "==> onRefreshComplete");
+		mListView.onRefreshComplete();
+	}
+	
+	/**
+	 * 设置Adapter
+	 */
+	public void setAdapter(BaseAdapter adapter) {
+		mAdapter = adapter;
+		Log.d("zhiheng", "===> setAdapter");
+	}
+	
+	/**
+	 * 
+	 * @Description 设置选中项
+	 * @Author blue
+	 * @Time 2015-9-6
+	 */
+	public void setSelection(int position) {
+		mListView.getRefreshableView().setSelection(position);
+	}
+	
+	/**
+	 * 
+	 * @Description 设置ListView的监听事件
+	 * @Author blue
+	 * @Time 2015-9-7
+	 */
+	public void setOnItemClickListener(OnItemClickListener listener) {
+		this.mOnItemClickListener = listener;
+	}
+}

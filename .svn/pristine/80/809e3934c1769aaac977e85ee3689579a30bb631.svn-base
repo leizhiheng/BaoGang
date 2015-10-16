@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.baosteel.qcsh.ui.view.TitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </com.baosteel.qcsh.ui.view.TitleBar>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="@dimen/dp_10"
+        android:text="中国电信宽带安装"
+        android:textSize="@dimen/sp_15" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingBottom="@dimen/dp_10"
+        android:paddingLeft="@dimen/dp_10"
+        android:text="服务评价（1523）"
+        android:textColor="@color/black_light"
+        android:textSize="@dimen/sp_14" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.2"
+        android:background="@color/gray" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.2"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@color/gray" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/dp_10"
+        android:background="@color/white" >
+
+        <fragment
+            android:id="@+id/fragment_refresh_listview"
+            android:name="com.baosteel.qcsh.ui.fragment.commen.RefreshListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            class="com.baosteel.qcsh.ui.fragment.commen.RefreshListFragment" />
+    </FrameLayout>
+
+</LinearLayout>

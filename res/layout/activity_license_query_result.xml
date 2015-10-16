@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.common.view.topbar.HeadView
+        android:id="@+id/headview"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_46" />
+
+    <TextView
+        android:id="@+id/tv_company_name"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_45"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:text="深圳英迈思科技文化有限公司"
+        android:textColor="#333333"
+        android:textSize="@dimen/commen_text_size_15" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.01dp"
+        android:background="#D3D3D3" />
+
+    <TextView
+        android:id="@+id/tv_license_num"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_35"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:text="营业执照注册号：*********"
+        android:textColor="#666666"
+        android:textSize="@dimen/commen_text_size_14" />
+
+    <TextView
+        android:id="@+id/tv_legal_person"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_35"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:text="法定代表人姓名：保密"
+        android:textColor="#666666"
+        android:textSize="@dimen/commen_text_size_14" />
+
+    <TextView
+        android:id="@+id/tv_adress"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_35"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:text="营业执照所在地：广东深圳宝安"
+        android:textColor="#666666"
+        android:textSize="@dimen/commen_text_size_14" />
+
+    <TextView
+        android:id="@+id/tv_registered_money"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_35"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:text="企业注册资金：*****"
+        android:textColor="#666666"
+        android:textSize="@dimen/commen_text_size_14" />
+
+    <TextView
+        android:id="@+id/tv_license_validity"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_35"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:text="营业执照有效期：保密"
+        android:textColor="#666666"
+        android:textSize="@dimen/commen_text_size_14" />
+
+    <TextView
+        android:id="@+id/tv_business_range"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_35"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:text="营业执照经营范围：保密"
+        android:textColor="#666666"
+        android:textSize="@dimen/commen_text_size_14" />
+
+    <TextView
+        android:id="@+id/tv_company_adress"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_35"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:text="公司地址：****"
+        android:textColor="#666666"
+        android:textSize="@dimen/commen_text_size_14" />
+
+    <TextView
+        android:id="@+id/tv_store_name"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_35"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:text="店铺名称：保密"
+        android:textColor="#666666"
+        android:textSize="@dimen/commen_text_size_14" />
+
+    <TextView
+        android:id="@+id/tv_store_web"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_35"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:text="店铺网址：保密"
+        android:textColor="#666666"
+        android:textSize="@dimen/commen_text_size_14" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.01dp"
+        android:background="#D3D3D3" />
+
+    <TextView
+        android:id="@+id/tv_tip"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="@dimen/dp_10"
+        android:background="@color/gray6"
+        android:text="注：以上营业执照信息，除公司名称、店铺名称、店铺网址已确认认证之外。其余信息由卖家自行申请填写。如需进一步核实，请联系当地工商行政管理部门"
+        android:textColor="#828283"
+        android:textSize="@dimen/commen_text_size_14" />
+
+
+</LinearLayout>

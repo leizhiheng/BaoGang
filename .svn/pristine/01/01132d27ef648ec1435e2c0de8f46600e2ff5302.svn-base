@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <com.baosteel.qcsh.ui.view.TitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/dp_15"
+        android:paddingTop="@dimen/dp_15" >
+
+        <LinearLayout
+            android:id="@+id/tab_city_llayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/tab_city_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/text_city"
+                android:textColor="@color/color_text_black_red"
+                android:textSize="@dimen/sp_14" />
+
+            <ImageView
+                android:id="@+id/tab_city_imageview"
+                android:layout_width="@dimen/dp_9"
+                android:layout_height="@dimen/dp_9"
+                android:layout_marginLeft="@dimen/dp_3"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerInside" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="@dimen/dp_0.2"
+            android:layout_height="match_parent"
+            android:background="@color/gray" />
+
+        <LinearLayout
+            android:id="@+id/tab_category_llayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/tab_category_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_category"
+                android:textColor="@color/color_text_black_red"
+                android:textSize="@dimen/sp_14" />
+
+            <ImageView
+                android:id="@+id/tab_category_imageview"
+                android:layout_width="@dimen/dp_9"
+                android:layout_height="@dimen/dp_9"
+                android:layout_marginLeft="@dimen/dp_3"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerInside" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="@dimen/dp_0.2"
+            android:layout_height="match_parent"
+            android:background="@color/gray" />
+
+        <LinearLayout
+            android:id="@+id/tab_area_llayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/tab_area_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_area"
+                android:textColor="@color/color_text_black_red"
+                android:textSize="@dimen/sp_14" />
+
+            <ImageView
+                android:id="@+id/tab_area_imageview"
+                android:layout_width="@dimen/dp_9"
+                android:layout_height="@dimen/dp_9"
+                android:layout_marginLeft="@dimen/dp_3"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerInside" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="@dimen/dp_0.2"
+            android:layout_height="match_parent"
+            android:background="@color/gray" />
+
+        <LinearLayout
+            android:id="@+id/tab_source_llayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/tab_source_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_source"
+                android:textColor="@color/color_text_black_red"
+                android:textSize="@dimen/sp_14" />
+
+            <ImageView
+                android:id="@+id/tab_source_imageview"
+                android:layout_width="@dimen/dp_9"
+                android:layout_height="@dimen/dp_9"
+                android:layout_marginLeft="@dimen/dp_3"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerInside" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.2"
+        android:background="@color/gray" >
+    </View>
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+    </FrameLayout>
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.2"
+        android:background="@color/gray" >
+    </View>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/dp_15"
+        android:paddingTop="@dimen/dp_15" >
+
+        <LinearLayout
+            android:id="@+id/tab_near_llayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/tab_near_imageview"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="@dimen/dp_24"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerInside"/>
+
+            <TextView
+                android:id="@+id/tab_near_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_3"
+                android:text="@string/text_near"
+                android:textColor="@color/color_text_gray_red"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="@dimen/dp_0.2"
+            android:layout_height="match_parent"
+            android:background="@color/gray" />
+
+        <LinearLayout
+            android:id="@+id/tab_map_llayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/tab_map_imageview"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="@dimen/dp_24"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerInside" />
+
+            <TextView
+                android:id="@+id/tab_map_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_3"
+                android:text="@string/text_map"
+                android:textColor="@color/color_text_gray_red"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="@dimen/dp_0.2"
+            android:layout_height="match_parent"
+            android:background="@color/gray" />
+
+        <LinearLayout
+            android:id="@+id/tab_release_llayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/tab_release_imageview"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="@dimen/dp_24"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerInside"/>
+
+            <TextView
+                android:id="@+id/tab_release_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_3"
+                android:text="@string/text_release"
+                android:textColor="@color/color_text_gray_red"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

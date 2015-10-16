@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:background="@color/white"
+    android:paddingBottom="@dimen/dp_10"
+    android:paddingTop="@dimen/dp_10" >
+
+    <ImageView
+        android:id="@+id/picImageView"
+        android:layout_width="@dimen/dp_80"
+        android:layout_height="@dimen/dp_80"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_order_product" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/nameTv"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:paddingTop="@dimen/dp_3"
+            android:text="奥克斯（AUX）ACL2007大线圈匀火加入智能显示电磁炉"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_14" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/dp_3" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="价格:"
+                android:textColor="@color/font_gray"
+                android:textSize="@dimen/sp_14" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="￥"
+                android:textColor="@color/theme_color_order"
+                android:textSize="@dimen/sp_12" />
+
+            <TextView
+                android:id="@+id/priceTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="199.00"
+                android:textColor="@color/theme_color_order"
+                android:textSize="@dimen/sp_16" />
+
+            <TextView
+                android:id="@+id/buyCountTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="x2"
+                android:textColor="@color/font_gray"
+                android:textSize="@dimen/sp_13" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

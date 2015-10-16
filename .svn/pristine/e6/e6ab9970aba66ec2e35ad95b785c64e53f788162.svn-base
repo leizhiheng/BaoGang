@@ -1,0 +1,80 @@
+package com.baosteel.qcsh.ui.fragment.myorder;
+
+import android.os.Bundle;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.model.OrderDetailData;
+import com.baosteel.qcsh.ui.view.TitleBar;
+import com.common.base.BaseFragment;
+
+/**
+ * 
+ * @description 订单详情 - 待审核
+ * @author blue
+ * @Time 2015-9-30
+ *
+ */
+public class OrderDetailNotCheckFragment extends OrderDetailBaseFragment implements OnClickListener{
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		
+		initData();
+		initView();
+		
+		if (mOrderDetailData != null) setView();
+	}
+
+	private void initData() {
+		
+	}
+	
+	
+	private void initView() {
+        mBtn_order_right.setOnClickListener(this);
+        mBtn_order_center.setOnClickListener(this);
+        mBtn_order_left.setOnClickListener(this);
+        
+        mBtn_order_right.setVisibility(View.VISIBLE);
+        mBtn_order_center.setVisibility(View.VISIBLE);
+        mBtn_order_left.setVisibility(View.VISIBLE);
+        mTv_service_tips.setVisibility(View.VISIBLE);
+        mLin_service_order.setVisibility(View.VISIBLE);
+        mTv_order_state.setText("待审核");
+        mBtn_order_left.setText("提醒卖家");
+        mBtn_order_center.setText("联系卖家");
+        mBtn_order_right.setText("取消订单");
+	}
+	
+	@Override
+	public void setOrderDetailData(OrderDetailData data) {
+		super.setOrderDetailData(data);
+		setView();
+	}
+	
+	@Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.btn_order_left:
+                Toast.makeText(mContext, "提醒卖家", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btn_order_center:
+                Toast.makeText(mContext, "联系卖家", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btn_order_right:
+                queryAppOrderStatusCancelReason();//取消订单
+                break;
+        }
+    }
+}

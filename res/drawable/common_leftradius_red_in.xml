@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" 
+    >
+
+    <!-- 圆角 -->
+    <corners
+        android:bottomLeftRadius="@dimen/radius_size"
+        android:topLeftRadius="@dimen/radius_size" />
+
+    <!-- 填充 -->
+    <solid android:color="@color/index_red" />
+
+    <!-- 边框 -->
+    <stroke android:color="#FEDCDE" android:width="1px"/>
+    
+</shape>

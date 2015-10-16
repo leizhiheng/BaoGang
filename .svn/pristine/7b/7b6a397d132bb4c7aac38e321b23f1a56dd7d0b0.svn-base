@@ -1,0 +1,160 @@
+package com.baosteel.qcsh.model;
+
+/**
+ * Created by lenovo on 2015/10/1.
+ */
+public class PickUpAddress {
+    private String contact_tel;
+
+    private String serve_name;
+
+    private String cityName;
+
+    private String provinceName;
+
+    private String serve_time;
+
+    private String remark_lat;
+
+    private int city;
+
+    private int id;
+
+    private String remark_lng;
+
+    private int area;
+
+    private String areaName;
+
+    private int province;
+
+    private int merchant_id;
+
+    private String street_address;
+
+    public String getContact_tel() {
+        return contact_tel;
+    }
+
+    public PickUpAddress setContact_tel(String contact_tel) {
+        this.contact_tel = contact_tel;
+        return this;
+    }
+
+    public String getServe_name() {
+        return serve_name;
+    }
+
+    public PickUpAddress setServe_name(String serve_name) {
+        this.serve_name = serve_name;
+        return this;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public PickUpAddress setCityName(String cityName) {
+        this.cityName = cityName;
+        return this;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public PickUpAddress setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+        return this;
+    }
+
+    public String getServe_time() {
+        return serve_time;
+    }
+
+    public PickUpAddress setServe_time(String serve_time) {
+        this.serve_time = serve_time;
+        return this;
+    }
+
+    public String getRemark_lat() {
+        return remark_lat;
+    }
+
+    public PickUpAddress setRemark_lat(String remark_lat) {
+        this.remark_lat = remark_lat;
+        return this;
+    }
+
+    public int getCity() {
+        return city;
+    }
+
+    public PickUpAddress setCity(int city) {
+        this.city = city;
+        return this;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public PickUpAddress setId(int id) {
+        this.id = id;
+        return this;
+    }
+
+    public String getRemark_lng() {
+        return remark_lng;
+    }
+
+    public PickUpAddress setRemark_lng(String remark_lng) {
+        this.remark_lng = remark_lng;
+        return this;
+    }
+
+    public int getArea() {
+        return area;
+    }
+
+    public PickUpAddress setArea(int area) {
+        this.area = area;
+        return this;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public PickUpAddress setAreaName(String areaName) {
+        this.areaName = areaName;
+        return this;
+    }
+
+    public int getProvince() {
+        return province;
+    }
+
+    public PickUpAddress setProvince(int province) {
+        this.province = province;
+        return this;
+    }
+
+    public int getMerchant_id() {
+        return merchant_id;
+    }
+
+    public PickUpAddress setMerchant_id(int merchant_id) {
+        this.merchant_id = merchant_id;
+        return this;
+    }
+
+    public String getStreet_address() {
+        return street_address;
+    }
+
+    public PickUpAddress setStreet_address(String street_address) {
+        this.street_address = street_address;
+        return this;
+    }
+}

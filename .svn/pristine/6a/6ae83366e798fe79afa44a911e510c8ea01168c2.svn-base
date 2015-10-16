@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    >
+    <com.common.view.topbar.HeadView
+        android:id="@+id/headview"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_46"/>
+    <TextView
+        android:id="@+id/tv_carnum"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/commen_text_size_12"
+        android:textColor="#848385"
+        android:background="#E5E2E4"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_5"
+        android:text="车牌号码：粤B637F4"/>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_0.1"
+        android:background="#D3D3D3"/>
+    <TextView
+        android:id="@+id/tv_illegal_num"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:text="共有2起"
+        android:textColor="@color/black"
+        android:textSize="@dimen/commen_text_size_14"
+        />
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_0.1"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:background="#D3D3D3"/>
+
+    <ListView
+        android:id="@+id/lv_illegal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:divider="#D3D3D3"
+        android:dividerHeight="@dimen/dp_0.1"
+        android:listSelector="@android:color/transparent"/>
+
+</LinearLayout>

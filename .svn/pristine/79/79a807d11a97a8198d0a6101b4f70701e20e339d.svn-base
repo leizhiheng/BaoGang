@@ -1,0 +1,250 @@
+package com.common.pay;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.TextPaint;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.ui.activity.MainActivity;
+import com.baosteel.qcsh.ui.activity.my.order.AllOrderActivity;
+import com.common.base.BaseActivity;
+
+/**
+ * 支付结果
+ * 
+ * @author 刘远祺
+ * 
+ * @todo TODO
+ * 
+ * @date 2015-10-15
+ */
+public class PayResultActivity extends BaseActivity implements OnClickListener {
+
+	private static final String TAG 		= "PayResultActivity";
+	
+	
+	/**支付结果**/
+	public static final String Pay_Result 	= "pay_result";
+	
+	/**支付类型**/
+	public static final String Pay_Type 	= "pay_type";
+	
+	
+
+	private LinearLayout layout_pay_result;	// 支付结果
+	private TextView pay_find_orderinfo;	// 查看订单
+	private TextView pay_continueshop;		// 继续购物
+	private TextView tv_pay_tip1;			// 支付提示
+	private TextView tv_pay_orderid;		// 订单编号
+	private String number;					// 订单编号
+	private TextView title;					// 标题
+	private TextView tv_pay_tip2;			// 您已成功使用支付宝支付完成交易
+	private TextView tv_countdown;			// 倒计时
+	private ImageView iv_pay_image;			// 支付图标
+	
+	
+	private int pay_result;					// 支付结果 1.支付成功 2.支付失败 3.WAP支付返回
+	private int payType;					// 支付方式 1.支付宝 2.银联 3.微信4.服务卡
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.pay_result);
+		
+		//初始化控件
+		initView();
+		
+		
+		//初始化数据
+		initData();
+	}
+
+	/**
+	 * 初始化数据
+	 */
+	public void initData() {
+
+		//显示支付结果
+		showPayResult();
+		
+		//显示倒计时
+		showCountDown();
+	}
+
+	/**
+	 * 初始化控件
+	 */
+	public void initView() {
+		layout_pay_result = (LinearLayout) findViewById(R.id.layout_pay_result);
+		pay_find_orderinfo = (TextView) findViewById(R.id.pay_find_orderinfo);
+		pay_continueshop = (TextView) findViewById(R.id.pay_continueshop);
+		tv_pay_tip1 = (TextView) findViewById(R.id.tv_pay_tip1);
+		tv_pay_tip2 = (TextView) findViewById(R.id.tv_pay_tip2);
+		tv_pay_orderid = (TextView) findViewById(R.id.tv_pay_orderid);
+		title = (TextView) findViewById(R.id.title);
+		tv_countdown = (TextView) findViewById(R.id.tv_countdown);
+		iv_pay_image = (ImageView) findViewById(R.id.iv_pay_image);
+		
+		pay_find_orderinfo.setOnClickListener(this);
+		pay_continueshop.setOnClickListener(this);
+		
+	}
+
+	/**
+	 * 初始化数据
+	 */
+	public void showPayResult() {
+		TextPaint tp = title.getPaint();
+		tp.setFakeBoldText(true);
+		TextPaint tp1 = tv_pay_tip1.getPaint();
+		tp1.setFakeBoldText(true);
+
+		tv_pay_orderid.setText("订单编号：" + number);
+		if (1 == pay_result) {// 成功
+			title.setText("支付成功");
+			tv_pay_tip1.setText("支付成功，谢谢惠顾！");
+			String payName = "";
+			int drawable = 1;
+			if (1 == payType) {// 支付宝
+				payName = "支付宝";
+				iv_pay_image.setImageResource(R.drawable.pay_alipay);
+			} else if (2 == payType) {// 银联
+				payName = "银联";
+				iv_pay_image.setImageResource(R.drawable.pay_up);
+			} else if (3 == payType) {// 微信
+				payName = "微信";
+				iv_pay_image.setImageResource(R.drawable.pay_weixin);
+			}
+			tv_pay_tip2.setText("您已成功使用" + payName + "支付完成交易");
+		} else if (2 == pay_result) {
+			title.setText("支付失败");
+			tv_pay_tip1.setText("支付失败！");
+			String payName = "";
+			int drawable = 1;
+			if (1 == payType) {// 支付宝
+				payName = "支付宝";
+				iv_pay_image.setImageResource(R.drawable.pay_alipay);
+			} else if (2 == payType) {// 银联
+				payName = "银联";
+				iv_pay_image.setImageResource(R.drawable.pay_up);
+			} else if (3 == payType) {// 微信
+				payName = "微信";
+				iv_pay_image.setImageResource(R.drawable.pay_weixin);
+			}
+			pay_find_orderinfo.setBackgroundResource(R.drawable.btn_backpay);// 设置背景为重新支付
+			tv_pay_tip2.setText("您使用" + payName + "支付交易失败");
+		} else {
+			title.setText("支付结果");
+			tv_pay_tip1.setText("查看支付结果！");
+//			if (5 == payType) {// 中行
+//				iv_pay_image.setImageResource(R.drawable.logo_china_bank);
+//			}
+//			if (6 == payType) {// 建行
+//				iv_pay_image.setImageResource(R.drawable.logo_construction_bank);
+//			}
+			tv_pay_tip2.setText("");
+		}
+		layout_pay_result.setVisibility(View.VISIBLE);
+	}
+
+
+	@Override
+	public void onClick(View v) {
+
+		switch (v.getId()) {
+		case R.id.pay_find_orderinfo:
+			
+			// 查看订单
+			if (1 == pay_result) {
+				
+				// 成功-进入订单列表
+				findOrderInfo();
+				
+			} else {
+				
+				// 失败--返回支付页面
+				backPay();
+			}
+			break;
+		case R.id.pay_continueshop:
+			
+			// 继续购物--自动跳转到主页
+			startToMainActivity(MainActivity.TAB_HOME);
+			
+			
+			break;
+		}
+	}
+
+	/**
+	 * 查看订单
+	 */
+	public void findOrderInfo() {
+		
+		//跳转全部订单列表
+		Intent intent = new Intent(this, AllOrderActivity.class);
+		startActivity(intent);
+	}
+
+	
+	
+	//倒计时------------------start
+	private static final int HANDLER_TIME_FINISH = 1;
+	private Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+
+			super.handleMessage(msg);
+			switch (msg.what) {
+			case HANDLER_TIME_FINISH:
+
+				if (count > 0) {
+					count--;
+					mHandler.sendEmptyMessageDelayed(HANDLER_TIME_FINISH, 1000);
+					// 更新ui, count;
+					tv_countdown.setText(count + "s后将自动返回订单详情");
+				} else {
+					findOrderInfo();
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	};
+	private int count = 10;
+	private void showCountDown() {
+		count = 10;
+		mHandler.sendEmptyMessageDelayed(HANDLER_TIME_FINISH, 1000);
+	}
+	//倒计时------------------end
+	
+
+	/**
+	 * 返回支付页面
+	 */
+	public void backPay() {
+		// Intent i = new Intent();
+		// i.setClass(WXPayEntryActivity.this, CommitOrderActivity.class);
+		// i.putExtra("number", number);
+		// i.putExtra("totalPrice", price + "");
+		// i.putExtra("serialNum", order_id);
+		// startActivity(i);
+		// WXPayEntryActivity.this.finish();
+	}
+
+	
+
+	@Override
+	protected void onDestroy() {
+		mHandler.removeMessages(HANDLER_TIME_FINISH);
+		super.onDestroy();
+	}
+}

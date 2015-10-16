@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.baosteel.qcsh.ui.view.TitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </com.baosteel.qcsh.ui.view.TitleBar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_160"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_healthy_people_hospital" >
+            </ImageView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_10"
+                android:gravity="center_vertical"
+                android:background="@color/white"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/dp_5" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="医院特色："
+                            android:textSize="@dimen/sp_14" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="眼科  骨科  内科  神经科"
+                            android:textSize="@dimen/sp_14" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/dp_5" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="医院地址："
+                            android:textSize="@dimen/sp_14" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="上海市宝山区牡丹江路345号"
+                            android:textSize="@dimen/sp_14" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/dp_5" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="咨询电话："
+                            android:textSize="@dimen/sp_14" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="021-75446859"
+                            android:textSize="@dimen/sp_14" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="@dimen/dp_0.5"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/dp_5"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:background="@color/gray" />
+
+                <ImageView
+                    android:layout_width="@dimen/dp_25"
+                    android:layout_height="@dimen/dp_25"
+                    android:layout_margin="@dimen/dp_15"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/icon_phone" />
+            </LinearLayout>
+            
+            <View android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_0.2"
+                android:background="@color/gray"/>
+            <View android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_0.2"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/gray"/>
+            
+            <TextView android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_15"
+                android:padding="@dimen/dp_10"
+                android:background="@color/white"
+                android:text="医院简介"/>
+            
+            <TextView android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_14"
+                android:padding="@dimen/dp_10"
+                android:textColor="@color/black_light"
+                android:background="@color/white"
+                android:text="上海市人民医院是国家三级甲等综合医院。始建于1984年，是一家集医疗、预防、保健、康复、科研、教学于一体的大型综合医院，是南方医科大学非直属医院，广东省高等医学院校教学医院，住院医师规范化培训基地，中山大学博士后流动站科研基地。医院占地面积6.3万平方米，建筑面积14.4万平方米，开设病床1050张，有固定资产7.6亿元。截止2012年底，全院有干部、职工1655人，其中博士后、博士、硕士研究生200多人，高级卫技人员365人。 2012年门急诊总诊疗病人250万人次，年出院病人3万多人次。医院现设职能科室26个，临床、医技科室51个，社康中心10个。"/>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

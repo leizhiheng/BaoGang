@@ -1,0 +1,103 @@
+package com.baosteel.qcsh.ui.fragment.classify;
+
+import java.util.ArrayList;
+
+import android.R.integer;
+import android.app.Fragment;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.model.ProductCategory;
+import com.baosteel.qcsh.ui.activity.common.SearchActivity;
+import com.baosteel.qcsh.ui.fragment.commen.ProductCategoryFragment;
+import com.baosteel.qcsh.ui.view.TitleBar;
+import com.common.base.BaseFragment;
+import com.common.utils.LogUtil;
+
+/**
+ * 分类
+ * @author 刘远祺
+ *
+ * @todo TODO
+ *
+ * @date 2015-8-27
+ */
+public class ClassFragment extends BaseFragment {
+	private static final String TAG = "ClassFragment";
+	
+	/**
+	 * 分类信息
+	 */
+	private ArrayList<ProductCategory> mCategories;
+	
+	/**
+	 * 搜索框
+	 */
+	private View mLoayoutSearch;
+	/**
+	 * 嵌套的显示商品分类的Fragment
+	 */
+	private ClassifyProductCategoryFragment mProductCategoryFragment;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		mProductCategoryFragment = new ClassifyProductCategoryFragment();
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater,
+			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+		LogUtil.d(TAG, "=== > onCreateView");
+		fragmentView = inflater.inflate(R.layout.fragment_classify, null);
+		return fragmentView;
+	}
+	
+	@Override
+	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		LogUtil.d(TAG, "=== > onActivityCreated");
+		initView();
+	}
+	
+	private void initView() {
+		
+		findViewById(R.id.btn_back).setVisibility(View.GONE);
+		findViewById(R.id.activity_index_sousuo_iv).setVisibility(View.GONE);
+		
+		mContext.getSupportFragmentManager().beginTransaction().replace(R.id.container, mProductCategoryFragment).commit();
+		mLoayoutSearch = findViewById(R.id.ab_search);
+		mLoayoutSearch.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(ClassFragment.this.getActivity(),SearchActivity.class));
+			}
+		});
+		
+//		mTitleView = (TitleBar) fragmentView.findViewById(R.id.title_bar);
+//		mTitleMidView = LayoutInflater.from(mContext).inflate(R.layout.layout_classify_title_midview, null);
+//		mTitleMidView.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				startActivity(new Intent(ClassFragment.this.getActivity(),SearchActivity.class));
+//			}
+//		});
+//		
+		mProductCategoryFragment.setmColorSelected(getResources().getColor(R.color.index_red));
+//		
+//		mTitleView.setMidView(mTitleMidView);
+	}
+	
+	public void setData(ArrayList<ProductCategory> categories) {
+		this.mCategories = categories;
+	}
+}

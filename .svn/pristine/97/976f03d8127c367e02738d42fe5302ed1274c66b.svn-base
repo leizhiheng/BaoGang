@@ -1,0 +1,171 @@
+package com.baosteel.qcsh.ui.activity.my.setting;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.model.CommonHouse;
+import com.baosteel.qcsh.ui.adapter.CommonHouseAdapter;
+import com.baosteel.qcsh.ui.view.TitleBar;
+import com.common.base.BaseActivity;
+import com.common.view.pulltorefresh.PullToRefreshBase;
+import com.common.view.pulltorefresh.PullToRefreshBase.OnRefreshListener2;
+import com.common.view.pulltorefresh.PullToRefreshListView;
+
+/**
+ * 常用房屋列表
+ * 
+ * @author 刘远祺
+ * 
+ * @todo TODO
+ * 
+ * @date 2015-9-16
+ */
+public class CommonHouseListActivity extends BaseActivity implements OnRefreshListener2<ListView>, View.OnClickListener, OnItemClickListener {
+
+	/**添加房屋**/
+	public static final int REQUEST_ADD = 1;
+	
+	/**编辑房屋**/
+	public static final int REQUEST_EDIT = 2;
+	
+	/**标题**/
+	private TitleBar mTitle_bar;
+
+	/**新增提示标题**/
+	private TextView addTipTv;
+	
+	/**房屋列表**/
+	private PullToRefreshListView listView;
+
+	/**适配器**/
+	private CommonHouseAdapter adapter;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_common_car_info);
+		
+		initViews();
+		
+		initData();
+	}
+
+	/**
+	 * 初始化控件
+	 */
+	private void initViews() {
+
+		//标题
+		mTitle_bar = (TitleBar) findViewById(R.id.title_bar);
+		mTitle_bar.setTitle("常用房屋抬头");
+		mTitle_bar.setBackgroud(R.color.index_red);
+		
+		//新增提示
+		addTipTv = (TextView)findViewById(R.id.addTipTv);
+		addTipTv.setText("新增常用房屋信息");
+		
+		//ListView
+		listView = (PullToRefreshListView) findViewById(R.id.data_list);
+
+		//点击事件
+		findViewById(R.id.lin_add_address).setOnClickListener(this);
+
+	}
+
+	/**
+	 * 初始化数据 
+	 */
+	private void initData() {
+
+		adapter = new CommonHouseAdapter(mContext, getData());
+		listView.setAdapter(adapter);
+		listView.setOnItemClickListener(this);
+	}
+
+	/**
+	 * 构造房屋数据
+	 * @return
+	 */
+	private List<CommonHouse> getData(){
+		List<CommonHouse> list = new ArrayList<CommonHouse>();
+		list.add(new CommonHouse("毛泽东"));
+		list.add(new CommonHouse("周恩来"));
+		list.add(new CommonHouse("邓小平"));
+		list.add(new CommonHouse("习见平"));
+		list.add(new CommonHouse("胡锦涛"));
+		list.add(new CommonHouse("江泽民"));
+		return list;
+	}
+	
+	@Override
+	public void onClick(View view) {
+		switch (view.getId()) {
+		case R.id.lin_add_address:
+
+			// 添加房屋抬头
+			Intent intent = new Intent(mContext, CommonHouseEditActivity.class);
+			startActivityForResult(intent, REQUEST_ADD);
+			
+			break;
+		}
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		//不是一次成功的结果
+		if(RESULT_OK != resultCode){
+			return;
+		}
+		
+		switch (requestCode) {
+		case REQUEST_ADD:
+			
+			CommonHouse houseAdd = (CommonHouse)data.getSerializableExtra("house");
+			adapter.addData(houseAdd);
+			
+			break;
+
+		case REQUEST_EDIT:
+			
+			CommonHouse ticketEdit = (CommonHouse)data.getSerializableExtra("house");
+			adapter.updateData(ticketEdit);
+			
+			break;
+		}
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+		//记住当前点击的房屋
+		adapter.remembItemClick(position);
+		CommonHouse ticket = (CommonHouse)adapter.getItem(position);
+		
+		//跳转到编辑界面
+		Intent intent = new Intent(mContext, CommonHouseEditActivity.class);
+		intent.putExtra(CommonHouseEditActivity.HOUSE, ticket);
+		startActivityForResult(intent, REQUEST_ADD);
+	}
+
+	@Override
+	public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+		// TODO Auto-generated method stub
+		
+	}
+}

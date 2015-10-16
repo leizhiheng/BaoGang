@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E5E2E4"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="@dimen/dp_70"
+            android:layout_height="@dimen/dp_70"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_5"
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_maintenance_time" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_5"
+            android:text="记录各项保养时间"
+            android:textColor="@color/black"
+            android:textSize="@dimen/commen_text_size_14" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dp_5"
+            android:text="系统准时给您保养提醒"
+            android:textColor="#525252"
+            android:textSize="@dimen/commen_text_size_12" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_5"
+            android:text="记录您爱车的保养费用"
+            android:textColor="@color/black"
+            android:textSize="@dimen/commen_text_size_14" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dp_10"
+            android:text="养车成本一目了然"
+            android:textColor="#525252"
+            android:textSize="@dimen/commen_text_size_12" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/btn_add"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_20"
+        android:background="@drawable/common_radius_green"
+        android:gravity="center"
+        android:text="立即增加"
+        android:textColor="@color/white"
+        android:textSize="@dimen/commen_text_size_16" />
+
+
+</LinearLayout>

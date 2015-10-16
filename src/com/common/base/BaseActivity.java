@@ -1,0 +1,517 @@
+package com.common.base;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.constants.ConstantsAPI;
+import com.baosteel.qcsh.model.BaoGangData;
+import com.baosteel.qcsh.model.User;
+import com.baosteel.qcsh.ui.popwindow.SelectListItemWindow;
+import com.baosteel.qcsh.ui.view.TitleBar;
+import com.common.utils.LogUtil;
+
+import java.util.ArrayList;
+import java.util.Map;
+
+import android.R.integer;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.Gravity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.baosteel.qcsh.ui.activity.MainActivity;
+import com.baosteel.qcsh.ui.activity.my.LoginActivity;
+import com.baosteel.qcsh.ui.activity.prodcut.TongueTipProductDetailsActivity;
+import com.baosteel.qcsh.ui.popwindow.SelectApplyReasonWindow;
+import com.baosteel.qcsh.ui.popwindow.SelectApplyReasonWindow.IOnItemClick;
+import com.baosteel.qcsh.utils.ImageManager;
+import com.common.utils.DeviceUtils;
+
+/**
+ * Activity基类
+ * @author 刘远祺
+ *
+ * @todo TODO
+ *
+ * @date 2015-8-27
+ */
+public class BaseActivity extends FragmentActivity{
+	
+	protected final String TAG = this.getClass().getSimpleName();
+	/**
+	 * Activity跳转时携带页面标题的 Intent Key
+	 */
+	public static final String EXTRA_KEY_TITLE = "key_title";
+	/**
+	 * 子Activity返回结果时，携带数据的Intent key
+	 */
+	public static final String EXTRA_KEY_RESULT = "key_result";
+	/**
+	 */
+	protected Activity mContext;
+	
+	protected TitleBar mTitleBar;
+
+	private SelectListItemWindow listItemWindow;//下拉选择框
+
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		mContext = this;
+		LogUtil.d("BaseActivity", "==> "+this.getClass().getSimpleName()+" onCreate");
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		//清空图片缓存
+		ImageManager.clearCache();
+	}
+	
+	@Override
+	public void setContentView(int layoutResID) {
+		super.setContentView(layoutResID);
+        
+        baseInit();
+        
+        bindView();
+	}
+	
+	public void bindView(){
+		
+	}
+	
+	
+	/**
+	 * 基类初始化
+	 */
+	private void baseInit(){
+		
+		//返回事件
+		View backView = findViewById(R.id.ab_back);
+		if(null == backView){
+			backView = findViewById(R.id.btn_back);
+		}
+		if(null == backView){
+			backView = findViewById(R.id.layout_back);
+		}
+		
+		if(null != backView){
+			backView.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					finish();
+				}
+			});
+		}
+	}
+	
+	/**
+	 * 显示toast
+	 * @param msg
+	 */
+	public void showToast(String msg){
+		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+	}
+	
+	/**
+	 * 获取textview文本 
+	 * @param tv
+	 * @return
+	 */
+	protected String getText(TextView tv){
+		try{
+			return tv.getText().toString().trim();
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	protected String getTag(View view){
+		try{
+			return view.getTag().toString().trim();
+		}catch(Exception e){
+			e.printStackTrace();
+			return "";
+		}
+	}
+	
+	/**
+     * 监听originTextView文本值变化，有值showTextView显示相对应的字数值
+     * @param originTextView
+     * @param showTextView
+     * @param maxLength 最大字数
+     */
+    protected void setTextChangeListener(TextView originTextView,  final TextView showTextView,final int maxLength) {
+        if (null == originTextView || null == showTextView) {
+            return;
+        }
+        originTextView.addTextChangedListener(new TextWatcher() {
+            public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+            }
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
+            public void afterTextChanged(Editable arg0) {
+                String text = arg0.toString().trim();
+                int textLength=text.length();
+                String showText=textLength+"/"+maxLength;
+                showTextView.setText(showText);
+            }
+        });
+    }
+    
+    /**
+	 * 获取String值
+	 * @param key
+	 * @return
+	 */
+	protected String getStringExtra(String key){
+		return getStringExtra(key, "");
+	}
+	
+	/**
+	 * 获取String值
+	 * @param key
+	 * @return
+	 */
+	protected String getStringExtra(String key, String defaultValue){
+		String value = defaultValue;
+		try{
+			Intent intent = getIntent();
+			if(null != intent && intent.hasExtra(key)){
+				value = intent.getStringExtra(key);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return value;
+	}
+	
+	/**
+	 * 获取int值
+	 * @param key
+	 * @return
+	 */
+	protected int getIntExtra(String key){
+		return getIntExtra(key, 0);
+	}
+	
+	/**
+	 * 获取int值
+	 * @param key
+	 * @return
+	 */
+	protected int getIntExtra(String key, int defaultValue){
+		int value = defaultValue;
+		try{
+			Intent intent = getIntent();
+			if(null != intent){
+				value = intent.getIntExtra(key, defaultValue);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return value;
+	}
+	
+	/**
+	 * 判断文件内容是否为空
+	 * @param text
+	 * @return
+	 */
+	protected boolean isNull(TextView text){
+		if(null == text){
+			return true;
+		}
+		return isNull(getText(text));
+	}
+	
+	/**
+	 * 判断文本是否为空
+	 * @param text
+	 * @return
+	 */
+	protected boolean isNull(String text){
+		return TextUtils.isEmpty(text);
+	}
+	
+	/**
+	 * 设置标题
+	 * @param title
+	 */
+	public void setTitle(String title){
+		//titlebar
+		mTitleBar = (TitleBar) findViewById(R.id.title_bar);
+		if (mTitleBar != null) {
+			mTitleBar.setTitle(title);
+			return;
+		}
+		
+		//tv_title
+		View view = findViewById(R.id.ab_title);
+		if(null == view){
+			view = findViewById(R.id.tv_headview_title);
+		}
+		
+		if (view != null) {
+			try{
+				TextView titleTv = (TextView)view;
+				titleTv.setText(title);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
+	public void setTitleBarColor(int color){
+		View view = findViewById(R.id.root_view);
+		if(null != view){
+			view.setBackgroundColor(color);
+		}
+	}
+	
+	/**
+	 * 设置标题
+	 * @param title
+	 */
+	public void setTitle(int stringId){
+		//titlebar
+		mTitleBar = (TitleBar) findViewById(R.id.title_bar);
+		if (mTitleBar != null) {
+			mTitleBar.setTitle(stringId);
+			return;
+		}
+		
+		//tv_title
+		View view = findViewById(R.id.ab_title);
+		if (view != null) {
+			try{
+				TextView titleTv = (TextView)view;
+				titleTv.setText(stringId);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
+	/**
+     * 显示申请理由
+     * @param view
+     * @param dataMap
+     */
+    public void showReasonPopwindow(View view, Map<String, String> dataMap, String checkedKey, boolean showBottomTip, IOnItemClick onItenClick){
+        SelectApplyReasonWindow pop = new SelectApplyReasonWindow(mContext, dataMap, checkedKey, showBottomTip, onItenClick);
+
+        if (!pop.isShowing()) {
+            pop.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+            
+            int height = pop.getHeight();
+            int screenHeight = DeviceUtils.getHeightMaxPx(mContext);
+            int maxHeight = ((screenHeight/3)*2);
+            if(height > maxHeight){
+            	height = maxHeight;
+            	pop.setHeight(height);
+            }
+        }
+    }
+    
+    /**当前显示的fragment**/
+	private Fragment currentFragment = null;
+
+	public Fragment getCurrentFragment(){
+		return currentFragment;
+	}
+	
+	/**
+	 * 显示framgnet
+	 * @param fragment
+	 */
+	public void showFragment(int frameLayoutId, Fragment fragment){
+		
+		//非空
+		if(null == fragment){
+			return;
+		}
+		
+		//已经显示
+		if(fragment.isAdded() && !fragment.isHidden()){
+			return;
+		}
+		
+		
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		FragmentTransaction transation = fragmentManager.beginTransaction();
+		
+		//隐藏当前显示的fragment
+		if(null != currentFragment && currentFragment.isAdded()){
+			transation.hide(currentFragment);
+		}
+		
+		//显示传入的fragment
+		if(!fragment.isAdded()){
+			transation.add(frameLayoutId, fragment);
+			transation.commit();
+		}else{
+			
+			transation.show(fragment);
+			transation.commit();
+		}
+		
+		//记住当前的fragment
+		currentFragment = fragment;
+	}
+	
+	/**
+     * 判断用户是否已经登录
+     * @return
+     */
+    public boolean userIsLogin(){
+    	return userIsLogin(false);
+    }
+    
+    /**
+     * 判断用户是否已经登录
+     * @return
+     */
+    public boolean userIsLogin(boolean startLoginActivity){
+    	
+    	User user = BaoGangData.getInstance().getUser();
+    	
+    	//判断缓存用户是否存在
+    	if(null != user && !TextUtils.isEmpty(user.userId)){
+    		return true;
+    	}
+    	
+    	if(startLoginActivity){
+    		//跳转到登录界面
+    		Intent intent = new Intent(mContext, LoginActivity.class);
+    		startActivity(intent);
+    		showToast("请登录");
+    	}
+    	
+    	return false;
+    }
+    
+    /**
+     * 跳转到主界面
+     * @param tabIndex tab下标索引
+     */
+    public void startToMainActivity(int tabIndex){
+    	Intent intent  = new Intent(mContext, MainActivity.class);
+    	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    	intent.putExtra(MainActivity.TAB_INDEX, tabIndex);
+    	startActivity(intent);
+    }
+    
+    public void clearUserInfo(){
+    	
+    	//清空用户数据，需要重新登录
+    	BaoGangData.getInstance().setUser(null);
+    }
+    
+    /**
+     * 绑定事件
+     * @param viewId
+     * @param onclick
+     */
+    public void bindClick(int viewId, View.OnClickListener onclick){
+    	try{
+    		findViewById(viewId).setOnClickListener(onclick);
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}
+    }
+    
+    /**
+     * 跳转到商品详情
+     * @param productId
+     * @param goodsGenreType
+     */
+    public void startToProductDetailActivity(String productId, int goodsGenreType){
+    	
+    	Intent intent = null;
+    	
+    	switch (goodsGenreType) {
+		case ConstantsAPI.Goods_Genre_Normal:
+			
+			//实物商品
+			intent = new Intent(mContext, TongueTipProductDetailsActivity.class);
+			intent.putExtra(TongueTipProductDetailsActivity.GOOOS_ID, productId);
+			startActivity(intent);
+			
+			break;
+		case ConstantsAPI.Goods_Genre_Service:
+
+			//服务商品
+			intent = new Intent(mContext, TongueTipProductDetailsActivity.class);
+			intent.putExtra(TongueTipProductDetailsActivity.GOOOS_ID, productId);
+			startActivity(intent);
+			
+			break;
+		default:
+			
+			//实物商品
+			intent = new Intent(mContext, TongueTipProductDetailsActivity.class);
+			intent.putExtra(TongueTipProductDetailsActivity.GOOOS_ID, productId);
+			startActivity(intent);
+			
+			break;
+		}
+    }
+
+	/**
+	 * 判断文件内容是否为空
+	 * @param text
+	 * @return
+	 */
+	protected boolean isNull(EditText text){
+		if(null == text){
+			return true;
+		}
+		return isNull(getText(text));
+	}
+
+	/**
+	 * 获取textview文本
+	 * @param tv
+	 * @return
+	 */
+	protected String getText(EditText tv){
+		try{
+			return tv.getText().toString().trim();
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * 下拉框
+	 * @param downview		依赖的view
+	 * @param data			列表显示的内容
+	 * @param itemsOnClick	列表点击事件
+	 */
+	protected void showListPopBelowView(View downview,ArrayList<String> data,int height,AdapterView.OnItemClickListener itemsOnClick){
+		int width=downview.getMeasuredWidth();
+		listItemWindow=new SelectListItemWindow(mContext,width,height,data,itemsOnClick);
+		listItemWindow.showAsDropDown(downview);
+	}
+}

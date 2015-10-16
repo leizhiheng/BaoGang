@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40" >
+
+        <ImageView
+            android:id="@+id/type_pic_imageview"
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_20"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_12"
+            android:layout_marginRight="@dimen/dp_10"
+            android:background="@drawable/checkbox_frame_on"
+            android:contentDescription="@null" />
+
+        <LinearLayout
+            android:id="@+id/class_sort_list1_normal_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_12"
+            android:layout_toLeftOf="@id/type_pic_imageview"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/type_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:text="我要安装"
+                android:textColor="@color/font_black"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px_1"
+            android:textSize="@dimen/sp_14"
+            android:layout_alignParentBottom="true"
+            android:background="@color/recommend_products_item_line" />
+    </RelativeLayout>
+
+</RelativeLayout>

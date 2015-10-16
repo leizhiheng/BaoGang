@@ -1,0 +1,279 @@
+package com.baosteel.qcsh.ui.activity.cart;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.api.RequestCallback;
+import com.baosteel.qcsh.api.RequestClient;
+import com.baosteel.qcsh.model.BaoGangData;
+import com.baosteel.qcsh.model.CarItem;
+import com.baosteel.qcsh.model.DeliverCommit;
+import com.baosteel.qcsh.model.DeliverGoods;
+import com.baosteel.qcsh.model.DeliverMethod;
+import com.baosteel.qcsh.model.DeliveryMethod;
+import com.baosteel.qcsh.model.MemberReceiveAddressJson;
+import com.baosteel.qcsh.model.PickUpAddress;
+import com.baosteel.qcsh.ui.adapter.DeliveryMethodAdapter;
+import com.baosteel.qcsh.ui.popwindow.SelectApplyReasonWindow;
+import com.baosteel.qcsh.ui.view.TitleBar;
+import com.baosteel.qcsh.utils.JSONParseUtils;
+import com.common.base.BaseActivity;
+import com.common.view.listview.MyListView;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 配送方式
+ *
+ * @author 江文思
+ * @todo TODO
+ * @date 2015-10-2
+ */
+public class DeliverMethodActivity extends BaseActivity implements View.OnClickListener {
+
+    private MyListView mLv_deliver_method;
+    private DeliveryMethodAdapter adapter;
+    private TitleBar mTitle_bar;
+    private Button btn_ok;
+    private boolean isExist =true;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_deliver_method);
+        initViews();
+        initData();
+        queryDeliverMethod();
+    }
+
+    private void initViews() {
+        mLv_deliver_method = (MyListView) findViewById(R.id.lv_deliver_method);
+        mTitle_bar = (TitleBar) findViewById(R.id.title_bar);
+        btn_ok = (Button) findViewById(R.id.btn_ok);
+    }
+
+    private void initData() {
+
+        mTitle_bar.setTitle("配送方式");
+        mTitle_bar.setBackgroud(R.color.index_red);
+        btn_ok.setOnClickListener(this);
+    }
+
+    /**
+     * 查询配送方式
+     */
+    private void queryDeliverMethod() {
+        if (!userIsLogin()) {
+            return;
+        }
+        String userId = BaoGangData.getInstance().getUser().userId;
+        String addressId = getStringExtra("addressId");
+        String shoppingId = getStringExtra("id");
+        RequestClient.queryAppDistributionMode(mContext, userId, shoppingId, addressId, new RequestCallback<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+
+                        String returnMap = response.get("returnMap").toString();
+
+                        List<DeliverMethod> list = JSONParseUtils.fromJsonArray(returnMap, DeliverMethod.class);
+                        if (list.get(0) == null) {
+                            isExist = true;
+                            return;
+                        }
+                        setAdapterData(list);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+    }
+
+    /**
+     * 设置配送方式数据
+     *
+     * @param list
+     */
+    private void setAdapterData(final List<DeliverMethod> list) {
+        if (null == adapter) {
+            adapter = new DeliveryMethodAdapter(mContext, list, new DeliveryMethodAdapter.ItemOnclickListener() {
+                @Override
+                public void getPoint(int position, View view) {
+                    Toast.makeText(DeliverMethodActivity.this, "选择自提点", Toast.LENGTH_SHORT).show();
+                    queryAppSinceSome(list.get(position).getAddress().getMerchant_id() + "", view);
+                }
+
+                @Override
+                public void getAddress(int position) {
+                    Toast.makeText(DeliverMethodActivity.this, "选择地址", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void getPhone(int position) {
+                    Toast.makeText(DeliverMethodActivity.this, "更改电话", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void getDate(int position) {
+                    Toast.makeText(DeliverMethodActivity.this, "选择自提时间", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void clickMention(int position) {
+                    if (list.get(position).getType() == 1) {
+                        list.get(position).setType(2);
+                        adapter.refreshData(list);
+                    }
+                }
+
+                @Override
+                public void clickDelivery(int position) {
+
+                    if (list.get(position).getType() == 2) {
+                        list.get(position).setType(1);
+                        adapter.refreshData(list);
+                    }
+
+                }
+            });
+
+            mLv_deliver_method.setAdapter(adapter);
+
+        } else {
+
+            //刷新数据
+            adapter.refreshData(list);
+        }
+    }
+
+    /**
+     * 查询自提点信息
+     */
+    private void queryAppSinceSome(String seller_id, final View view) {
+        RequestClient.queryAppSinceSome(mContext, seller_id, new RequestCallback<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+                        String returnMap = response.get("returnMap").toString();
+                        List<PickUpAddress> addressList = JSONParseUtils.fromJsonArray(returnMap, PickUpAddress.class);
+
+                        showReasonPopwindow(view, loadPickUpData(addressList), null, false, new SelectApplyReasonWindow.IOnItemClick() {
+
+                            @Override
+                            public void onItemClick(String id, String value) {
+
+                            }
+                        });
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+    }
+
+
+    /**
+     * 获取自提点信息
+     */
+    private Map<String, String> loadPickUpData(List<PickUpAddress> addressList) {
+        Map<String, String> dataMap = new HashMap<String, String>();
+        for (int i = 0; i < addressList.size(); i++) {
+            dataMap.put(i + 1 + "", addressList.get(i).getServe_name() + " " + addressList.get(i).getProvinceName() +
+                    addressList.get(i).getCityName() + addressList.get(i).getAreaName() + addressList.get(i).getStreet_address());
+        }
+        return dataMap;
+    }
+
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_ok:
+                if(isExist){
+                    showToast("该商品不存在配送方式，请更换同类商品");
+                    return;
+                }
+                setResult(RESULT_OK, new Intent().putParcelableArrayListExtra("delive", getDeliveList()).putExtra("shipment", getShipment()));
+                this.finish();
+                break;
+        }
+    }
+
+    private int getShipment() {
+        int shipment = 0;
+        List<DeliverMethod> list = adapter.getList();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getInvoiceType().equals("1")) {
+                shipment += list.get(i).getShipment();
+            }
+        }
+        return shipment;
+    }
+
+
+    /**
+     * 提取返回给订单页的信息
+     */
+    private ArrayList<DeliverCommit> getDeliveList() {
+        List<DeliverMethod> methodList = adapter.getList();
+        ArrayList<DeliverCommit> list = new ArrayList<DeliverCommit>();
+        String serllsId = "";
+        String goodsId = "";
+        for (int i = 0; i < methodList.size(); i++) {
+            List<DeliverGoods> goodsList = methodList.get(i).getGoodsImg();
+            for (int k = 0; k < goodsList.size(); k++) {
+                if (serllsId.isEmpty()) {
+                    serllsId = goodsList.get(k).getSeller_id() + "";
+                } else {
+                    serllsId += "," + goodsList.get(k).getSeller_id();
+                }
+                if (goodsId.isEmpty()) {
+                    goodsId = goodsList.get(k).getId() + "";
+                } else {
+                    goodsId += "," + goodsList.get(k).getId();
+                }
+                serllsId = getString(serllsId.split(","));
+            }
+            list.add(new DeliverCommit(serllsId, goodsId, methodList.get(i).getType(), methodList.get(i).getAddress().getId(), methodList.get(i).getInvoiceType()));
+            serllsId = "";
+        }
+        return list;
+    }
+
+    private String getString(String[] array) {
+        List<String> list = new ArrayList<String>();
+        for (int i = 0; i < array.length; i++) {
+            if (!list.contains(array[i])) {
+                list.add(array[i]);
+            }
+        }
+        String str = "";
+        boolean flag = false;
+        for (String s : list) {
+            if (!flag) {
+                str += s;
+                flag = true;
+            } else {
+                str += ("," + s);
+            }
+        }
+        return str;
+    }
+
+}

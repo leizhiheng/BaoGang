@@ -1,0 +1,123 @@
+package com.baosteel.qcsh;
+
+import java.io.File;
+
+import android.app.Application;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.Environment;
+import android.util.Log;
+
+import com.baosteel.qcsh.model.UserInfo;
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.nostra13.universalimageloader.utils.StorageUtils;
+
+/**
+ * 应用Appcontext类
+ * @author 刘远祺
+ *
+ * @todo TODO
+ *
+ * @date 2015-8-26
+ */
+public class AppContext extends Application {
+
+	public static AppContext appContext;
+
+	public static String ROOTPATH_NAME 	= "/BaoGang";
+	public static String ROOTPATH 		= "/BaoGang";
+	public static String IMAGEPATH 		= "/image";
+	
+	public static boolean isHasUpdate = false;
+	
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		appContext = this;
+
+		// 初始化目录
+		initPath();
+
+		// 初始化数据
+		initData();
+	}
+
+	/**
+	 * 初始化数据
+	 */
+	private void initData() {
+		
+		//初始化imageloader
+		initImageLoader(getApplicationContext());
+	}
+
+	/**
+	 * 初始化图片加载器
+	 *
+	 * @param context
+	 */
+	public void initImageLoader(Context context) {
+		File cacheDir = StorageUtils.getOwnCacheDirectory(getApplicationContext(), "baogang/cache/ImageCache");
+		DisplayImageOptions options = new DisplayImageOptions.Builder().showStubImage(R.drawable.image_default_rectangle)
+				.showImageForEmptyUri(R.drawable.image_default_rectangle).showImageOnFail(R.drawable.image_default_rectangle)
+				.imageScaleType(ImageScaleType.IN_SAMPLE_INT).cacheInMemory(true).cacheOnDisc(true)
+				.bitmapConfig(Bitmap.Config.RGB_565).build();
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context).threadPriority(Thread.NORM_PRIORITY)
+				.denyCacheImageMultipleSizesInMemory().defaultDisplayImageOptions(options)
+				.memoryCache(new LruMemoryCache(5 * 1024 * 1024)).discCacheFileNameGenerator(new Md5FileNameGenerator())
+				.tasksProcessingOrder(QueueProcessingType.LIFO).discCache(new UnlimitedDiscCache(cacheDir)).build();
+		ImageLoader.getInstance().init(config);
+	
+	}
+	
+	/**
+	 * 建立用户数据文件夹
+	 */
+	public void initPath() {
+		String ROOT;
+		// 判断SD卡是否插入
+		if (Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+			ROOT = Environment.getExternalStorageDirectory().getPath();
+		} else {
+			Log.v("MKDIR", "No SD card!!!");
+			ROOT = "/data/data";
+		}
+
+		// 定义目录文件夹
+		if (ROOTPATH.equals(ROOTPATH_NAME)) {
+			ROOTPATH = ROOT + ROOTPATH;
+			IMAGEPATH = ROOTPATH + IMAGEPATH;
+		}
+
+		// 生成sunsacred目录
+		File rootPath = new File(ROOTPATH);
+		if (!rootPath.exists()) {
+			rootPath.mkdirs();
+			Log.d("INITPATH", "ROOT");
+		}
+
+		// 生成sunsacred/image目录
+		File imagePath = new File(IMAGEPATH);
+		if (!imagePath.exists()) {
+			imagePath.mkdirs();
+			Log.d("INITPATH", "IMAGE");
+		}
+	}
+
+	/**
+	 * 获取项目目录-图片目录
+	 * 
+	 * @return
+	 */
+	public String getImagePath() {
+		return IMAGEPATH;
+	}
+	
+}

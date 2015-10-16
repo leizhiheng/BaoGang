@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.baosteel.qcsh.ui.view.TitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/theme_color_order"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/dp_10"
+        android:paddingLeft="@dimen/dp_40"
+        android:paddingRight="@dimen/dp_40"
+        android:paddingTop="@dimen/dp_10" >
+
+        <RadioButton
+            android:id="@+id/btn_entity_service_order"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="-1dp"
+            android:checked="true"
+            android:layout_weight="1"
+            android:background="@drawable/selector_left_radius_8_pink"
+            android:button="@null"
+            android:gravity="center"
+            android:padding="@dimen/dp_7"
+            android:text="实物/服务订单"
+            android:textColor="@color/color_text_pink_white"
+            android:textSize="@dimen/sp_14" />
+
+        <RadioButton
+            android:id="@+id/btn_other_order"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_right_radius_8_pink"
+            android:button="@null"
+            android:gravity="center"
+            android:padding="@dimen/dp_7"
+            android:text="其他订单"
+            android:textColor="@color/color_text_pink_white"
+            android:textSize="@dimen/sp_14" />
+    </RadioGroup>
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

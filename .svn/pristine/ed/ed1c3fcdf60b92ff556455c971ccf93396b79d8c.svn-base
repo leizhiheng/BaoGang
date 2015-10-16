@@ -1,0 +1,90 @@
+package com.baosteel.qcsh.ui.fragment.myorder;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.ui.activity.my.order.CommentActivity;
+import com.baosteel.qcsh.ui.activity.my.order.ReturnAddActivity;
+import com.baosteel.qcsh.ui.view.TitleBar;
+import com.common.base.BaseFragment;
+
+/**
+ * 
+ * @description 订单详情 - 待审核
+ * @author blue
+ * @Time 2015-9-30
+ *
+ */
+public class OrderDetailFinishedFragment extends OrderDetailBaseFragment implements OnClickListener{
+
+	@Override
+	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		initData();
+		initView();
+
+		loadData();
+	}
+
+	private void initData() {
+
+	}
+
+	private void initView() {
+		mBtn_order_right.setOnClickListener(this);
+		mBtn_order_center.setOnClickListener(this);
+		mBtn_refunds.setOnClickListener(this);
+		mBtn_again_buy.setOnClickListener(this);
+
+		mTv_order_state.setText("待评价");
+		mRel_logistics.setVisibility(View.VISIBLE);
+		mBtn_order_right.setVisibility(View.VISIBLE);
+		mBtn_order_center.setVisibility(View.VISIBLE);
+		mLin_begin.setVisibility(View.VISIBLE);
+		mBtn_order_left.setVisibility(View.VISIBLE);
+		mBtn_order_left.setText("查看物流");
+		mBtn_order_center.setText("评价晒单");
+		mBtn_order_right.setText("删除订单");
+	}
+
+	private void loadData() {
+
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.btn_order_left:
+			Toast.makeText(mContext, "查看物流", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.btn_order_center:
+			// Toast.makeText(mContext, "评价晒单", Toast.LENGTH_SHORT).show();
+			startActivity(new Intent(mContext, CommentActivity.class));
+			break;
+		case R.id.btn_order_right:
+			queryAppOrderStatusDel();
+			break;
+		case R.id.btn_refunds:
+
+			// 退货/换货
+			startActivity(new Intent(mContext, ReturnAddActivity.class));
+
+			break;
+		case R.id.btn_again_buy:
+			Toast.makeText(mContext, "再次购买", Toast.LENGTH_SHORT).show();
+			break;
+		}
+	}
+}

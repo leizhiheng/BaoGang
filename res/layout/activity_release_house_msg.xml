@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.baosteel.qcsh.ui.view.TitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </com.baosteel.qcsh.ui.view.TitleBar>
+    
+    <fragment android:id="@+id/fragment_single_select"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.baosteel.qcsh.ui.fragment.commen.SingleSelectFragment"
+        class="com.baosteel.qcsh.ui.fragment.commen.SingleSelectFragment"/>
+
+</LinearLayout>

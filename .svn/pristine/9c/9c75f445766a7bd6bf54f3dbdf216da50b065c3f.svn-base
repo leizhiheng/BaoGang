@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/gray6"
+    android:divider="@drawable/horizontal_divider_5dp"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/dp_5"
+    android:paddingRight="@dimen/dp_5"
+    android:paddingTop="@dimen/dp_5"
+    android:showDividers="middle" >
+
+    <LinearLayout
+        android:id="@+id/product_linearlayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="@dimen/dp_5" >
+
+        <ImageView
+            android:id="@+id/product_imgview1"
+            android:layout_width="@dimen/dp_120"
+            android:layout_height="@dimen/dp_120"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/img_corner_bg"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bg_maybelike" />
+
+        <TextView
+            android:id="@+id/product_name_textview1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:ellipsize="end"
+            android:lines="2"
+            android:text="海尔挂式空调海尔挂式空调海尔挂式空调海尔挂式空调海尔挂式空调海尔挂式空调"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_14" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/freight_textview1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="免运费"
+                android:textColor="@color/grayfont"
+                android:textSize="@dimen/sp_12" />
+
+            <TextView
+                android:id="@+id/address_textview1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="深圳宝安区"
+                android:textColor="@color/grayfont"
+                android:textSize="@dimen/sp_12" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:gravity="bottom"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="bottom"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:text="￥"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/sp_12" />
+
+                <TextView
+                    android:id="@+id/product_price_textview1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="2999"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/sp_16" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/product_pay_count_textview1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="56人付款"
+                android:textColor="@color/grayfont"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/product_linearlayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="@dimen/dp_5" >
+
+        <ImageView
+            android:id="@+id/product_imageview2"
+            android:layout_width="@dimen/dp_120"
+            android:layout_height="@dimen/dp_120"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/img_corner_bg"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bg_maybelike" />
+
+        <TextView
+            android:id="@+id/product_name_textview2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:ellipsize="end"
+            android:lines="2"
+            android:text="海尔挂式空调海尔挂式空调海尔挂式空调海尔挂式空调海尔挂式空调海尔挂式空调"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_14" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/freight_textview2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="免运费"
+                android:textColor="@color/grayfont"
+                android:textSize="@dimen/sp_12" />
+
+            <TextView
+                android:id="@+id/address_textview2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="深圳宝安区"
+                android:textColor="@color/grayfont"
+                android:textSize="@dimen/sp_12" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:gravity="bottom"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="bottom"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:text="￥"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/sp_12" />
+
+                <TextView
+                    android:id="@+id/product_price_textview2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="2999"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/sp_16" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/product_pay_count_textview2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="56人付款"
+                android:textColor="@color/grayfont"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

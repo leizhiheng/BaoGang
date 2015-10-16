@@ -1,0 +1,175 @@
+package com.baosteel.qcsh.ui.fragment.commen;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ExpandableListView;
+import android.widget.GridView;
+import android.widget.ListView;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.model.homeclassify.ClassifyRank2;
+import com.baosteel.qcsh.ui.adapter.ProductCategoryItemAdapter;
+import com.baosteel.qcsh.ui.adapter.ProductCatogeryAdapter;
+import com.common.base.BaseFragment;
+
+/**
+ * Description 这个Fragment封装了商品分类的UI。根据左边ListView的item,切换右边商品列表的数据
+ *      使用到这个Fragment的页面有：主界面分类，汽配商场和食品列表
+ * Author blue
+ * Time 2015/8/31
+ */
+public class ProductCategoryFragment extends BaseFragment {
+
+    // View menbers
+    private ListView mCatogeryTitleListView;
+    private GridView mCatogetyDetailGridView;
+    
+    private ProductCatogeryAdapter mTitleAdapter;
+    private ProductCategoryItemAdapter mItemAdapter;
+    
+    /**ListView中item被选中时文字的颜色*/
+    private int mColorSelected;
+
+    /**分类数据*/
+    private List<ClassifyRank2> mCatogeries;
+    
+    /**当前选择分类的下标*/
+    private int mCurListIndex = 0;
+
+    public ProductCategoryFragment() {
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        fragmentView = inflater.inflate(R.layout.fragment_product_catogery, container, false);
+        return fragmentView;
+    }
+    
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    	super.onActivityCreated(savedInstanceState);
+    	initData();
+    	initView();
+    }
+    
+    private void initView() {
+    	Log.d("zhiheng","initView");
+    	mCatogeryTitleListView = (ListView) fragmentView.findViewById(R.id.listview_product_catogery_title);
+        mCatogetyDetailGridView = (GridView) fragmentView.findViewById(R.id.gridview_product_catogery_detail);
+        mCatogeryTitleListView.setAdapter(mTitleAdapter);
+        mCatogetyDetailGridView.setAdapter(mItemAdapter);
+        
+        mCatogeryTitleListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+									int position, long id) {
+				Log.d(TAG, "onItemclick position = " + position + " , category item size:" + mCatogeries.get(position).getmCatogeryItems().size());
+				if (position != mCurListIndex) {
+					mCatogeries.get(mCurListIndex).setSelected(false);
+					mCatogeries.get(position).setSelected(true);
+					mTitleAdapter.notifyDataSetChanged();
+					mCurListIndex = position;
+
+					mItemAdapter.setData(mCatogeries.get(position).getmCatogeryItems());
+				}
+			}
+		});
+
+		mCatogetyDetailGridView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				if(null!=listener){
+					listener.onItemClick( parent, view,position, id);
+				}
+			}
+		});
+    	
+    	mCatogeries.get(0).setSelected(true);
+    	mItemAdapter.setData(mCatogeries.get(0).getmCatogeryItems());
+    	mTitleAdapter.notifyDataSetChanged();
+    	mItemAdapter.notifyDataSetChanged();
+    }
+    
+    /**
+     * init data
+     */
+    private void initData() {
+    	Log.d("zhiheng","initData");
+    	setTestTitleData();
+    	mTitleAdapter = new ProductCatogeryAdapter(mContext, mCatogeries, mColorSelected);
+    	
+    	mItemAdapter = new ProductCategoryItemAdapter(mContext, null);
+    	mItemAdapter.notifyDataSetChanged();
+    	
+    }
+    
+    /**
+     * @Description 添加Catogery
+     * @Author blue
+     * @Time 下午2:32:33
+     */
+    private void setTestTitleData() {
+//    	if (mCatogeries != null) {
+//			return;
+//		}
+//    	mCatogeries = new ArrayList<ClassifyRank2>();
+//    	ArrayList<ProductCategory> items = new ArrayList<ProductCategory>();
+//    	items.add(new ProductCategory("烘焙饼干"));
+//    	items.add(new ProductCategory("水果蛋糕"));
+//    	items.add(new ProductCategory("芝士蛋糕"));
+//    	items.add(new ProductCategory("烘焙饼干"));
+//    	items.add(new ProductCategory("烘焙饼干"));
+//    	items.add(new ProductCategory("烘焙饼干"));
+//    	
+//    	mCatogeries.get(0).setSelected(true);
+//    	
+//    	for (int i = 0; i < mCatogeries.size(); i++) {
+//			mCatogeries.get(i).setmCatogeryItems(items);
+//		}
+    }
+    
+    public void setData(List<ClassifyRank2> categories) {
+    	Log.d("zhiheng","set Data");
+    	mCatogeries = categories;
+    }
+    
+    /**
+     * 设置选中时文字的颜色
+     * @Description TODO
+     * @Author blue
+     * @Time 2015-9-2
+     */
+    public void setmColorSelected(int mColorSelected) {
+		this.mColorSelected = mColorSelected;
+		if (mTitleAdapter != null) {
+			mTitleAdapter.setSeletedItemColor(mColorSelected);
+		}
+	}
+
+	public interface OnListItemClickListener {
+		void onItemClick(AdapterView<?> parent, View view,int position, long id);
+	}
+
+	/**
+	 * 列表item点击事件的回调
+	 */
+	private OnListItemClickListener listener;
+
+	public void setOnItemClickListener(OnListItemClickListener listener) {
+		this.listener = listener;
+	}
+}

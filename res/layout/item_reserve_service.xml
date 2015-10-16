@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_corner_8_white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_10" >
+
+        <TextView
+            android:id="@+id/tv_service_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="中国电信宽带安装"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_15" />
+
+        <TextView
+            android:id="@+id/tv_service_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="服务评价"
+            android:textColor="@color/orange_red"
+            android:textSize="@dimen/sp_14" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.5"
+        android:background="@color/gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/dp_10" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:orientation="horizontal"
+            android:padding="@dimen/dp_5" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="服务单位:"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/sp_14" />
+
+            <TextView
+                android:id="@+id/tv_service_depart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/dp_5"
+                android:text="中国电信宝山区营业点"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:orientation="horizontal"
+            android:padding="@dimen/dp_5" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="服务电话:"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/sp_14" />
+
+            <TextView
+                android:id="@+id/tv_service_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/dp_5"
+                android:text="021-06654530"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:orientation="horizontal"
+            android:padding="@dimen/dp_5" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="收费标准:"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/sp_14" />
+
+            <TextView
+                android:id="@+id/tv_service_pricelevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/dp_5"
+                android:text="按实际情况收取费用"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:orientation="horizontal"
+            android:padding="@dimen/dp_5" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="详细内容:"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/sp_14" />
+
+            <TextView
+                android:id="@+id/tv_service_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/dp_5"
+                android:text="各地收费标准不同，请拨打10000进行咨询办理，谢谢！"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.5"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:background="@color/gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_10" >
+
+        <TextView
+            android:id="@+id/btn_call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5"
+            android:paddingRight="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_10"
+            android:text="电话联系"
+            android:background="@drawable/selector_gray_corner_frame"
+            android:clickable="true"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/btn_reserve"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5"
+            android:paddingRight="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_10"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:text="预约"
+            android:textColor="@color/color_text_orange_white"
+            android:background="@drawable/selector_orange_corner_frame"
+            android:clickable="true"
+            android:textSize="@dimen/sp_14" />
+    </LinearLayout>
+
+</LinearLayout>

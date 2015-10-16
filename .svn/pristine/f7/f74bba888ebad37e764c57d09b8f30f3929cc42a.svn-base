@@ -1,0 +1,166 @@
+package com.baosteel.qcsh.model;
+
+import java.io.Serializable;
+
+/**
+ * Created by jws on 2015/9/6.
+ * 购物车商品类
+ */
+public class CarItem implements Serializable{
+    private String spec;//商品规格
+    private String goods_name;//商品名称
+    private int type;//商品类型
+    private String addtimestamp;//添加时间搓
+    private String goods_img;//商品图片
+    private int id;//购物车id
+    private int num;//数量
+    private int goods_count;//商品库存
+    private String addtime;// 添加时间
+    private String goods_id;//商品id
+    private double curprice;//价格
+    private String user_id;//用户id
+    private String seller_id;//店铺id
+    private int shopping_cart_type;//购物车类型
+    private String sn_id;//商品编号id
+
+    public String getSpec() {
+        return spec;
+    }
+
+    public CarItem setSpec(String spec) {
+        this.spec = spec;
+        return this;
+    }
+
+    public String getGoods_name() {
+        return goods_name;
+    }
+
+    public CarItem setGoods_name(String goods_name) {
+        this.goods_name = goods_name;
+        return this;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public CarItem setType(int type) {
+        this.type = type;
+        return this;
+    }
+
+    public String getAddtimestamp() {
+        return addtimestamp;
+    }
+
+    public CarItem setAddtimestamp(String addtimestamp) {
+        this.addtimestamp = addtimestamp;
+        return this;
+    }
+
+    public String getGoods_img() {
+        return goods_img;
+    }
+
+    public CarItem setGoods_img(String goods_img) {
+        this.goods_img = goods_img;
+        return this;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public CarItem setId(int id) {
+        this.id = id;
+        return this;
+    }
+
+    public int getNum() {
+        return num;
+    }
+
+    
+    
+    public CarItem setNum(int num) {
+        this.num = num;
+        return this;
+    }
+
+    public String getAddtime() {
+        return addtime;
+    }
+
+    public CarItem setAddtime(String addtime) {
+        this.addtime = addtime;
+        return this;
+    }
+
+    public String getGoods_id() {
+        return goods_id;
+    }
+
+    public CarItem setGoods_id(String goods_id) {
+        this.goods_id = goods_id;
+        return this;
+    }
+
+    public double getCurprice() {
+        return curprice;
+    }
+
+    public CarItem setCurprice(double curprice) {
+        this.curprice = curprice;
+        return this;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public CarItem setUser_id(String user_id) {
+        this.user_id = user_id;
+        return this;
+    }
+
+    public String getSeller_id() {
+        return seller_id;
+    }
+
+    public CarItem setSeller_id(String seller_id) {
+        this.seller_id = seller_id;
+        return this;
+    }
+
+    public int getShopping_cart_type() {
+        return shopping_cart_type;
+    }
+
+    public CarItem setShopping_cart_type(int shopping_cart_type) {
+        this.shopping_cart_type = shopping_cart_type;
+        return this;
+    }
+
+    public String getSn_id() {
+        return sn_id;
+    }
+
+    public CarItem setSn_id(String sn_id) {
+        this.sn_id = sn_id;
+        return this;
+    }
+
+	public int getGoods_count() {
+		if(0 == goods_count){
+			return Integer.MAX_VALUE;
+		}
+		return goods_count;
+	}
+
+	public void setGoods_count(int goods_count) {
+		this.goods_count = goods_count;
+	}
+
+	
+}

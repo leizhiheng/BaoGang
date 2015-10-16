@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <com.baosteel.qcsh.ui.view.TitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_32"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/dp_10"
+            android:background="@drawable/common_radius_transparent_strok_gray"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="@dimen/dp_19"
+                android:layout_height="@dimen/dp_19"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_7"
+                android:layout_marginRight="@dimen/dp_6"
+                android:contentDescription="@null"
+                android:src="@drawable/ab_ic_search" />
+
+            <EditText
+                android:id="@+id/searchEt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/dp_4"
+                android:background="@null"
+                android:gravity="center_vertical|left"
+                android:hint="上船地/经停港口/出发日期/邮轮名称"
+                android:singleLine="true"
+                android:textColor="@color/grayfont"
+                android:textColorHint="#c1c1c3"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.5"
+        android:background="@color/line" />
+
+    <!-- com.common.view.pulltorefresh.PullToRefreshScrollView -->
+
+    <ScrollView
+        android:id="@+id/travel_inland_body_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical" >
+
+            <!-- 快速导航 -->
+
+            <RelativeLayout
+                android:id="@+id/myView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <com.common.view.scrolllayout.ScrollLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/ScrollLayoutTest"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_160"
+                    android:background="@color/white" />
+
+                <com.common.view.scrolllayout.PageControlView
+                    android:id="@+id/pageControl"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_20"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@id/ScrollLayoutTest"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px_1"
+                android:background="@color/gray" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_20"
+                android:background="@color/bg_color" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/px_1"
+                    android:background="@color/gray" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:background="@drawable/common_rightradius_red"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_5"
+                    android:singleLine="true"
+                    android:text="热门路线"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_14" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/px_1"
+                    android:background="@color/gray" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.common.view.listview.MyListView
+                    android:id="@+id/dataListview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:divider="@color/transparent"
+                    android:listSelector="@color/transparent"
+                    android:scrollbars="none" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

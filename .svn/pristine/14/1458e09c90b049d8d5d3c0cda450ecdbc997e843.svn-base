@@ -1,0 +1,69 @@
+package com.baosteel.qcsh.ui.fragment.myorder;
+
+import android.os.Bundle;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.ui.view.TitleBar;
+import com.common.base.BaseFragment;
+
+/**
+ * 
+ * @description 订单详情 - 待收货
+ * @author blue
+ * @Time 2015-9-30
+ *
+ */
+public class OrderDetailNotReceiveFragment extends OrderDetailBaseFragment implements OnClickListener{
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		
+		initData();
+		initView();
+		
+		loadData();
+	}
+
+	private void initData() {
+		
+	}
+	
+	private void initView() {
+        mBtn_order_right.setOnClickListener(this);
+        mBtn_order_center.setOnClickListener(this);
+        mTv_order_state.setText("待收货");
+        mBtn_order_right.setVisibility(View.VISIBLE);
+        mBtn_order_center.setVisibility(View.VISIBLE);
+        mRel_logistics.setVisibility(View.VISIBLE);
+        mBtn_order_center.setText("查看物流");
+        mBtn_order_right.setText("确认收货");
+	}
+	
+	private void loadData() {
+		
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()){
+        case R.id.btn_order_center:
+            Toast.makeText(mContext, "查看物流", Toast.LENGTH_SHORT).show();
+            break;
+        case R.id.btn_order_right:
+            queryAppOrderStatusConfirm();//确认收货
+            break;
+    }
+		
+	}
+}

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minWidth="@dimen/dp_300"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:drawablePadding="@dimen/dp_10"
+        android:gravity="center"
+        android:textColor="@color/dialog_tiltle_blue"
+        android:textSize="@dimen/sp_18"
+        tools:ignore="SelectableText" />
+
+    <ImageView
+        android:id="@+id/dialog_divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_2"
+        android:layout_marginLeft="@dimen/dp_14"
+        android:layout_marginRight="@dimen/dp_14"
+        android:scaleType="fitXY"
+        android:src="@drawable/alipay_dialog_cut_line"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/dialog_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:layout_marginLeft="@dimen/dp_14"
+        android:layout_marginRight="@dimen/dp_14"
+        android:layout_marginTop="@dimen/dp_10"
+        android:maxWidth="@dimen/dp_225"
+        android:minHeight="@dimen/dp_30"
+        android:textColor="#666666"
+        android:textSize="@dimen/sp_16"
+        tools:ignore="SelectableText" />
+
+    <FrameLayout
+        android:id="@+id/dialog_content_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/dialog_button_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:layout_marginTop="@dimen/dp_22"
+            android:scaleType="fitXY"
+            android:src="@drawable/alipay_dialog_split_h"
+            tools:ignore="ContentDescription" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_45" >
+
+            <Button
+                android:id="@+id/left_button"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="@dimen/dp_45"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/alipay_dialog_button_submit"
+                android:textColor="@drawable/alipay_dialog_button_colorlist"
+                android:textSize="@dimen/sp_18"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/dialog_split_v"
+                android:layout_width="@dimen/dp_1"
+                android:layout_height="@dimen/dp_45"
+                android:layout_gravity="center_horizontal"
+                android:scaleType="fitXY"
+                android:src="@drawable/alipay_dialog_split_v"
+                android:visibility="gone"
+                tools:ignore="ContentDescription" />
+
+            <Button
+                android:id="@+id/right_button"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="@dimen/dp_45"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/alipay_dialog_button_submit"
+                android:textColor="@drawable/alipay_dialog_button_colorlist"
+                android:textSize="@dimen/sp_18"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

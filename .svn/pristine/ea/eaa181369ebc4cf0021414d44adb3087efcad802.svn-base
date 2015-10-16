@@ -1,0 +1,163 @@
+package com.baosteel.qcsh.ui.activity.my;
+
+import java.util.List;
+
+import org.json.JSONObject;
+
+import android.os.Bundle;
+import android.view.MotionEvent;
+import android.widget.ListView;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.api.RequestCallback;
+import com.baosteel.qcsh.api.RequestClient;
+import com.baosteel.qcsh.model.BaoGangData;
+import com.baosteel.qcsh.model.store.StoreCollect;
+import com.baosteel.qcsh.ui.adapter.CollectProductAdapter;
+import com.baosteel.qcsh.ui.adapter.CollectStoreAdapter;
+import com.baosteel.qcsh.utils.JSONParseUtils;
+import com.common.base.BaseActivity;
+import com.common.view.pulltorefresh.PullToRefreshBase;
+import com.common.view.pulltorefresh.PullToRefreshBase.Mode;
+import com.common.view.pulltorefresh.PullToRefreshBase.OnRefreshListener2;
+import com.common.view.pulltorefresh.PullToRefreshListView;
+import com.common.view.swipe.SwipeLayout;
+
+/**
+ * 收藏的店铺
+ * @author 刘远祺
+ *
+ * @todo TODO
+ *
+ * @date 2015-9-8
+ */
+public class CollectStoreActivity extends BaseActivity implements OnRefreshListener2<ListView>{
+
+	/**商品列表ListView**/
+	private PullToRefreshListView listView;
+	
+	/**商品列表适配器**/
+	private CollectStoreAdapter adapter;
+
+	/**分页索引**/
+	private int pageIndex = 1;
+	
+	/**每页加载条数**/
+	private int pageSize = 10;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_collect_product);
+		setTitle("我收藏的店铺");
+		
+		initView();
+		
+		loadData();
+	}
+
+
+	/**
+	 * 初始化布局
+	 */
+	private void initView() {
+		
+		listView = (PullToRefreshListView)findViewById(R.id.refresh_listview);
+		listView.setMode(Mode.BOTH);
+		listView.setOnRefreshListener(this);
+		
+		adapter = new CollectStoreAdapter(mContext, true);
+		listView.setAdapter(adapter);
+	}
+
+	boolean showDialog = true;
+	/**
+	 * 获取数据
+	 */
+	private void loadData() {
+
+		String userId = BaoGangData.getInstance().getUser().userId;
+		RequestClient.queryAppSelectCollectList(mContext, userId, pageIndex, new RequestCallback<JSONObject>(showDialog) {
+			
+			@Override
+			public void onFinish() {
+				super.onFinish();
+				showDialog = false;
+				listView.onRefreshComplete();
+			}
+			
+			@Override
+			public void onResponse(JSONObject response) {
+				listView.onRefreshComplete();
+				
+				if(JSONParseUtils.isSuccessRequest(mContext, response)){
+					
+					//解析数据
+					List<StoreCollect> tempData = JSONParseUtils.queryAppSelectCollectList(response);
+					
+					//非空判断
+					if(null == tempData || tempData.size() == 0){
+						showToast("没有数据");
+						return;
+					}
+					
+					//第一页，下拉刷新操作
+					if(pageIndex <= 1){
+						adapter.refreshData(tempData);
+					}else{
+						
+						//第二页后，上拉加载数据
+						adapter.appendData(tempData);
+					}
+					
+					//无下一页数据,判断是否还有下一页
+					Mode mode = (tempData.size() < 10) ? Mode.PULL_FROM_START : Mode.BOTH;
+					listView.setMode(mode);
+					
+					//pageIndex++
+					if(tempData.size() >= 10){
+						pageIndex++;
+					}
+				}
+			}
+		});
+	}
+
+	float y = 0;
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		
+		//下面代码是为了解决SwipeView打开了，ListView还在滚动的问题
+		if(ev.getAction() == MotionEvent.ACTION_MOVE){
+			float temp = ev.getY();
+			
+			if(y == 0){
+				y = temp;
+			}else{
+				
+				float distance = temp - y;
+				y = temp;
+				if(distance > 50){
+					List<SwipeLayout> list = adapter.getOpenLayouts();
+					if(null != list && list.size() > 0){
+						for(SwipeLayout swipe : list){
+							swipe.close();
+						}
+					}
+				}
+			}
+		}
+		return super.dispatchTouchEvent(ev);
+	}
+
+	@Override
+	public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+		pageIndex = 1;
+		loadData();
+	}
+
+	@Override
+	public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+		loadData();
+	}
+}

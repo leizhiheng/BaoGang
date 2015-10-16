@@ -1,0 +1,274 @@
+package com.baosteel.qcsh.ui.fragment.classify;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONObject;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.api.RequestCallback;
+import com.baosteel.qcsh.api.RequestClient;
+import com.baosteel.qcsh.model.ProductCategory;
+import com.baosteel.qcsh.model.homeclassify.ClassifyRank1;
+import com.baosteel.qcsh.model.homeclassify.ClassifyRank2;
+import com.baosteel.qcsh.ui.activity.prodcut.ProductListActivity;
+import com.baosteel.qcsh.ui.adapter.ClassifyProductCategoryAdapter;
+import com.baosteel.qcsh.ui.adapter.HomeClassifyTitleAdapter;
+import com.baosteel.qcsh.utils.JSONParseUtils;
+import com.common.base.BaseFragment;
+
+/**
+ * 
+ * @description 首页-》分类 中的商品分类列表
+ * @author blue
+ * @Time 2015-9-11
+ *
+ */
+public class ClassifyProductCategoryFragment extends BaseFragment {
+
+    // View menbers
+    private ListView mCatogeryTitleListView;
+    private ListView mCatogetyDetailListView;
+    
+    private HomeClassifyTitleAdapter mTitleAdapter;
+    private ClassifyProductCategoryAdapter mItemAdapter;
+    
+    /**ListView中item被选中时文字的颜色*/
+    private int mColorSelected;
+
+    /**分类数据*/
+    private List<ClassifyRank1> mCatogeries;
+    
+    /**当前选择分类的下标*/
+    private int mCurListIndex = 0;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+    	Log.d("zhiheng", "onCreateView");
+    	fragmentView = inflater.inflate(R.layout.fragment_classify_product_category, container, false);
+        return fragmentView;
+    }
+    
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    	super.onActivityCreated(savedInstanceState);
+    	Log.d("zhiheng", "onActivityCreated");
+    	initData();
+    	initView();
+    	
+//    	loadData();
+//    	loadDataRank1();
+    }
+    
+    @Override
+    public void onStart() {
+    	super.onStart();
+    	if (mCatogeries == null || mCatogeries.size() == 0) {
+    		loadDataRank1();
+		}
+    }
+    
+    private void initView() {
+    	mCatogeryTitleListView = (ListView) fragmentView.findViewById(R.id.listview_product_catogery_title);
+        mCatogetyDetailListView = (ListView) fragmentView.findViewById(R.id.listview_product_catogery_detail);
+        mCatogeryTitleListView.setAdapter(mTitleAdapter);
+        mCatogetyDetailListView.setAdapter(mItemAdapter);
+        
+        mCatogeryTitleListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				if (position != mCurListIndex) {
+					
+					/*
+					 * 如果该一级分类下面没有数据则跳转至商品分类
+					 */
+					if (mCatogeries.get(position).getmRank2Items() != null && mCatogeries.get(position).getmRank2Items().size() == 0) {
+						Intent intent = new Intent(mContext, ProductListActivity.class);
+						intent.putExtra(ProductListActivity.EXTRA_INTENT_FROM, ProductListActivity.INTENT_FROM_CLASSIFY);
+						intent.putExtra(ProductListActivity.EXTRA_PRODUCT_TYPE_ID, mCatogeries.get(position).getId());
+						mContext.startActivity(intent);
+						return;
+					}
+					
+					if (mCatogeries.get(position).getmRank2Items() == null || mCatogeries.get(position).getmRank2Items().size() == 0) {
+						
+						//下载二、三级分类数据
+						loadDataRankOthers(position, mCatogeries.get(position).getId());
+						
+					} else {
+						refreshView(position);
+					}
+				}
+			}
+		});
+    }
+    
+    /**
+     * 
+     * @Description 当二级数据个数大于0时刷新列表
+     * @Author blue
+     * @Time 2015-10-13
+     */
+    private void refreshView(int position) {
+		/*
+		 * 刷新一级分类列表
+		 */
+		mCatogeries.get(mCurListIndex).setSelected(false);
+		mCatogeries.get(position).setSelected(true);
+		mTitleAdapter.notifyDataSetChanged();
+		
+		//加载已下载的数据
+		mItemAdapter.setData(mCatogeries.get(position).getmRank2Items());
+		mCurListIndex = position;
+    }
+    
+    /**
+     * init data
+     */
+    private void initData() {
+    	
+    	mCatogeries = new ArrayList<ClassifyRank1>();
+    	mTitleAdapter = new HomeClassifyTitleAdapter(mContext, mCatogeries, mColorSelected);
+    	mItemAdapter = new ClassifyProductCategoryAdapter(mContext, null);
+    	
+    }
+    
+    /**
+     * @Description 添加分类数据
+     * @Author blue
+     * @Time 下午2:32:33
+     */
+    private void loadData() {
+    	/*
+    	 * 以及分类数据
+    	 */
+//    	mCatogeries.add(new ClassifyRank1("坚果"));
+//    	mCatogeries.add(new ClassifyRank1("肉干"));
+//    	mCatogeries.add(new ClassifyRank1("蜜饯果干"));
+//    	mCatogeries.add(new ClassifyRank1("瓜子花生"));
+//    	mCatogeries.add(new ClassifyRank1("坚果"));
+//    	mCatogeries.add(new ClassifyRank1("肉干"));
+//    	mCatogeries.add(new ClassifyRank1("蜜饯果干"));
+//    	mCatogeries.add(new ClassifyRank1("瓜子花生"));
+    	
+    	/*
+    	 * 二级分类数据
+    	 */
+    	List<ClassifyRank2> classifyProductCategoryItems = new ArrayList<ClassifyRank2>();
+    	for (int i = 0; i < 3; i++) {
+    		ClassifyRank2 item = new ClassifyRank2("烘焙食品");
+    		ArrayList<ProductCategory> items = new ArrayList<ProductCategory>();
+        	items.add(new ProductCategory("烘焙饼干"));
+        	items.add(new ProductCategory("水果蛋糕"));
+        	items.add(new ProductCategory("芝士蛋糕"));
+        	items.add(new ProductCategory("烘焙饼干"));
+        	items.add(new ProductCategory("烘焙饼干"));
+        	items.add(new ProductCategory("烘焙饼干"));
+        	
+        	item.setmRank3Items(items);
+        	
+        	classifyProductCategoryItems.add(item);
+    	}
+    	
+    	/*
+    	 * 以及分类数据和二级分类数据关联
+    	 */
+    	for (int i = 0; i < mCatogeries.size(); i++) {
+			((ClassifyRank1) mCatogeries.get(i)).setmRank2Items(classifyProductCategoryItems);
+		}
+    	
+    	/*
+    	 * 选中第一个分类
+    	 */
+    	mCatogeries.get(0).setSelected(true);
+    	mItemAdapter.setData((mCatogeries.get(0)).getmRank2Items());
+    
+    	mTitleAdapter.notifyDataSetChanged();
+    	mItemAdapter.notifyDataSetChanged();
+    }
+    
+    /**
+     * 
+     * @Description 获取一级分类数据
+     * @Author blue
+     * @Time 2015-9-25
+     */
+    private void loadDataRank1() {
+    	RequestClient.queryAppClassifyList(this.getActivity(), -1+"", new RequestCallback<JSONObject>() {
+			
+			@Override
+			public void onResponse(JSONObject response) {
+				Log.d(TAG, "loadDataRank1 onResponse response = "+response.toString());
+				if (JSONParseUtils.isSuccessRequest(ClassifyProductCategoryFragment.this.getActivity(), response)) {
+					
+					mCatogeries = JSONParseUtils.getClassifyDataRank1(response);
+					if(null != mCatogeries && mCatogeries.size() > 0){
+						mCatogeries.get(0).setSelected(true);
+						mTitleAdapter.setData(mCatogeries);//重新设置数据，并刷新列表
+						loadDataRankOthers(0, mCatogeries.get(0).getId());
+					}
+				}
+			}
+		});
+    }
+    
+    /**
+     * 
+     * @Description 获取二级和三级数据
+     * @Author blue
+     * @Time 2015-9-25
+     */
+    private void loadDataRankOthers(final int position, String goodTypeId) {
+    	RequestClient.queryAppClassifyList(this.getActivity(), goodTypeId, new RequestCallback<JSONObject>() {
+			
+			@Override
+			public void onResponse(JSONObject response) {
+				if (JSONParseUtils.isSuccessRequest(ClassifyProductCategoryFragment.this.getActivity(), response)) {
+						
+					List<ClassifyRank2> rank2s = new ArrayList<ClassifyRank2>();
+					rank2s = JSONParseUtils.getClassifyDataRankOther(response);
+					mCatogeries.get(mCurListIndex).setmRank2Items(rank2s);
+					
+					/*
+					 * 如果该二级分类下面没有数据则跳转至商品分类
+					 */
+					if (rank2s.size() == 0) {
+						Intent intent = new Intent(mContext, ProductListActivity.class);
+						intent.putExtra(ProductListActivity.EXTRA_INTENT_FROM, ProductListActivity.INTENT_FROM_CLASSIFY);
+						intent.putExtra(ProductListActivity.EXTRA_PRODUCT_TYPE_ID, mCatogeries.get(mCurListIndex).getId());
+						mContext.startActivity(intent);
+					} else {
+						mCatogeries.get(position).setmRank2Items(rank2s);
+						refreshView(position);
+					}
+				}
+			}
+		});
+    }
+    
+    /**
+     * 设置选中时文字的颜色
+     * @Description TODO
+     * @Author blue
+     * @Time 2015-9-2
+     */
+    public void setmColorSelected(int mColorSelected) {
+		this.mColorSelected = mColorSelected;
+//		mTitleAdapter.setSeletedItemColor(mColorSelected);
+	}    
+}
+

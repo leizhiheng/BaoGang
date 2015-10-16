@@ -1,0 +1,49 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context="com.baosteel.qcsh.ui.fragment.ProductCatogeryFragment" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="@dimen/dp_90"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_rect_frame_gray"
+            android:layout_marginBottom="-1dp"
+            android:orientation="vertical" >
+
+            <ListView
+                android:id="@+id/listview_product_catogery_title"
+                android:layout_width="@dimen/dp_90"
+                android:layout_height="match_parent"
+                android:scrollbars="@null"
+                android:divider="@drawable/list_divider_gray" />
+
+            <!-- <View
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginBottom="-1dp"
+                android:layout_marginLeft="-1dp"
+                android:layout_weight="1" /> -->
+        </LinearLayout>
+
+        <GridView
+            android:id="@+id/gridview_product_catogery_detail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/dp_10"
+            android:layout_weight="1"
+            android:horizontalSpacing="@dimen/dp_10"
+            android:numColumns="3"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="@dimen/dp_10" >
+        </GridView>
+    </LinearLayout>
+
+</LinearLayout>

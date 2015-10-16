@@ -1,0 +1,76 @@
+package com.baosteel.qcsh.ui.activity.home.tongue;
+
+import android.os.Bundle;
+import android.util.Log;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.api.RequestCallback;
+import com.baosteel.qcsh.api.RequestClient;
+import com.baosteel.qcsh.model.ProductCategory;
+import com.baosteel.qcsh.model.homeclassify.ClassifyRank2;
+import com.baosteel.qcsh.ui.fragment.commen.ProductCategoryFragment;
+import com.baosteel.qcsh.ui.view.TitleBar;
+import com.baosteel.qcsh.utils.JSONParseUtils;
+import com.common.base.BaseActivity;
+import com.common.view.topbar.HeadView;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by lenovo on 2015/9/2.
+ */
+public class TongueTypeActivity extends BaseActivity {
+
+    public static final String TYPE_ID              = "typeId";//分类ID
+    public static final String TYPE_LEVEL           = "typeLevel";//分类等级  1,2,3
+    public static final String TYPE                 = "type";//类型(1首页 2舌尖宝)
+    public static final String TYPE_TITLE           = "type_title";//标题
+    /** 分类信息*/
+    private ArrayList<ProductCategory> mCategories;
+    private ProductCategoryFragment mProductCategoryFragment;
+    private TitleBar mTitle_Bar;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tongue_type);
+        initView();
+
+    }
+
+    private void initView() {
+//        mProductCategoryFragment = (ProductCategoryFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_product_category);
+//        mProductCategoryFragment.setmColorSelected(getResources().getColor(R.color.theme_color_tongue));
+//        mTitle_Bar = (TitleBar)findViewById(R.id.title_bar);
+//        mTitle_Bar.setTitle(getStringExtra("tongueType"));
+//        mTitle_Bar.setBackgroud(R.color.sjb_color);
+//        loadDataRankOthers(getIntent().getExtras().getInt("goodsTypeId") + "");
+//        mProductCategoryFragment.setData();
+    }
+
+    /**
+     *
+     * @Description 获取二级和三级数据
+     * @Author blue
+     * @Time 2015-9-25
+     */
+    private void loadDataRankOthers(String goodTypeId) {
+        RequestClient.queryAppClassifyList(mContext, goodTypeId, new RequestCallback<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, "loadDataRankOthers onResponse response = " + response.toString());
+                if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+
+                    List<ClassifyRank2> rank2s = JSONParseUtils.getClassifyDataRankOther(response);
+                    Log.d(TAG, "loadDataRankOthers rank2s size = " + rank2s.size());
+                    mProductCategoryFragment.setData(rank2s);
+                }
+            }
+        });
+    }
+
+
+}

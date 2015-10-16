@@ -1,0 +1,256 @@
+package com.baosteel.qcsh.ui.fragment.home.healthy;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.dialog.SimpleMsgDialog;
+import com.baosteel.qcsh.model.HealthyContactPerson;
+import com.baosteel.qcsh.model.HealthyLiveInPerson;
+import com.baosteel.qcsh.ui.activity.home.healthy.ChooseContactPersonActivity;
+import com.baosteel.qcsh.ui.activity.home.healthy.ChooseLiveInPersonActivity;
+import com.baosteel.qcsh.ui.activity.home.healthy.EditLiveInPersonActivity;
+import com.baosteel.qcsh.ui.adapter.HealthyLiveInPersonsAdapter;
+import com.common.base.BaseActivity;
+import com.common.base.BaseFragment;
+import com.common.utils.DensityUtils;
+import com.common.view.other.SwipeMenuListViewInScrollView;
+import com.common.view.swipemenulistview.SwipeMenu;
+import com.common.view.swipemenulistview.SwipeMenuCreator;
+import com.common.view.swipemenulistview.SwipeMenuItem;
+import com.common.view.swipemenulistview.SwipeMenuListView;
+
+public class CommitBedReserveOrderFragment extends BaseFragment implements
+		OnClickListener {
+
+	/*
+	 * 联系人
+	 */
+	private View mBtnChooseContact;// 选择联系人
+	private EditText mContactName;// 联系人姓名
+	private EditText mContactPhone;// 联系人电话
+	private EditText mContactEmail;// 联系人邮箱
+
+	/*
+	 * 选择入住人信息
+	 */
+	private View mBtnChooseLivePerson;
+	/*
+	 * 入住人员列表
+	 */
+	private SwipeMenuListViewInScrollView mLivInPersonList;
+	private List<HealthyContactPerson> mLiveInPersons;
+	private HealthyLiveInPersonsAdapter mLiveInAdapter;
+
+	private TextView mBtnCommit;// 提交
+
+	private static final int REQUEST_CODE_CONTACT = 0x1;
+	private static final int REQUEST_CODE_LIVE_PERSON = 0x2;
+	private static final int REQUEST_CODE_EIDT_LIVE_PERSON = 0x3;
+
+	/*
+	 * 选择的联系人
+	 */
+	private HealthyContactPerson mContactPerson;
+	/*
+	 * 选择的入住人
+	 */
+	private HealthyContactPerson mLiveInPerson;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater,
+			ViewGroup container, Bundle savedInstanceState) {
+		fragmentView = inflater.inflate(
+				R.layout.fragment_commit_bed_reserve_order, null);
+		return fragmentView;
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		initData();
+		initView();
+		loadData();
+	}
+
+	private void initData() {
+		mLiveInPersons = new ArrayList<HealthyContactPerson>();
+		mLiveInAdapter = new HealthyLiveInPersonsAdapter(this.getActivity(),
+				mLiveInPersons);
+	}
+
+	private void initView() {
+		mBtnChooseContact = findViewById(R.id.layout_choose_contact);
+		mBtnChooseLivePerson = findViewById(R.id.layout_choose_live_person);
+		mContactName = (EditText) findViewById(R.id.et_contact_name);
+		mContactPhone = (EditText) findViewById(R.id.et_contact_phone);
+		mContactEmail = (EditText) findViewById(R.id.et_contact_email);
+		mBtnCommit = (TextView) findViewById(R.id.btn_commit);
+
+		mBtnChooseContact.setOnClickListener(this);
+		mBtnChooseLivePerson.setOnClickListener(this);
+		mBtnCommit.setOnClickListener(this);
+
+		mLivInPersonList = (SwipeMenuListViewInScrollView) findViewById(R.id.listview_live_in_people);
+		mLivInPersonList.setAdapter(mLiveInAdapter);
+		initSwipeListView();
+	}
+
+	private void loadData() {
+		mLiveInPersons.add(new HealthyContactPerson("李易峰", "男",
+				"43315548854554125478"));
+		mLiveInPersons.add(new HealthyContactPerson("刘亦菲", "女",
+				"41254654854554125478"));
+		mLiveInAdapter.notifyDataSetChanged();
+	}
+
+	/**
+	 * 
+	 * @Description 初始化SwipeMenuListView
+	 * @Author blue
+	 * @Time 2015-9-14
+	 */
+	private void initSwipeListView() {
+		// step 1. create a MenuCreator
+		SwipeMenuCreator creator = new SwipeMenuCreator() {
+
+			@Override
+			public void create(SwipeMenu menu) {
+				// 删除
+				SwipeMenuItem deleteItem = new SwipeMenuItem(getActivity()
+						.getApplicationContext());
+				deleteItem.setBackground(R.drawable.selector_btn_gray);
+				deleteItem.setWidth(DensityUtils.dp2px(getActivity(), 70));
+				deleteItem.setTitle("删除");
+				deleteItem.setTitleSize(16);
+				deleteItem.setTitleColor(Color.WHITE);
+				menu.addMenuItem(deleteItem);
+
+				// 编辑
+				SwipeMenuItem editItem = new SwipeMenuItem(getActivity()
+						.getApplicationContext());
+				editItem.setBackground(R.drawable.selector_btn_orange);
+				editItem.setWidth(DensityUtils.dp2px(getActivity(), 70));
+				editItem.setTitle("编辑");
+				editItem.setTitleSize(16);
+				editItem.setTitleColor(Color.WHITE);
+				menu.addMenuItem(editItem);
+			}
+		};
+		// set creator
+		mLivInPersonList.setMenuCreator(creator);
+
+		// step 2. listener item click event
+		mLivInPersonList
+				.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+					@Override
+					public boolean onMenuItemClick(int position,
+							SwipeMenu menu, int index) {
+						switch (index) {
+						case 0:
+							// delete
+							mLiveInPersons.remove(position);
+							mLiveInAdapter.notifyDataSetChanged();
+							break;
+						case 1:
+							Intent intent = new Intent(CommitBedReserveOrderFragment.this.getActivity(), EditLiveInPersonActivity.class);
+							intent.putExtra(ChooseLiveInPersonActivity.EXTRA_PERSON_TYPE, ChooseLiveInPersonActivity.PERSON_TYPE_LIVE_IN);
+							intent.putExtra(EditLiveInPersonActivity.EXTRA_KEY_PERSON, mLiveInPersons.get(position));
+							intent.putExtra(EditLiveInPersonActivity.EXTRA_KEY_PERSON_POSITION, position);
+							startActivityForResult(intent, REQUEST_CODE_EIDT_LIVE_PERSON);
+							break;
+						}
+						return false;
+					}
+				});
+
+	}
+
+	@Override
+	public void onClick(View v) {
+		
+		Intent intent = null;
+		
+		switch (v.getId()) {
+		case R.id.layout_choose_contact:
+			intent = new Intent(this.getActivity(),ChooseContactPersonActivity.class);
+			startActivityForResult(intent, REQUEST_CODE_CONTACT);
+			break;
+		case R.id.layout_choose_live_person:
+			intent = new Intent(this.getActivity(), ChooseLiveInPersonActivity.class);
+			intent.putExtra(ChooseLiveInPersonActivity.EXTRA_PERSON_TYPE, ChooseLiveInPersonActivity.PERSON_TYPE_LIVE_IN);
+			startActivityForResult(intent, REQUEST_CODE_LIVE_PERSON);
+			break;
+		case R.id.btn_commit:
+			commitOrder();
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == REQUEST_CODE_CONTACT && data != null) {
+			/*
+			 * 选择联系人结果
+			 */
+			mContactPerson = (HealthyContactPerson) data
+					.getSerializableExtra(BaseActivity.EXTRA_KEY_TITLE);
+			mContactName.setText(mContactPerson.getName());
+			mContactPhone.setText(mContactPerson.getPhone());
+			mContactEmail.setText(mContactPerson.getEmail());
+		} else if (requestCode == REQUEST_CODE_LIVE_PERSON && data != null) {
+			/*
+			 * 选择入住人结果
+			 */
+			mLiveInPerson = (HealthyContactPerson) data
+					.getSerializableExtra(BaseActivity.EXTRA_KEY_TITLE);
+			mLiveInPersons.add(mLiveInPerson);
+			mLiveInAdapter.notifyDataSetChanged();
+		} else if (requestCode == REQUEST_CODE_EIDT_LIVE_PERSON && data != null) {
+			HealthyContactPerson person = (HealthyContactPerson) data
+					.getSerializableExtra(BaseActivity.EXTRA_KEY_TITLE);
+			int position = data.getIntExtra(EditLiveInPersonActivity.EXTRA_KEY_PERSON_POSITION, -1);
+			mLiveInPersons.remove(position);
+			mLiveInPersons.add(position, person);
+			mLiveInAdapter.notifyDataSetChanged();
+		}
+	}
+
+	/**
+	 * 
+	 * @Description 提交订单
+	 * @Author blue
+	 * @Time 2015-9-17
+	 */
+	private void commitOrder() {
+		final SimpleMsgDialog dialog = new SimpleMsgDialog(getActivity());
+		dialog.hideCancelBtn();
+		dialog.setMsg("您的订单预约登记成功，\n请耐心等待商家回复！");
+		dialog.show();
+		dialog.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (v.getId() == R.id.btn_ok) {
+					dialog.dismiss();
+				}
+			}
+		});
+	}
+}

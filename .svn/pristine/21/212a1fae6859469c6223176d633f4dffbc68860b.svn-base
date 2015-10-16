@@ -1,0 +1,119 @@
+package com.baosteel.qcsh.ui.fragment.commen;
+
+import java.util.List;
+
+import android.R.integer;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
+
+import com.baosteel.qcsh.R;
+import com.common.base.BaseFragment;
+import com.common.view.pulltorefresh.PullToRefreshBase;
+import com.common.view.pulltorefresh.PullToRefreshListView;
+import com.common.view.pulltorefresh.PullToRefreshBase.OnRefreshListener2;
+
+/**
+ * 
+ * @description 用于显示不同状态的多个数据列表，如不同状态的订单列表，服务预约列表
+ * @author blue
+ * @Time 2015-9-10
+ *
+ */
+public abstract class TabPagerFragment extends BaseFragment{
+
+	private int mBgColor;
+	/**
+	 * 下拉刷新ListView
+	 */
+	private PullToRefreshListView mListView;
+	/**
+	 * mListView的Adapter,由外部传入
+	 */
+	private BaseAdapter mAdapter;
+	/**
+	 * ListView的单击事件
+	 */
+	private OnItemClickListener mOnItemClickListener;
+	
+	private List<Object> mDatas;
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater,
+			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+		fragmentView = inflater.inflate(R.layout.fragment_tab_indicator, null);
+		fragmentView.setBackgroundColor(mBgColor);
+		return fragmentView;
+	}
+	
+	@Override
+	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		Log.d("zhiheng", "init listview and setAdater");
+		mListView = (PullToRefreshListView) fragmentView.findViewById(R.id.refresh_listview);
+		mListView.setAdapter(mAdapter);
+		
+		setListener();
+
+	}
+	
+	/**
+	 * 设置Adapter
+	 * 不同的Adapter就表示了不同的Item布局
+	 */
+	public void setAdapter(BaseAdapter adapter) {
+		mAdapter = adapter;
+		Log.d("zhiheng", "===> setAdapter");
+	}
+	
+	/**
+	 * 
+	 * @Description 设置选中项
+	 * @Author blue
+	 * @Time 2015-9-6
+	 */
+	public void setSelection(int position) {
+		mListView.getRefreshableView().setSelection(position);
+	}
+	
+	/**
+	 * 
+	 * @Description 设置ListView的监听事件
+	 * @Author blue
+	 * @Time 2015-9-7
+	 */
+	public void setOnItemClickListener(OnItemClickListener listener) {
+		this.mOnItemClickListener = listener;
+	}
+	
+
+	public void onRefreshComplete() {
+		Log.d(TAG, "==> onRefreshComplete");
+		mListView.onRefreshComplete();
+	}
+	
+	private void setListener() {
+		mListView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);//设置刷新模式：下拉、上拉或两者皆可
+//		mListView.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载更多");
+//		mListView.getLoadingLayoutProxy(false, true).setReleaseLabel("松开加载");
+//		mListView.getLoadingLayoutProxy(false, true).setRefreshingLabel("正在加载...");
+		if (mOnItemClickListener != null) mListView.setOnItemClickListener(mOnItemClickListener);
+		mListView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
+			@Override
+			public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+			}
+
+			@Override
+			public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+				mListView.onRefreshComplete();
+			}
+		});
+	}
+	
+}

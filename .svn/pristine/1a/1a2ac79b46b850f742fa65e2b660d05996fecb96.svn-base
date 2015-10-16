@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<translate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:anim/linear_interpolator"
+    android:duration="400"
+    android:fromYDelta="100%p"
+    android:toYDelta="0%p">
+</translate>
+<!-- From: file:/D:/sls_project/sls_branches/BaoGang/res/anim/yt_sharepopup_fade_in_fast.xml -->

@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.5"
+        android:background="@color/line" />
+
+    <RelativeLayout
+        android:id="@+id/destinationRl"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="@dimen/dp_70"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:gravity="left|center_vertical"
+                android:text="目的地"
+                android:textColor="@color/grayfont"
+                android:textSize="@dimen/sp_14" />
+
+            <TextView
+                android:id="@+id/destinationTv"
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:gravity="left|center_vertical"
+                android:hint="请选择目的地"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_5"
+            android:drawablePadding="@dimen/dp_5"
+            android:drawableRight="@drawable/com_black_arraw"
+            android:gravity="right"
+            android:paddingRight="@dimen/dp_10"
+            android:textSize="@dimen/sp_14" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.5"
+        android:background="@color/line" />
+
+    <RelativeLayout
+        android:id="@+id/beInsuranceRl"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="@dimen/dp_70"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:gravity="left|center_vertical"
+                android:text="被保人数"
+                android:textColor="@color/grayfont"
+                android:textSize="@dimen/sp_14" />
+
+            <TextView
+                android:id="@+id/beInsuranceTv"
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:gravity="left|center_vertical"
+                android:hint="1成人   1儿童 "
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_5"
+            android:drawablePadding="@dimen/dp_5"
+            android:drawableRight="@drawable/com_black_arraw"
+            android:gravity="right"
+            android:paddingRight="@dimen/dp_10"
+            android:textSize="@dimen/sp_14" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.5"
+        android:background="@color/line" />
+
+    <RelativeLayout
+        android:id="@+id/beginTimeRl"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="@dimen/dp_70"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:gravity="left|center_vertical"
+                android:text="开始时间"
+                android:textColor="@color/grayfont"
+                android:textSize="@dimen/sp_14" />
+
+            <TextView
+                android:id="@+id/beginTimeTv"
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:gravity="left|center_vertical"
+                android:hint="请选择开始时间"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/beginTimeTipTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_5"
+            android:drawablePadding="@dimen/dp_5"
+            android:drawableRight="@drawable/com_black_arraw"
+            android:gravity="right"
+            android:paddingRight="@dimen/dp_10"
+            android:text="今天"
+            android:textColor="@color/grayfont"
+            android:textSize="@dimen/sp_12" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.5"
+        android:background="@color/line" />
+
+    <RelativeLayout
+        android:id="@+id/finishTimeRl"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="@dimen/dp_70"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:gravity="left|center_vertical"
+                android:text="结束时间"
+                android:textColor="@color/grayfont"
+                android:textSize="@dimen/sp_14" />
+
+            <TextView
+                android:id="@+id/finishTimeTv"
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:gravity="left|center_vertical"
+                android:hint="请选择结束时间"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/finishTimeTipTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_5"
+            android:drawablePadding="@dimen/dp_5"
+            android:drawableRight="@drawable/com_black_arraw"
+            android:gravity="right"
+            android:paddingRight="@dimen/dp_10"
+            android:textSize="@dimen/sp_14" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.5"
+        android:background="@color/line" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:background="@color/gray7"
+        android:gravity="center_vertical|left"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_10"
+        android:text="选择保险特色公司"
+        android:textColor="@color/grayfont"
+        android:textSize="@dimen/sp_14" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.5"
+        android:background="@color/line" />
+
+    <RelativeLayout
+        android:id="@+id/chooseCompanyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/chooseCompanyTv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:gravity="left|center_vertical"
+                android:hint="请选择保险特色/公司"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_5"
+            android:drawablePadding="@dimen/dp_5"
+            android:drawableRight="@drawable/com_black_arraw"
+            android:gravity="right"
+            android:paddingRight="@dimen/dp_10"
+            android:textSize="@dimen/sp_14" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.5"
+        android:background="@color/line" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/dp_30"
+        android:background="@drawable/common_btn_yellow_selector"
+        android:textSize="@dimen/sp_16" 
+        android:textColor="@color/white"
+        android:text="查看"/>
+
+</LinearLayout>

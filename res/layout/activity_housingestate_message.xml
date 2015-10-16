@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.baosteel.qcsh.ui.view.TitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </com.baosteel.qcsh.ui.view.TitleBar>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="-1dp"
+        android:layout_marginRight="-1dp"
+        android:layout_marginTop="-1dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:text="小区地址"
+        android:textColor="@color/black_light"
+        android:textSize="14sp" >
+    </TextView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.2"
+        android:background="@color/gray" />
+
+    <TextView
+        android:id="@+id/btn_choose_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_list_item"
+        android:paddingBottom="15dp"
+        android:paddingLeft="15dp"
+        android:paddingTop="15dp"
+        android:text="点击选择您小区的所在地"
+        android:textColor="@color/black"
+        android:textSize="16sp" >
+    </TextView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.2"
+        android:background="@color/gray" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="-1dp"
+        android:layout_marginRight="-1dp"
+        android:layout_marginTop="-1dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:text="小区名称"
+        android:textColor="@color/black_light"
+        android:textSize="14sp" >
+    </TextView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.2"
+        android:background="@color/gray" />
+
+    <TextView
+        android:id="@+id/btn_choose_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_list_item"
+        android:paddingBottom="15dp"
+        android:paddingLeft="15dp"
+        android:paddingTop="15dp"
+        android:text="点击选择您的小区"
+        android:textColor="@color/black"
+        android:textSize="16sp" >
+    </TextView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.2"
+        android:background="@color/gray" />
+
+    <Button
+        android:id="@+id/btn_commit"
+        style="@style/CommitBtnStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/selector_btn_voilet_corner"
+        android:clickable="true"
+        android:text="提交" />
+
+</LinearLayout>

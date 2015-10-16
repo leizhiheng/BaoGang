@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+
+    <TextView
+        android:id="@+id/tv_attr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_5"
+        android:background="@drawable/selector_radiu_brickred"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:paddingBottom="@dimen/dp_8"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12"
+        android:paddingTop="@dimen/dp_8"
+        android:singleLine="true"
+        android:text="白色"
+        android:textColor="#ffffff"
+        android:textSize="@dimen/sp_14" />
+
+</LinearLayout>

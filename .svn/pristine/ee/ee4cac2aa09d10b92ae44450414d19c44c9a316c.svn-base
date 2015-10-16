@@ -1,0 +1,547 @@
+package com.baosteel.qcsh.ui.adapter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONObject;
+
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.api.RequestCallback;
+import com.baosteel.qcsh.api.RequestClient;
+import com.baosteel.qcsh.constants.ConstantsOrder;
+import com.baosteel.qcsh.dialog.SimpleMsgDialog;
+import com.baosteel.qcsh.dialog.SingleSelectListDialog;
+import com.baosteel.qcsh.dialog.SingleSelectListDialog.onOkClickListener;
+import com.baosteel.qcsh.model.BaoGangData;
+import com.baosteel.qcsh.model.CancelOrderReason;
+import com.baosteel.qcsh.model.OrderItem;
+import com.baosteel.qcsh.ui.activity.OnlinePaymentActivity;
+import com.baosteel.qcsh.ui.activity.store.StoreMainActivity;
+import com.baosteel.qcsh.utils.JSONParseUtils;
+import com.common.view.other.ListViewInScrollView;
+
+public class EntityAndServiceOrderAdapter extends BaseAdapter {
+	private static final String TAG = "EntityAndServiceOrderAdapter";
+	private Context mContext;
+	private List<OrderItem> mDatas;
+	private LayoutInflater mInflater;
+	
+	private List<CancelOrderReason> mCancelOrderReasons;
+	
+	/**
+	 * 当前操作的订单Position
+	 */
+	private int mPosition;
+
+	public EntityAndServiceOrderAdapter(Context context, List<OrderItem> datas) {
+		this.mContext = context;
+		this.mDatas = datas;
+		mInflater = LayoutInflater.from(context);
+	}
+
+	@Override
+	public int getCount() {
+		return mDatas == null ? 0 : mDatas.size();
+	}
+
+	@Override
+	public Object getItem(int position) {
+		return mDatas.get(position);
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return 0;
+	}
+	
+	/**
+	 * 上拉加载数据
+	 * @param datas
+	 */
+	public void appendData(List<OrderItem> datas) {
+		if (mDatas == null) {
+			mDatas = new ArrayList<OrderItem>();
+		}
+		mDatas.addAll(datas);
+		notifyDataSetChanged();
+	}
+	
+	/**
+	 * 下拉刷新数据
+	 * @param datas
+	 */
+	public void refreshData(List<OrderItem> datas) {
+		mDatas = datas;
+		notifyDataSetChanged();
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		
+		OrderItem item = mDatas.get(position);
+		Log.d(TAG, "position = "+position+", order id:"+item.getOrderId()+", order statu:"+item.getStatus()+", statu name:"+item.getStatusName());
+		ViewHolder holder = null;
+		if (convertView == null) {
+			convertView = mInflater.inflate(R.layout.adapter_entity_and_service_order, null);
+			holder = new ViewHolder(convertView);
+			convertView.setTag(holder);
+		}
+		
+		holder = (ViewHolder) convertView.getTag();
+		
+		//刷新订单商品数据
+		holder.showData(mDatas.get(position));
+		
+		//显示订单状态相关按钮
+		holder.setView(Integer.parseInt(mDatas.get(position).getStatus()), position);
+		
+		return convertView;
+	}
+
+	class ViewHolder {
+		
+		TextView storeName;					//店铺名称
+		TextView productCountTv;			//一共商品数量
+		TextView totalPayTv;				//订单总金额
+		
+		TextView tvStateName;				//订单状态
+		ListViewInScrollView productListView;//订单中的商品
+		OrderProductsAdapter adapter;
+		
+		
+		//底部按钮
+		TextView btnGoPay;					// 去付款
+		TextView btnBuyAgain;
+		TextView btnDeleteOrder;			// 删除订单（交易完成后可取消订单）
+		TextView btnComment;				// 评价（或追加评价）
+		TextView btnCheckLogistics;			// 查看物流
+		TextView btnConfirmReceive;			// 确认收货
+		TextView btnCancelOrder;			// 取消订单
+		TextView btnNoticeSeller;			// 提醒卖家
+		TextView btnContactSeller;			// 联系订单
+		TextView btnRufundAndChange;		// 退货/换货
+
+		List<View> mBtnViews;				// 用于管理底部按钮View
+
+		private int mBtnIndex;
+
+		public ViewHolder(View view) {
+
+			//店铺名称，商品数量，订单总金额，订单状态
+			storeName = (TextView) view.findViewById(R.id.tv_service_title);
+			productCountTv = (TextView) view.findViewById(R.id.productCountTv);
+			totalPayTv = (TextView) view.findViewById(R.id.totalPayTv);
+			tvStateName = (TextView) view.findViewById(R.id.tv_order_state_name);
+			
+			//订单商品列表
+			productListView = (ListViewInScrollView) view.findViewById(R.id.listview_product);
+			adapter = new OrderProductsAdapter(mContext);
+			productListView.setAdapter(adapter);
+			
+			//订单状态按钮
+			mBtnViews = new ArrayList<View>();
+			btnGoPay = (TextView) view.findViewById(R.id.btn_gopay);
+			btnBuyAgain = (TextView) view.findViewById(R.id.btn_buy_again);
+			btnDeleteOrder = (TextView) view.findViewById(R.id.btn_delete_order);
+			btnComment = (TextView) view.findViewById(R.id.btn_comment_order);
+			btnCheckLogistics = (TextView) view.findViewById(R.id.btn_check_logistics);
+			btnConfirmReceive = (TextView) view.findViewById(R.id.btn_confirm_receive);
+			btnCancelOrder = (TextView) view.findViewById(R.id.btn_cancel_order);
+			btnNoticeSeller = (TextView) view.findViewById(R.id.btn_notice_seller);
+			btnContactSeller = (TextView) view.findViewById(R.id.btn_contact_seller);
+			btnRufundAndChange = (TextView) view.findViewById(R.id.btn_refund_and_change);
+
+			mBtnViews.add(btnGoPay);// 0 去付款
+			mBtnViews.add(btnBuyAgain);// 1 再次购买
+			mBtnViews.add(btnCancelOrder);// 2 取消订单
+			mBtnViews.add(btnCheckLogistics);// 3 查看物流
+			mBtnViews.add(btnComment);// 4 评论
+			mBtnViews.add(btnConfirmReceive);// 5 确认收货
+			mBtnViews.add(btnDeleteOrder);// 6 删除订单
+			mBtnViews.add(btnNoticeSeller);// 7 提醒卖家
+			mBtnViews.add(btnContactSeller);// 8 联系卖家
+			mBtnViews.add(btnRufundAndChange);// 9 退货/换货
+		}
+
+		
+		/**
+		 * 显示订单数据
+		 * @param order
+		 */
+		public void showData(OrderItem item){
+			
+			storeName.setText(item.getSellerName());
+			productCountTv.setText("共"+item.getGoodsNum()+"件商品  实付：");
+			totalPayTv.setText(item.getOrderAllPrice());
+			tvStateName.setText(item.getStatusName());
+			
+			//商品列表
+			adapter.refreshData(item.getGoodsList());
+		}
+		
+		/**
+		 * 
+		 * @Description 根据订单的状态判断底部按钮的显示与隐藏
+		 * @Author blue
+		 * @Time 2015-9-21
+		 */
+		public void setView(int orderState, final int position) {
+			
+			/*
+			 * 点击店铺名称跳转到对应店铺主页
+			 */
+			storeName.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(mContext, StoreMainActivity.class);
+					intent.putExtra(StoreMainActivity.MERCHANT_ID, mDatas.get(position).getSellerId());
+					mContext.startActivity(intent);
+				}
+			});
+			
+			hideBtns();
+			
+			int [] btnIndexs = null;
+			switch (orderState) {
+			
+			case ConstantsOrder.ORDER_STATUS_CANCELED:// 已取消
+				tvStateName.setText("已取消");
+				btnIndexs = new int[] { 6 };// 显示“删除订单”按钮
+				break;
+				
+			case ConstantsOrder.ORDER_STATUS_NOT_CHECK:// 待审核
+				tvStateName.setText("待审核");
+				btnIndexs = new int[] { 2, 7 };// 显示“取消订单”,"提醒卖家"按钮
+				break;
+
+			case ConstantsOrder.ORDER_STATUS_NOT_PAY:// 待付款
+				tvStateName.setText("待付款");
+				btnIndexs = new int[] { 0, 2, 8 };// 显示"去付款"，“取消订单”,"联系卖家"按钮
+
+				break;
+			case ConstantsOrder.ORDER_STATUS_NOT_SEND:// 待发货
+				tvStateName.setText("待发货");
+				btnIndexs = new int[] { 2, 7 };// 显示“取消订单”， “提醒卖家”按钮
+				break;
+
+			case ConstantsOrder.ORDER_STATUS_NOT_RECEIVE:// 待收货
+				tvStateName.setText("待收货");
+				btnIndexs = new int[] { 3, 5, 2 };// 显示"查看物流"，“确认收货”, "取消订单"按钮
+				break;
+
+			case ConstantsOrder.ORDER_STATUS_NOT_COMMENT:// 待评价
+				tvStateName.setText("交易完成");
+				btnComment.setText("晒单评价");
+				btnIndexs = new int[] { 1, 6, 4, 9 };// 显示"再次购买"，“删除订单”，“晒单评价“,"退或/换货"按钮
+				break;
+				
+			case ConstantsOrder.ORDER_STATUS_FINISHED:// 交易完成
+				tvStateName.setText("交易完成");
+				btnComment.setText("追加评价");
+				btnIndexs = new int[] { 1, 6, 4, 9 };// 显示"再次购买"，“删除订单”，“晒单评价“,"退或/换货"按钮
+				break;
+
+			default:
+				break;
+			}
+			
+			if (btnIndexs == null || btnIndexs.length <= 0) {
+				return;
+			}
+			
+			showBtns(btnIndexs);
+			setOnClickListener(btnIndexs, position);
+		}
+
+		/**
+		 * 
+		 * @Description 隐藏所有底部按钮
+		 * @Author blue
+		 * @Time 2015-9-21
+		 */
+		private void hideBtns() {
+			for (int i = 0; i < mBtnViews.size(); i++) {
+				if (mBtnViews.get(i).getVisibility() == View.VISIBLE) {
+					mBtnViews.get(i).setVisibility(View.GONE);
+				}
+			}
+		}
+
+		/**
+		 * 
+		 * @Description 根据状态显示相应的底部按钮
+		 * @Author blue
+		 * @Time 2015-9-21
+		 */
+		private void showBtns(int[] btnIndexs) {
+			
+			for (int i : btnIndexs) {
+				mBtnViews.get(i).setVisibility(View.VISIBLE);
+			}
+		}
+
+		/**
+		 * 
+		 * @Description 设置底部按钮的监听事件
+		 * @Author blue
+		 * @Time 2015-9-21
+		 */
+		private void setOnClickListener(int[] btnIndexs, final int position) {
+			
+			for (int i = 0; i < btnIndexs.length; i++) {
+				mBtnIndex = btnIndexs[i];
+				TextView btn = (TextView) mBtnViews.get(mBtnIndex);
+				btn.setTag(mBtnIndex);
+				Log.d("zhiheng", "postion = "+position +"， btn index = " + mBtnIndex+ ", btn text = "+btn.getText().toString());
+
+				/*
+				 * 监听事件
+				 */
+				btn.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						mPosition = position ;
+						int btnIndex = Integer.parseInt(v.getTag().toString());
+						switch (btnIndex) {
+						case 0:
+							//去付款
+
+							goPay();
+							
+							break;
+						case 1:
+							//再次购买
+							
+							showToast("再次购买");
+							
+							break;
+						case 2:
+							//取消订单
+							
+							cancelOrder();
+							
+							break;
+						case 3:
+							//查看物流
+							
+							showToast("查看物流");
+							
+							
+							break;
+						case 4:
+							//评论
+							
+							showToast("评论");
+							
+							break;
+						case 5:
+							//确认收货
+							
+							queryAppOrderStatusConfirm();
+							
+							break;
+						case 6:
+							//删除订单
+							
+							deleteOrder();
+							
+							break;
+						case 7:
+							//提醒卖家
+							
+							showToast("提醒卖家");  
+							
+							break;
+						case 8:
+							//联系卖家
+							
+							showToast("联系卖家");  
+							
+							break;
+						case 9:
+							//退货/换货
+							
+							showToast("退货/换货");
+							
+							break;
+							
+
+						default:
+							break;
+						}
+					}
+				});
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @Description 去付款
+	 * @Author blue
+	 * @Time 2015-10-9
+	 */
+	private void goPay() {
+		Intent intent = new Intent(mContext, OnlinePaymentActivity.class);
+		//传递订单ID
+		intent.putExtra(OnlinePaymentActivity.EXTRA_ORDER_ID, mDatas.get(mPosition).getOrderId());
+		//传递订单编号
+		intent.putExtra(OnlinePaymentActivity.EXTRA_ORDER_CODE, mDatas.get(mPosition).getOrderCode());
+		//传递订单金额
+		intent.putExtra(OnlinePaymentActivity.EXTRA_ORDER_PRICE, mDatas.get(mPosition).getPayPrice());
+		mContext.startActivity(intent);
+	}
+	
+	/**
+	 * 
+	 * @Description 删除订单
+	 * @Author blue
+	 * @Time 2015-10-9
+	 */
+	private void deleteOrder() {
+		final SimpleMsgDialog dialog = new SimpleMsgDialog(mContext);
+		dialog.setMsg("您确定要删除该订单吗？");
+		dialog.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if (v.getId() == R.id.btn_ok) {
+					queryAppOrderStatusDel();
+				}
+				
+				dialog.dismiss();
+			}
+		});
+		dialog.show();
+	}
+	
+	/**
+	 * 
+	 * @Description 取消订单
+	 * @Author blue
+	 * @Time 2015-9-29
+	 */
+	private void cancelOrder() {
+		queryAppOrderStatusCancelReason();
+	}
+	
+	/**
+	 * 获取订单取消理由
+	 */
+	private void queryAppOrderStatusCancelReason() {
+		RequestClient.queryAppOrderStatusCancelReason(mContext, new RequestCallback<JSONObject>() {
+
+			@Override
+			public void onResponse(JSONObject response) {
+				if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+					mCancelOrderReasons = JSONParseUtils.getCancelOrderReasons(response);
+					final SingleSelectListDialog dialog = new SingleSelectListDialog(mContext);
+					dialog.setDatas(mCancelOrderReasons);
+					dialog.setonOkClickListener(new onOkClickListener() {
+						
+						@Override
+						public void onOkClick(int position) {
+							closeReason = mCancelOrderReasons.get(position).getName();
+							queryAppOrderStatusCancel();
+						}
+					});
+					dialog.show();
+				}
+			}
+		});
+	}
+	
+	/**
+	 * 确认收货
+	 * @param userId 用户Id
+	 * @param orderId 订单Id
+	 */
+	private void queryAppOrderStatusConfirm() {
+		RequestClient.queryAppOrderStatusConfirm(mContext, "21", "1", new RequestCallback<JSONObject>() {
+
+			@Override
+			public void onResponse(JSONObject response) {
+				if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+					mDatas.remove(mPosition);
+					Toast.makeText(mContext, "已确认收货", Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(mContext, JSONParseUtils.getString(response, "msg"), Toast.LENGTH_SHORT).show();
+				}
+				EntityAndServiceOrderAdapter.this.notifyDataSetChanged();
+			}
+		});
+	}
+	
+	private String userId;//用户Id
+	private String orderId;//订单Id
+	private String orderType;//订单类型(1实物2服务)
+	private String closeReason;//订单取消理由
+	
+	/**
+	 * 订单状态-取消 接口
+	 * @param userId 用户Id
+	 * @param orderId 订单Id
+	 * @param orderType订单类型(1实物2服务)
+	 * @param closeReason 订单取消理由
+	 */
+	private void queryAppOrderStatusCancel() {
+		RequestClient.queryAppOrderStatusCancel(mContext, BaoGangData.getInstance().getUserId(), mDatas.get(mPosition).getOrderId(), ConstantsOrder.ORDER_TYPE_ENTITY+"", closeReason, new RequestCallback<JSONObject>() {
+
+			@Override
+			public void onResponse(JSONObject response) {
+				if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+					
+					mDatas.remove(mPosition);
+					Toast.makeText(mContext, "已取消一个订单！", Toast.LENGTH_SHORT).show();
+				
+				} else {
+					
+					Toast.makeText(mContext, JSONParseUtils.getString(response, "msg"), Toast.LENGTH_SHORT).show();
+				
+				}
+				EntityAndServiceOrderAdapter.this.notifyDataSetChanged();
+			}
+		});
+	}
+	
+	/**
+	 * 订单状态-删除 接口
+	 * @param userId 用户Id
+	 * @param orderId 订单Id
+	 * @param orderType订单类型(1实物2服务)
+	 * @param closeReason 订单取消理由
+	 */
+	private void queryAppOrderStatusDel() {
+		RequestClient.queryAppOrderStatusDel(mContext, BaoGangData.getInstance().getUserId(), mDatas.get(mPosition).getOrderId(), new RequestCallback<JSONObject>() {
+
+			@Override
+			public void onResponse(JSONObject response) {
+				if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+					mDatas.remove(mPosition);
+				} else {
+					Toast.makeText(mContext, JSONParseUtils.getString(response, "msg"), Toast.LENGTH_SHORT).show();
+				}
+				
+				EntityAndServiceOrderAdapter.this.notifyDataSetChanged();
+			}
+		});
+	}
+
+	
+	private void showToast(String msg) {
+		Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+	}
+}

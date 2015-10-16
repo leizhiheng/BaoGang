@@ -1,0 +1,122 @@
+package com.baosteel.qcsh.ui.activity.cart;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.api.RequestCallback;
+import com.baosteel.qcsh.api.RequestClient;
+import com.baosteel.qcsh.model.BaoGangData;
+import com.baosteel.qcsh.model.CarItem;
+import com.baosteel.qcsh.model.ShoppingCar;
+import com.baosteel.qcsh.ui.adapter.ShoppingCarBusinessAdapter;
+import com.baosteel.qcsh.ui.adapter.ShoppingCarItemAdapter;
+import com.baosteel.qcsh.ui.view.TitleBar;
+import com.baosteel.qcsh.utils.JSONParseUtils;
+import com.baosteel.qcsh.utils.Preferences;
+import com.common.base.BaseActivity;
+import com.common.view.listview.MyListView;
+
+import org.json.JSONObject;
+
+/**
+ * Created by jws on 2015/9/16.
+ */
+public class ProductInventoryActivity extends BaseActivity {
+    private MyListView mLv_shopping_car;
+    private TitleBar mTitle_Bar;
+    private ShoppingCarBusinessAdapter shoppingCarBusinessAdapter;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_prodect_inventor);
+        initViews();
+        initData();
+    }
+
+    private void initViews(){
+        mTitle_Bar = (TitleBar)findViewById(R.id.title_bar);
+        mLv_shopping_car = (MyListView) findViewById(R.id.lv_shopping_car);
+        shoppingCarBusinessAdapter = new ShoppingCarBusinessAdapter(mContext);
+        mLv_shopping_car.setAdapter(shoppingCarBusinessAdapter);
+    }
+
+    private void initData(){
+        mTitle_Bar.setTitle("商品清单");
+        mTitle_Bar.setBackgroud(R.color.index_red);
+        //获取是立即购买进来的还是加入购物车进来的
+        int orderType = getIntent().getIntExtra("orderType", -1);
+        if(orderType==0){
+            ShoppingCar shoppingCar = (ShoppingCar)getIntent().getSerializableExtra("shoppingCar");
+            List<ShoppingCar> shoppingCarts = new ArrayList<ShoppingCar>();
+            shoppingCarts.add(shoppingCar);
+            setAdapter(shoppingCarts);
+        }else{
+            String shoppingId = getStringExtra("id");
+            loadCartData(shoppingId);
+        }
+
+
+    }
+    boolean showDialog = true;
+    /**
+     * 加载购物车商品
+     */
+    private void loadCartData(String shopping_id){
+
+        String  userId = BaoGangData.getInstance().getUser().userId;
+        RequestClient.queryAppShoppingCart(mContext, userId, shopping_id, new RequestCallback<JSONObject>(showDialog) {
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                showDialog = false;
+            }
+
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+                        Object returnMap = response.optJSONObject("returnMap").get("shoppingCart");
+                        List<ShoppingCar> shoppingCarts = JSONParseUtils.fromJsonArray(returnMap.toString(), ShoppingCar.class);
+
+                        if (null != shoppingCarts && shoppingCarts.size() > 0) {
+                            setAdapter(shoppingCarts);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void setAdapter(List<ShoppingCar> shoppingCarts){
+        shoppingCarBusinessAdapter.refreshData(shoppingCarts, new ShoppingCarItemAdapter.ChangeNumOncliListener() {
+            @Override
+            public void addNum(CarItem product) {
+
+            }
+
+            @Override
+            public void cutNum(CarItem product) {
+
+            }
+        }, new ShoppingCarItemAdapter.CheckItemOncliListener() {
+            @Override
+            public void checkProduct(int businessPosition, int position) {
+
+            }
+
+            @Override
+            public void checkBusiness(int position) {
+
+            }
+        },false);
+    }
+
+}

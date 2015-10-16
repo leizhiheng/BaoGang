@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/dp_10"
+    android:paddingRight="@dimen/dp_10"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/ic_healthy_report_item_bg"
+        android:padding="@dimen/dp_10" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/dp_10"
+                android:text="订单号：21024425"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_15" >
+            </TextView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/dp_5"
+                android:text="体检日期：2015-8-21"
+                android:textColor="@color/black_light"
+                android:textSize="@dimen/sp_14" >
+            </TextView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="体检项目：肝功能二项"
+                android:textColor="@color/black_light"
+                android:textSize="@dimen/sp_14" >
+            </TextView>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_load_icon"
+            android:layout_width="@dimen/dp_70"
+            android:layout_height="@dimen/dp_70"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_healthy_load_report" />
+    </LinearLayout>
+    <View android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"/>
+
+</LinearLayout>

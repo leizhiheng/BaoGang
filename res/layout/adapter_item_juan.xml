@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/layout_main"
+        android:layout_width="@dimen/dp_115"
+        android:layout_height="@dimen/dp_50"
+        android:descendantFocusability="blocksDescendants"
+        android:layout_marginLeft="@dimen/dp_5"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_5"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@drawable/icon_jiangquan_weilingqu">
+        <TextView
+            android:id="@+id/tv_juan_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:padding="@dimen/dp_2"
+            android:text="现金劵"
+            android:textColor="@color/gray_juan"
+            android:textSize="@dimen/sp_10" />
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="￥20"
+            android:textColor="@color/gray_juan"
+            android:textSize="@dimen/commen_text_size_16" />
+
+    </LinearLayout>
+</LinearLayout>

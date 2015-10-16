@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_color"
+    android:orientation="vertical" >
+
+    <com.baosteel.qcsh.ui.view.TitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/layout_gallery"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_125" >
+
+            <com.common.view.viewflow.ViewFlow
+                android:id="@+id/mHomeViewflow"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <com.common.view.viewflow.CircleFlowIndicator
+                android:id="@+id/mHomeViewflowindic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/dp_8"
+                android:paddingBottom="@dimen/dp_6"
+                android:paddingLeft="@dimen/dp_1"
+                android:paddingRight="@dimen/dp_1"
+                android:paddingTop="@dimen/dp_6"
+                app:activeColor="@color/index_red"
+                app:activeType="fill"
+                app:circleSeparation="@dimen/dp_16"
+                app:inactiveColor="#ffbcbcbc"
+                app:inactiveType="stroke"
+                app:radius="@dimen/dp_4" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/myView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <com.common.view.scrolllayout.PageControlView
+                android:id="@+id/pageControl"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/dp_20"
+                android:layout_alignParentBottom="true"
+                android:background="@color/white"
+                android:gravity="center"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/view_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <com.baosteel.qcsh.ui.view.TabViewPagerIndicator
+                android:id="@+id/indicator"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+
+            <View
+                android:id="@+id/view_id_1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_1"
+                android:layout_below="@id/indicator"
+                android:background="@color/gray"
+                android:textSize="@dimen/sp_14" />
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/water_pager"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@id/view_id_1"
+                android:textSize="@dimen/sp_14" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

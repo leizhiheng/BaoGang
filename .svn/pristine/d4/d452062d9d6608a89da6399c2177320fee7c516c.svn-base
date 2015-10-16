@@ -1,0 +1,77 @@
+package com.baosteel.qcsh.ui.activity.prodcut;
+
+import android.os.Bundle;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.utils.WebViewUtil;
+import com.common.base.BaseFragment;
+import com.common.view.webview.MyWebView;
+
+/**
+ * 安程宝商品详情-详情
+ * Created by kuangyong on 15/9/1.
+ */
+public class CarDetailsFragment extends BaseFragment{
+    // --------------------产品轮换图---------
+    private WebView webview;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        fragmentView = inflater.inflate(R.layout.layout_fragment_tonguetip_details, null);
+        return fragmentView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        findView();
+        setListener();
+        initView();
+    }
+
+    private void findView() {
+        webview = (MyWebView)findViewById(R.id.webview);
+    }
+
+    private void setListener() {
+
+    }
+
+
+    private void initView() {
+        WebSettings webSettings = webview.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        webSettings.setBlockNetworkImage(false);
+        webSettings.setBlockNetworkLoads(false);
+//		webSettings.setLoadWithOverviewMode(true);
+//		webSettings.setBuiltInZoomControls(true);
+//		webSettings.setSupportZoom(true);			//设定支持缩放
+//		webSettings.setUseWideViewPort(true);		//设定支持viewport
+        webview.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        webSettings.setUseWideViewPort(true);
+        webSettings.setSupportZoom(true);//可以缩放
+        webSettings.setBuiltInZoomControls(true);//显示放大缩小
+        webSettings.setDefaultZoom(WebSettings.ZoomDensity.CLOSE);//默认缩放模式
+        webview.setBackgroundResource(R.color.transparent); // 设置背景色
+        webview.getBackground().setAlpha(0); // 设置填充透明度 范围：0-255
+        webview.setVisibility(View.INVISIBLE);
+        webview.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                // 结束
+                super.onPageFinished(view, url);
+                webview.setVisibility(View.VISIBLE);
+            }
+
+        });
+        webview.loadDataWithBaseURL(null, WebViewUtil.initWebViewFor19_ZOOM("暂无详情。。。"), "text/html", "utf-8", null);
+    }
+}

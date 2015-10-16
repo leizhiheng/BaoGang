@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.baosteel.qcsh.ui.view.TitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </com.baosteel.qcsh.ui.view.TitleBar>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_160"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_my_happyliving" />
+    <!-- 我的发布 -->
+
+    <LinearLayout
+        android:id="@+id/layout_all_release"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_list_item"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_15" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="我的发布"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_15" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="全部发布信息"
+            android:textColor="@color/font_gray"
+            android:textSize="@dimen/sp_14" />
+
+        <ImageView
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_20"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_arrow_right" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.2"
+        android:background="@color/gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:background="@color/white">
+
+        <!-- 草稿 -->
+
+        <LinearLayout
+            android:id="@+id/layout_draft_release"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_15"
+            android:paddingBottom="@dimen/dp_15"
+            android:layout_weight="1"
+            android:background="@drawable/selector_list_item"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:layout_marginBottom="@dimen/dp_5"
+                android:src="@drawable/gerenzhongxin_caogao" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  草稿  "
+                android:textColor="@color/black_light"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+
+        <!-- 已提交 -->
+
+        <LinearLayout
+            android:id="@+id/layout_commited_release"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_15"
+            android:paddingBottom="@dimen/dp_15"
+            android:layout_weight="1"
+            android:background="@drawable/selector_list_item"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:layout_marginBottom="@dimen/dp_5"
+                android:src="@drawable/gerenzhongxin_yitijiao" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="已提交"
+                android:textColor="@color/black_light"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+
+        <!-- 审核中 -->
+
+        <LinearLayout
+            android:id="@+id/layout_in_checking_release"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_15"
+            android:paddingBottom="@dimen/dp_15"
+            android:layout_weight="1"
+            android:background="@drawable/selector_list_item"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:layout_marginBottom="@dimen/dp_5"
+                android:src="@drawable/gerenzhongxin_shenhezhong" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="审核中"
+                android:textColor="@color/black_light"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+
+        <!-- 已审核 -->
+
+        <LinearLayout
+            android:id="@+id/layout_checked_release"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_15"
+            android:paddingBottom="@dimen/dp_15"
+            android:layout_weight="1"
+            android:background="@drawable/selector_list_item"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:layout_marginBottom="@dimen/dp_5"
+                android:src="@drawable/gerenzhongxin_yishenhe" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="已审核"
+                android:textColor="@color/black_light"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+
+        <!-- 已退回 -->
+
+        <LinearLayout
+            android:id="@+id/layout_canceled_release"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_15"
+            android:paddingBottom="@dimen/dp_15"
+            android:layout_weight="1"
+            android:background="@drawable/selector_list_item"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:layout_marginBottom="@dimen/dp_5"
+                android:src="@drawable/gerenzhongxin_yituihui" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="已退回"
+                android:textColor="@color/black_light"
+                android:textSize="@dimen/sp_14" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.2"
+        android:background="@color/gray" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.2"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@color/gray" />
+
+    <!-- 我的预约信息 -->
+
+    <LinearLayout
+        android:id="@+id/layout_all_reserve_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_list_item"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_15" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="我的预约服务"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_15" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="全部预约信息"
+            android:textColor="@color/font_gray"
+            android:textSize="@dimen/sp_14" />
+
+        <ImageView
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_20"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_arrow_right" />
+    </LinearLayout>
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.2"
+        android:background="@color/gray" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.2"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@color/gray" />
+
+    <!-- 我的申报记录 -->
+
+    <LinearLayout
+        android:id="@+id/layout_all_apply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_list_item"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_15" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="我的申报记录"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_15" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="全部申报记录"
+            android:textColor="@color/font_gray"
+            android:textSize="@dimen/sp_14" />
+
+        <ImageView
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_20"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_arrow_right" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0.2"
+        android:background="@color/gray" />
+
+</LinearLayout>

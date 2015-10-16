@@ -1,0 +1,190 @@
+package com.baosteel.qcsh.ui.activity;
+
+import org.json.JSONObject;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.api.RequestCallback;
+import com.baosteel.qcsh.api.RequestClient;
+import com.baosteel.qcsh.api.URLs;
+import com.baosteel.qcsh.ui.activity.my.order.AllOrderActivity;
+import com.baosteel.qcsh.ui.view.TitleBar;
+import com.baosteel.qcsh.utils.JSONParseUtils;
+import com.baosteel.qcsh.utils.StringUtils;
+import com.common.base.BaseActivity;
+import com.common.pay.alipay.AlipayUtil;
+import com.common.pay.alipay.AlipayUtil.PayCallBack;
+import com.common.pay.alipay.Keys;
+
+/**
+ * 在线支付
+ * @author 江文思
+ *
+ * @todo TODO
+ *
+ * @date 2015-10-12
+ */
+public class OnlinePaymentActivity extends BaseActivity implements View.OnClickListener{
+
+	/**用于传递订单ID**/
+	public static final String EXTRA_ORDER_ID = "order.id";
+	
+	/**用于传递订单ID**/
+	public static final String EXTRA_ORDER_PAY_ID = "order.pay.id";
+	
+	/**用于传递订单编号**/
+	public static final String EXTRA_ORDER_CODE = "order.code";
+	
+	/**用于传递订单金额**/
+	public static final String EXTRA_ORDER_PRICE = "order.price";
+
+    private TitleBar mTitle_Bar;
+    private LinearLayout lin_pay;
+    private TextView mTvOrderCode;//订单编号
+    private TextView mTvOrderPrice;//订单价格
+    
+    private String orderId;
+    private String orderPayId;
+    private String orderCode;
+    private String orderPrice;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_online_payment);
+        intiData();
+        initViews();
+    }
+    
+    /**
+     * 初始化数据
+     */
+    private void intiData(){
+    	
+    	//订单id， 订单支付ID， 订单编号，订单支付总金额
+    	orderId = getIntent().getStringExtra(EXTRA_ORDER_ID);
+    	orderPayId = getIntent().getStringExtra(EXTRA_ORDER_PAY_ID);
+        orderCode = getIntent().getStringExtra(EXTRA_ORDER_CODE);
+        orderPrice = getIntent().getStringExtra(EXTRA_ORDER_PRICE);
+    }
+
+    /**
+     * 初始化控件
+     */
+    private void initViews(){
+    	
+        mTitle_Bar = (TitleBar)findViewById(R.id.title_bar);
+        mTitle_Bar.setTitle("在线支付");
+        mTitle_Bar.setBackgroud(R.color.index_red);
+        
+        mTvOrderCode = (TextView) findViewById(R.id.tv_order_code);
+        mTvOrderPrice = (TextView) findViewById(R.id.tv_order_price);
+        
+        mTvOrderCode.setText("订单编号：" + orderCode);
+        mTvOrderPrice.setText(orderPrice+"");
+
+        lin_pay= (LinearLayout)findViewById(R.id.pay_alipay_layout);
+        lin_pay.setOnClickListener(this);
+    }
+
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.pay_alipay_layout:
+            	
+            	//支付宝支付
+            	//PayCash();
+            	alipayBefore(orderPayId);
+            	
+                break;
+        }
+    }
+
+    
+    /**
+     * 支付前接口-获取支付相关参数
+     */
+    private void  alipayBefore(String orderId){
+        RequestClient.alipayBefore(mContext, orderId, new RequestCallback<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+            	
+            	//{"type":1,"returnMap":{"total_fee":"250.0","private_key":"1","notify_url":"www.alipay.com","number":"1","partner":"ttsrt","seller_id":"ttsrt","public_key":"yy","out_trade_no":"OA_20151012195447685"},"msg":"成功"}
+            	if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+            		response = response.optJSONObject("returnMap");
+            		
+            		String private_key = JSONParseUtils.getString(response, "private_key");
+            		String partner = JSONParseUtils.getString(response, "partner");
+            		String seller_id = JSONParseUtils.getString(response, "seller_id");
+            		String order_no = JSONParseUtils.getString(response, "out_trade_no");
+            		String order_name = "宝钢七彩生活";
+            		String order_desc = "宝钢七彩生活";
+            		String order_fee = JSONParseUtils.getString(response, "total_fee");
+            		String notify_url = JSONParseUtils.getString(response, "notify_url");
+            		
+//            		String private_key = Keys.PRIVATE;
+//            		String partner = Keys.DEFAULT_PARTNER;
+//            		String seller_id = Keys.DEFAULT_SELLER;
+//            		String order_no = JSONParseUtils.getString(response, "out_trade_no");
+//            		String order_name = "宝钢七彩生活";
+//            		String order_desc = "宝钢七彩生活";
+//            		String order_fee = "0.1"/*JSONParseUtils.getString(response, "total_fee")*/;
+//            		String notify_url = URLs.alipayBefore;
+            		
+            		//支付宝支付
+            		AlipayUtil aplipay = new AlipayUtil(mContext);
+            		aplipay.alipayOrder(private_key, partner, seller_id, order_no, order_name, order_desc, order_fee, notify_url);
+            		aplipay.setPayResultCallBack(new PayCallBack() {
+						
+						@Override
+						public void payResultCallBack(int type, String resultStatus) {
+							
+							alipayAfter(orderCode);
+						}
+					});
+                }
+            }
+        });
+    }
+    
+    private void alipayAfter(String orderNo){
+        RequestClient.alipayAfter(mContext, orderNo, new RequestCallback<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+                        showToast("支付成功");
+                        startActivity(new Intent(getBaseContext(), AllOrderActivity.class));
+                        OnlinePaymentActivity.this.finish();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+    
+    
+    private void  PayCash(){
+        RequestClient.queryAppPay(mContext, orderId, 1, new RequestCallback<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+                        showToast("支付成功");
+                        startActivity(new Intent(getBaseContext(), AllOrderActivity.class));
+                        OnlinePaymentActivity.this.finish();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+}
+

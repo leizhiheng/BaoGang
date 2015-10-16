@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.common.view.topbar.HeadView
+        android:id="@+id/headview"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_46" />
+
+    <LinearLayout
+        android:id="@+id/layout_selecte_type"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:listSelector="@null"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="新增一台车辆"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_15" />
+
+
+        <ImageView
+            android:layout_width="@dimen/dp_16"
+            android:layout_height="@dimen/dp_16"
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_arrow_right_gray" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_0.1"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:background="#D3D3D3" />
+
+    <ListView
+        android:id="@+id/lv_car_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:listSelector="@null"
+        android:divider="#D3D3D3"
+        android:dividerHeight="@dimen/dp_0.1"
+        android:layout_marginLeft="@dimen/dp_10"/>
+
+</LinearLayout>

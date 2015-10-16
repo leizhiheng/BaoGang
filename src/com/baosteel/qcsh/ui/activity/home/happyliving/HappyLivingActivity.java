@@ -1,0 +1,328 @@
+package com.baosteel.qcsh.ui.activity.home.happyliving;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONObject;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
+
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.Poi;
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.api.RequestCallback;
+import com.baosteel.qcsh.api.RequestClient;
+import com.baosteel.qcsh.database.bean.TopProduct;
+import com.baosteel.qcsh.dialog.TopbarMenuPopwindow;
+import com.baosteel.qcsh.ui.activity.common.SearchActivity;
+import com.baosteel.qcsh.ui.adapter.TopProdectAdapter;
+import com.baosteel.qcsh.ui.view.MyGridView;
+import com.baosteel.qcsh.utils.BaiduMapUtil;
+import com.baosteel.qcsh.utils.JSONParseUtils;
+import com.common.base.BaseActivity;
+import com.common.utils.DeviceUtils;
+import com.common.view.banner.BannerData;
+import com.common.view.banner.BannerView;
+import com.common.view.banner.IOnBannerItenClick;
+import com.common.view.fastlink.FastLinkData;
+import com.common.view.fastlink.FastLinkView;
+import com.common.view.fastlink.LnkToolsGridViewAdapter.BackItemClickListener;
+import com.common.view.scrolllayout.PageControlView;
+import com.common.view.scrolllayout.ScrollLayout;
+import com.common.view.scrollview.NestScrollView;
+import com.common.view.viewflow.CircleFlowIndicator;
+import com.common.view.viewflow.ViewFlow;
+
+public class HappyLivingActivity extends BaseActivity implements IOnBannerItenClick, BackItemClickListener, OnClickListener {
+
+	private View mTitleView;
+    private NestScrollView mScrollView;
+	private ImageView mModoIcon;
+	private ImageView mRightIcon;
+	private ImageView mBtnBack;
+	private View mViewSearch;
+	/**
+     * Banner轮播图
+     **/
+    private BannerView bannerView;
+    /**
+     * 快速导航
+     **/
+    private FastLinkView fastLinkView;
+    /**
+     * 热门榜单
+     **/
+    private MyGridView myGridView;
+    /**
+     * Adapter for myGridView
+     */
+    private TopProdectAdapter mAdapter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tongue);
+        //初始化控件
+        initView();
+
+        // 初始化数据
+        initData();
+
+        // 加载竞拍数据
+        loadData();
+    }
+
+    private void initView() {
+
+    	mTitleView = findViewById(R.id.index_sousuo_linlayout);
+    	mTitleView.setBackgroundColor(getResources().getColor(R.color.title_bar_bg_voilet));
+    	mModoIcon = (ImageView) findViewById(R.id.activity_index_sousuo_iv);
+    	mModoIcon.setImageResource(R.drawable.icon_happyliving);
+
+    	mRightIcon = (ImageView) findViewById(R.id.home_location_imageview);
+    	mRightIcon.setImageResource(R.drawable.icon_3point);
+    	mRightIcon.setOnClickListener(this);
+
+    	mBtnBack = (ImageView) findViewById(R.id.btn_back);
+    	mBtnBack.setOnClickListener(this);
+    	
+    	mViewSearch = findViewById(R.id.ab_search);
+    	mViewSearch.setOnClickListener(this);
+    	
+    	mScrollView = (NestScrollView) findViewById(R.id.home_body_scrollview);
+    	scrollToTop();
+
+        //轮播图
+        ViewFlow viewFlow = (ViewFlow) findViewById(R.id.mHomeViewflow);// 获得viewFlow对象
+        CircleFlowIndicator indic = (CircleFlowIndicator) findViewById(R.id.mHomeViewflowindic); // viewFlow下的indic
+        bannerView = new BannerView(mContext, viewFlow, indic);
+        bannerView.setOnItemClickListener(this);
+
+        //快速导航图
+        ScrollLayout mScrollLayout = (ScrollLayout) findViewById(R.id.ScrollLayoutTest);
+        PageControlView pageControl = (PageControlView) findViewById(R.id.pageControl);
+        int mHeight = mScrollLayout.getLayoutParams().height;
+        ScrollLayout.LayoutParams layoutParams = mScrollLayout.getLayoutParams();
+//        layoutParams.height = mHeight / 2;
+        mScrollLayout.setLayoutParams(layoutParams);
+        fastLinkView = new FastLinkView(mContext, mScrollLayout, pageControl);
+        fastLinkView.setOntemClickListener(this);
+
+        myGridView = (MyGridView) findViewById(R.id.gv_top_list);
+
+        myGridView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				startActivity(new Intent(HappyLivingActivity.this, HouseDetailActivity.class));
+			}
+		});
+
+    }
+    
+    /**
+     * 
+     * @Description 使ScrollView滑动到顶部
+     * @Author blue
+     * @Time 2015-10-13
+     */
+    private void scrollToTop() {
+    	mScrollView.post(new Runnable() {
+ 			
+ 			@Override
+ 			public void run() {
+ 				mScrollView.scrollTo(0, 0);
+ 			}
+ 		});
+    }
+
+    /**
+     * 初始化数据
+     */
+    private void initData() {
+    	mAdapter = new TopProdectAdapter(this, getData());
+    	mAdapter.setIsShowSaleVolume(false);
+    }
+
+    /**
+     * 加载数据
+     */
+    public void loadData() {
+
+    	//获取Banner图数据
+    	loadBannerData();
+    	
+    	//获取子模块
+    	loadFastLinkData();
+    	
+        myGridView.setAdapter(mAdapter);
+
+    }
+    
+    private void loadFastLinkData() {
+		 int type = getIntent().getIntExtra("type",0);
+		 RequestClient.queryAppClassify(mContext, type, new RequestCallback<JSONObject>() {
+		
+		     @Override
+		     public void onResponse(JSONObject response) {
+		
+		         if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+		
+		             // 解析模块下的数据
+		        	 List<FastLinkData> list = JSONParseUtils.getTypeFastLinkDatas(response);
+		             if (list.size() > 0) fastLinkView.refreshData(list);
+		         }
+		         scrollToTop();
+		     }
+		 });
+
+        //构造FastLink假数据
+        List<FastLinkData> fastList = new ArrayList<FastLinkData>();
+        fastList.add(new FastLinkData(0, "物业服务", R.drawable.ic_happyling_mode_property));
+        fastList.add(new FastLinkData(1, "鲜花绿植",R.drawable.ic_happyling_mode_flower));
+        fastList.add(new FastLinkData(2, "保洁月嫂",R.drawable.ic_happyling_mode_yuesao));
+        fastList.add(new FastLinkData(3, "保洁",R.drawable.ic_happyling_mode_baojie));
+        fastList.add(new FastLinkData(4, "便捷缴费", R.drawable.ic_happyling_mode_pay));
+        fastList.add(new FastLinkData(5, "居家商城",R.drawable.ic_happyling_mode_mall));
+        fastList.add(new FastLinkData(6, "我是房客",R.drawable.ic_happyling_mode_house_roomer));
+        fastList.add(new FastLinkData(7, "我是房东",R.drawable.ic_happyling_mode_householder));
+        fastList.add(new FastLinkData(8, "装修预定",R.drawable.ic_happyling_mode_decotation));
+        fastLinkView.refreshData(fastList);
+    }
+
+    private List<TopProduct> getData() {
+        List<TopProduct> list = new ArrayList<TopProduct>();
+        list.add(new TopProduct("石岩高大上佳华豪苑 豪华装修带双车位靓房车", R.drawable.ic_happyling_product, "5800", 157+""));
+        list.add(new TopProduct("石岩高大上佳华豪苑 豪华装修带双车位靓房车", R.drawable.ic_happyling_product, "5800", 157+""));
+        list.add(new TopProduct("石岩高大上佳华豪苑 豪华装修带双车位靓房车", R.drawable.ic_happyling_product, "5800", 157+""));
+        list.add(new TopProduct("石岩高大上佳华豪苑 豪华装修带双车位靓房车", R.drawable.ic_happyling_product, "5800", 157+""));
+        list.add(new TopProduct("石岩高大上佳华豪苑 豪华装修带双车位靓房车", R.drawable.ic_happyling_product, "5800", 157+""));
+        list.add(new TopProduct("石岩高大上佳华豪苑 豪华装修带双车位靓房车", R.drawable.ic_happyling_product, "5800", 157+""));
+        return list;
+    }
+
+    @Override
+    public void onBannerItemClick(BannerData data, int position) {
+//        showToast("点击了第" + position + "项数据");
+    }
+
+    @Override
+    public void onFastLinkItemClick(FastLinkData bean) {
+    	Class clazz = null;
+        switch (bean.getId()) {
+            case 0:
+            	clazz = PropertyServiceActivity.class;
+                break;
+            case 1:
+//            	showToast("鲜花绿植");
+
+                break;
+            case 2:
+//            	showToast("保洁月嫂");
+                break;
+            case 3:
+            	
+//            	showToast("保洁");
+            	break;
+            case 4:
+            	clazz = NimblePaymentActivity.class;
+                break;
+            case 5:
+//            	showToast("居家商城");
+//            	clazz = HomeMallActivity.class;
+            	break;
+            case 6:
+            	clazz = IamRoomerActivity.class;
+            	
+            	break;
+            case 7:
+            	clazz = IamHouseHolderActivity.class;
+            	break;
+            case 8:
+            	clazz = DecorationReserveActivity.class;
+            	break;
+        }
+        if (clazz != null) {
+        	startActivity(new Intent(this, clazz));
+		}
+//        showToast("点击了第" + bean.getName() + "项数据");
+    }
+
+	@Override
+	public void onClick(View v) {
+		
+		switch (v.getId()) {
+		case R.id.btn_back:
+			finish();
+			break;
+		case R.id.home_location_imageview:
+			TopbarMenuPopwindow popwindow = new TopbarMenuPopwindow(this);
+			popwindow.showAsDropDown(mTitleView, DeviceUtils.getWidthMaxPx(this) - popwindow.getWidth(), 0);
+			break;
+		case R.id.ab_search:
+			Intent intent = new Intent(this, SearchActivity.class);
+			startActivity(intent);
+			break;
+		default:
+			break;
+		}
+	}
+	
+	/**
+	 * 
+	 * @Description 下载Banner图
+	 * @Author blue
+	 * @Time 2015-9-24
+	 */
+	private void loadBannerData()  {
+		
+		RequestClient.queryAPPBanner(this, 13, 1, new RequestCallback<JSONObject>() {
+			
+			@Override
+			public void onResponse(JSONObject response) {
+				if (JSONParseUtils.isSuccessRequest(HappyLivingActivity.this, response)) {
+					
+					bannerView.refreshData(JSONParseUtils.getBannerDatas(response));
+				
+				} else {
+					/*
+					 * 如果请求错误，将返回的错误信息显示出来
+					 */
+					Toast.makeText(HappyLivingActivity.this, JSONParseUtils.getResponseMsg(response), Toast.LENGTH_SHORT).show();
+				}
+				scrollToTop();
+			}
+			
+			@Override
+			public void onFinish() {
+				super.onFinish();
+				
+				if (bannerView.getCount() == 0) {
+		    		//Toast.makeText(HappyLivingActivity.this, "服务器无数据，使用模拟数据", Toast.LENGTH_SHORT).show();
+		    		//构造Banner假数据
+		            List<BannerData> dataList = new ArrayList<BannerData>();
+		            dataList.add(new BannerData());
+		            dataList.add(new BannerData());
+		            dataList.add(new BannerData());
+		            dataList.add(new BannerData());
+		            dataList.add(new BannerData());
+		            dataList.add(new BannerData());
+		            dataList.add(new BannerData());
+		            bannerView.refreshData(dataList);
+				}
+				
+			}
+		});
+	}
+}
+

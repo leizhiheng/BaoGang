@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
+    <TextView
+        android:id="@+id/tv_describ"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="韩国进口食品"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sp_16"/>
+    <TextView
+        android:id="@+id/tv_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="x1"
+        android:paddingRight="@dimen/dp_10"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sp_16"/>
+    <ImageView
+        android:id="@+id/iv_arrow"
+        android:layout_width="@dimen/dp_16"
+        android:layout_height="@dimen/dp_16"
+        android:scaleType="centerInside"
+        android:src="@drawable/icon_arrow_right_gray" />
+</LinearLayout>

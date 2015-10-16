@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center_horizontal"
+    android:padding="@dimen/dp_5" >
+
+    <ImageView
+        android:id="@+id/img_index_product"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_156"
+        android:scaleType="fitXY"
+        android:background="@drawable/test_pic" />
+
+    <TextView
+        android:id="@+id/tv_index_product_name"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_35"
+        android:layout_alignLeft="@+id/img_index_product"
+        android:layout_alignRight="@+id/img_index_product"
+        android:layout_below="@+id/img_index_product"
+        android:layout_marginTop="@dimen/dp_8"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="丹麦进口 丹麦蓝罐曲奇饼干125g加仑子味下午茶点心"
+        android:textSize="@dimen/sp_14" />
+
+    <TextView
+        android:id="@+id/tv_index_product_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/img_index_product"
+        android:layout_below="@+id/tv_index_product_name"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_3"
+        android:drawableLeft="@drawable/hao_"
+        android:text="10.9"
+        android:textColor="@color/btn_color"
+        android:textSize="@dimen/sp_16" />
+
+    <TextView
+        android:id="@+id/tv_index_product_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tv_index_product_price"
+        android:layout_alignRight="@+id/img_index_product"
+        android:layout_below="@+id/tv_index_product_name"
+        android:layout_marginTop="@dimen/dp_6"
+        android:text="56人购买"
+        android:textSize="@dimen/sp_12" />
+
+</RelativeLayout>

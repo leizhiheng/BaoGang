@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.common.view.pulltorefresh.PullToRefreshListView
+        xmlns:pulltorefresh="http://schemas.android.com/apk/res/com.baosteel.qcsh"
+        android:id="@+id/refresh_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/dp_10"
+        android:divider="@null">
+    </com.common.view.pulltorefresh.PullToRefreshListView>
+
+</LinearLayout>

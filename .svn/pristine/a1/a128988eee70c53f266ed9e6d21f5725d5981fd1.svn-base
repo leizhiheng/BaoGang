@@ -1,0 +1,240 @@
+package com.baosteel.qcsh.ui.adapter;
+
+import java.util.List;
+
+import android.app.Activity;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.model.DeliverGoods;
+import com.baosteel.qcsh.model.DeliverMethod;
+import com.common.base.BaseActivity;
+import com.common.view.listview.HorizontialListView;
+import com.common.view.swipe.SwipeLayout.ShowMode;
+
+
+/**
+ * Created by jws on 2015/7/22.
+ */
+public class DeliveryMethodAdapter extends BaseAdapter {
+    private Context mContext;
+    private List<DeliverMethod> list;
+    private LayoutInflater inflater;
+    private ItemOnclickListener itemOnclickListener;
+
+    public DeliveryMethodAdapter(Context mContext, List<DeliverMethod> list, ItemOnclickListener itemOnclickListener) {
+        super();
+        this.inflater = LayoutInflater.from(mContext);
+        this.mContext = mContext;
+        this.list = list;
+        this.itemOnclickListener = itemOnclickListener;
+    }
+
+    /**
+     * 刷新数据
+     * @param list
+     * @return
+     */
+    public void refreshData(List<DeliverMethod> list) {
+        this.list = list;
+        
+        this.notifyDataSetChanged();
+    }
+
+    public List<DeliverMethod> getList() {
+        return list;
+    }
+
+
+    @Override
+    public int getCount() {
+        return null != list ? list.size() : 0;
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return list.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+         ViewHolder holder = null;
+        if (convertView == null) {
+        	convertView = inflater.inflate(R.layout.item_delivery_method, null);
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+        findMethodByType(holder, position);
+        if(list.get(position).getType()==1){
+            holder.mTv_delivery_gohome.setBackgroundResource(R.drawable.delivery_select);
+            holder.mTv_delivery_gohome.setTextColor(mContext.getResources().getColor(R.color.g_orage_color));
+            holder.mTv_gohome_goget.setBackgroundResource(R.drawable.delivery_noselect);
+            holder.mTv_gohome_goget.setTextColor(mContext.getResources().getColor(R.color.gr_l_color));
+        }else if(list.get(position).getType()==2){
+            holder.mTv_delivery_gohome.setBackgroundResource(R.drawable.delivery_noselect);
+            holder.mTv_delivery_gohome.setTextColor(mContext.getResources().getColor(R.color.gr_l_color));
+            holder.mTv_gohome_goget.setBackgroundResource(R.drawable.delivery_select);
+            holder.mTv_gohome_goget.setTextColor(mContext.getResources().getColor(R.color.g_orage_color));
+            holder.mTv_gohome_goget.setVisibility(View.VISIBLE);
+            holder.mLin_tips.setVisibility(View.VISIBLE);
+        }
+        
+        //刷新商品图片
+        holder.adapter.refreshData(list.get(position).getGoodsImg());
+        
+        holder.mTv_fare.setText("商品运费"+list.get(position).getShipment()+"元");
+        holder.mTv_address.setText(list.get(position).getAddress().getStreet_address());
+        holder.mTv_date.setText(list.get(position).getAddress().getServe_time());
+        holder.mTv_phone.setText(list.get(position).getAddress().getContact_tel());
+        holder.mTv_mentionpoint.setText(list.get(position).getAddress().getServe_name());
+        holder.mRel_address.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                itemOnclickListener.getAddress(position);
+            }
+        });
+        holder.mRel_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                itemOnclickListener.getDate(position);
+            }
+        });
+        holder.mRel_mentionpoint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                itemOnclickListener.getPoint(position,view);
+            }
+        });
+        holder.mRel_phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                itemOnclickListener.getPhone(position);
+            }
+        });
+        holder.mTv_delivery_gohome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                itemOnclickListener.clickDelivery(position);
+            }
+        });
+        holder.mTv_gohome_goget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                itemOnclickListener.clickMention(position);
+            }
+        });
+        
+        
+        
+        
+        return convertView;
+    }
+
+    private void findMethodByType(ViewHolder holder,int position){
+        if (list.get(position).getInvoiceType().equals("1,2")) {
+            holder.mTv_delivery_gohome.setBackgroundResource(R.drawable.delivery_select);
+            holder.mTv_delivery_gohome.setTextColor(mContext.getResources().getColor(R.color.g_orage_color));
+            holder.mTv_gohome_goget.setBackgroundResource(R.drawable.delivery_noselect);
+            holder.mTv_gohome_goget.setTextColor(mContext.getResources().getColor(R.color.gr_l_color));
+            holder.mTv_delivery_gohome.setVisibility(View.VISIBLE);
+            holder.mTv_gohome_goget.setVisibility(View.VISIBLE);
+            holder.mLin_tips.setVisibility(View.GONE);
+        } else if(list.get(position).getInvoiceType().equals("1")) {
+            holder.mTv_delivery_gohome.setBackgroundResource(R.drawable.delivery_select);
+            holder.mTv_delivery_gohome.setTextColor(mContext.getResources().getColor(R.color.g_orage_color));
+            holder.mTv_delivery_gohome.setVisibility(View.VISIBLE);
+            holder.mTv_gohome_goget.setVisibility(View.GONE);
+            holder.mLin_tips.setVisibility(View.GONE);
+            list.get(position).setType(3);
+        }else if(list.get(position).getInvoiceType().equals("2")){
+            holder.mTv_gohome_goget.setBackgroundResource(R.drawable.delivery_select);
+            holder.mTv_gohome_goget.setTextColor(mContext.getResources().getColor(R.color.g_orage_color));
+            holder.mTv_delivery_gohome.setVisibility(View.GONE);
+            holder.mTv_gohome_goget.setVisibility(View.VISIBLE);
+            holder.mLin_tips.setVisibility(View.VISIBLE);
+            list.get(position).setType(3);
+        }
+    }
+
+    public final class ViewHolder implements OnItemClickListener {
+    	
+    	
+    	public HorizontialListView imgListView;
+		public TextView mTv_delivery_gohome;
+        public TextView mTv_gohome_goget;
+        public TextView mTv_fare;
+        public RelativeLayout mRel_mentionpoint;
+        public TextView mTv_mentionpoint;
+        public RelativeLayout mRel_address;
+        public TextView mTv_address;
+        public RelativeLayout mRel_phone;
+        public TextView mTv_phone;
+        public RelativeLayout mRel_date;
+        public TextView mTv_date;
+        public LinearLayout mLin_tips;
+        
+        /**商品图片适配器**/
+        public DeliverGoodsAdapter adapter;
+        
+        public ViewHolder(View convertView) {
+        	
+        	imgListView = (HorizontialListView) convertView.findViewById(R.id.lv_h);
+        	mTv_delivery_gohome = (TextView) convertView.findViewById(R.id.tv_delivery_gohome);
+            mTv_gohome_goget = (TextView) convertView.findViewById(R.id.tv_gohome_goget);
+            mTv_fare = (TextView) convertView.findViewById(R.id.tv_fare);
+            mRel_mentionpoint = (RelativeLayout) convertView.findViewById(R.id.rel_mentionpoint);
+            mTv_mentionpoint = (TextView) convertView.findViewById(R.id.tv_mentionpoint);
+            mRel_address = (RelativeLayout) convertView.findViewById(R.id.rel_address);
+            mLin_tips = (LinearLayout) convertView.findViewById(R.id.lin_tips);
+            mTv_address = (TextView) convertView.findViewById(R.id.tv_address);
+            mRel_phone = (RelativeLayout) convertView.findViewById(R.id.rel_phone);
+            mTv_phone = (TextView) convertView.findViewById(R.id.tv_phone);
+            mRel_date = (RelativeLayout) convertView.findViewById(R.id.rel_date);
+            mTv_date = (TextView) convertView.findViewById(R.id.tv_date);
+            
+            adapter = new DeliverGoodsAdapter((Activity)mContext);
+            imgListView.setAdapter(adapter);
+            imgListView.setOnItemClickListener(this);
+		}
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			DeliverGoods goods = (DeliverGoods)adapter.getItem(position);
+			//这里做商品详情跳转
+			((BaseActivity)mContext).showToast("这里做商品详情界面的跳转");
+		}
+    }
+
+    public interface ItemOnclickListener {
+        /**选择自提点**/
+        void getPoint(int position,View view);
+        /**选择地址**/
+        void getAddress(int position);
+        /**选择电话**/
+        void getPhone(int position);
+        /**选择日期**/
+        void getDate(int position);
+        /**选择上门自提**/
+        void clickMention(int position);
+        /**选择送货上门**/
+        void clickDelivery(int position);
+    }
+
+}

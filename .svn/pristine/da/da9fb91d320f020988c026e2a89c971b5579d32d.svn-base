@@ -1,0 +1,56 @@
+宝钢 v1.0
+======================================
+
+# Http 网络请求数据
+	
+## 方法一(需要自己解析结果)
+  	com.common.net.RequestParams params = new com.common.net.RequestParams();
+	params.url = Urls.Login;
+	params.addParam("key1", "value1");
+	HttpUtils.addRequest(this, params, new Listener<JSONObject>() {
+		@Override
+		public void onResponse(JSONObject response) {
+				//解析返回数据
+		}
+	});
+## 方法二(无需自己解析结果)
+
+   	//请求参数
+	Map<String, String> params = new HashMap<String, String>();
+	params.put("key1", "value1");
+	params.put("key2", "value2");
+		
+	//请求回调
+	ResponeListener<User> callback = new ResponeListener<User>() {
+
+		@Override
+		public void onErrorResponse(VolleyError error) {
+			//错误回调
+		}
+
+		@Override
+		public void onResponse(User response) {
+			//得到json对应的Bean对象
+		}
+	};
+		
+	//请求对象
+	Request<User> request = new RequestJSONBean<User>(url, User.class, params, callback);
+
+# 图片加载
+  ImageManager.Load(String imgUrl, ImageView imageView);
+  
+  
+# 本地SharedPreferences键值对存储
+  Preferences.putString(String key, String value);
+  
+# 本地数据库管理
+  1.添加表-在DatabaseManager里面
+  2.对表进行增删改查-在TableDao里面如(ProductDao)
+
+
+  
+  
+
+	
+	

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_166"
+    android:background="@drawable/icon_vehicle_information_base"
+    android:orientation="vertical">
+
+    <com.common.view.topbar.HeadView
+        android:id="@+id/headview"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_46" />
+
+    <LinearLayout
+        android:id="@+id/layout_car_info"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_120"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/dp_80"
+            android:layout_height="@dimen/dp_80"
+            android:layout_margin="@dimen/dp_10"
+            android:scaleType="fitXY"
+            android:src="@drawable/icon_default_img" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_car_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="添加一辆您爱车的信息"
+                android:textColor="@color/white"
+                android:textSize="@dimen/commen_text_size_16" />
+
+            <TextView
+                android:id="@+id/tv_car_more_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_5"
+                android:text="新车上路时间：2015年01月\n新车生产月份：01月生产"
+                android:textColor="@color/white"
+                android:textSize="@dimen/commen_text_size_14" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="@dimen/dp_18"
+            android:layout_height="@dimen/dp_18"
+            android:layout_marginRight="@dimen/dp_10"
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_arraw_right_white" />
+    </LinearLayout>
+</LinearLayout>

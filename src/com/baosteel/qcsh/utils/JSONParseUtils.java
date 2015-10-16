@@ -1,0 +1,764 @@
+package com.baosteel.qcsh.utils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.baosteel.qcsh.database.bean.TopProduct;
+import com.baosteel.qcsh.model.Brand;
+import com.baosteel.qcsh.model.CancelOrderReason;
+import com.baosteel.qcsh.model.CommitOrderInfo;
+import com.baosteel.qcsh.model.CommonTicket;
+import com.baosteel.qcsh.model.DeliverCommit;
+import com.baosteel.qcsh.model.FilterGridItem;
+import com.baosteel.qcsh.model.HotService;
+import com.baosteel.qcsh.model.MemberReceiveAddressJson;
+import com.baosteel.qcsh.model.OrderDetailData;
+import com.baosteel.qcsh.model.OrderItem;
+import com.baosteel.qcsh.model.ProductCollect;
+import com.baosteel.qcsh.model.ProductMaybeLike;
+import com.baosteel.qcsh.model.ProductRecord;
+import com.baosteel.qcsh.model.User;
+import com.baosteel.qcsh.model.homeclassify.ClassifyRank1;
+import com.baosteel.qcsh.model.homeclassify.ClassifyRank2;
+import com.baosteel.qcsh.model.store.StoreCollect;
+import com.common.view.banner.BannerData;
+import com.common.view.fastlink.FastLinkData;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+
+/**
+ * Json解析工具，处理简单的解析
+ * @author 刘远祺
+ *
+ */
+public class JSONParseUtils {
+	private static final String TAG = "JSONParseUtils";
+
+	/**
+	 * 解析一个key值(方便 解析状态值)
+	 * 
+	 * @param json
+	 * @param key
+	 * @return
+	 */
+	public static String getString(String json, String key){
+		try {
+			JSONObject obj = new JSONObject(json);
+			return obj.optString(key);
+		} catch (Exception e) {
+			e.printStackTrace();
+		};
+		
+		return "";
+	}
+	
+	/**
+	 * 解析一个key值(方便 解析状态值)
+	 * 
+	 * @param json
+	 * @param key
+	 * @return
+	 */
+	public static String getString(JSONObject jsonObj, String key){
+		try {
+			return jsonObj.optString(key);
+		} catch (Exception e) {
+			e.printStackTrace();
+		};
+		
+		return null;
+	}
+	
+	/**
+	 * 解析一个key值(方便 解析状态值)
+	 * 
+	 * @param json
+	 * @param key
+	 * @return
+	 */
+	public static int getInt(String json, String key){
+		try {
+			JSONObject obj = new JSONObject(json);
+			return obj.optInt(key);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		};
+		
+		return -1;
+	}
+	
+	/**
+	 * 
+	 * @Description 判断请求是否正确
+	 * @Author blue
+	 * @Time 2015-9-24
+	 */
+	public static boolean isResponseRight1(JSONObject response) {
+		
+		if (getString(response, "type").trim().equals("1")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * 
+	 * @Description 获取请求结果中的Msg信息
+	 * @Author blue
+	 * @Time 2015-9-24
+	 */
+	public static String getResponseMsg(JSONObject response) {
+		return getString(response, "msg");
+	}
+	
+	/**
+     * 判断是否为一次成功的请求
+     * @param context
+     * @param response
+     * @return
+     */
+    public static boolean isSuccessRequest(Context context, JSONObject response){
+    	
+    	if(null == response){
+    		Toast.makeText(context, "网络异常", Toast.LENGTH_LONG).show();
+    		return false;
+    	}
+    	
+    	//看返回的结果码 1代表成功
+    	if(response.optInt("type") != 1){
+    		String msg = response.optString("msg");
+    		Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+    		return false;
+    	}
+    	return true;
+    }
+	
+	
+	/*
+	 * 上面的是共用方法
+	 * ===========================================================
+	 */
+	
+	/**
+	 * 
+	 * @Description 获取Banner图数据
+	 * @Author blue
+	 * @Time 2015-9-24
+	 */
+	public static List<BannerData> getBannerDatas(JSONObject response) {
+		List<BannerData> datas = new ArrayList<BannerData>();
+		
+		try {
+			JSONArray array = response.getJSONArray("returnMap");
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject object = array.getJSONObject(i);
+				String linkType = object.optString("linkType");
+				String linkTypeId = object.optString("linkTypeId");
+				String imgUrl = object.optString("imgUrl");
+				String goods_sn = object.optString("goods_sn");
+				String goods_id = object.optString("goods_id");
+				BannerData data = new BannerData(linkTypeId, imgUrl, linkType);
+				data.setGoods_sn(goods_sn);
+				data.setGoods_id(goods_id);
+				datas.add(data);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		return datas;
+	}
+
+	/**
+	 * 获取快速数据(首页7个宝等等)
+	 * @param response
+	 * @return
+	 */
+	public static List<FastLinkData> getFastLinkDatas(JSONObject response) {
+		List<FastLinkData> datas = new ArrayList<FastLinkData>();
+
+		try {
+			JSONArray array = response.getJSONArray("returnMap");
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject object = array.getJSONObject(i);
+				int id = object.optInt("id");
+				String img_url = object.optString("img_url");
+				String name = object.optString("name");
+				if (!StringUtils.isEmpty(img_url)) {
+					FastLinkData data = new FastLinkData(id, name, img_url);
+					datas.add(data);
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return datas;
+	}
+	
+	/**
+	 * 
+	 * @Description 获取首页分类中的一级分类数据
+	 * @Author blue
+	 * @Time 2015-9-25
+	 */
+	public static List<ClassifyRank1> getClassifyDataRank1(JSONObject object) {
+		List<ClassifyRank1> categories = new ArrayList<ClassifyRank1>();
+		Gson gson = new Gson();
+		try {
+			JSONArray array = object.getJSONArray("returnMap");
+			for (int i = 0; i < array.length(); i++) {
+				object = array.getJSONObject(i);
+				ClassifyRank1 category = gson.fromJson(object.toString(), ClassifyRank1.class);
+				categories.add(category);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return categories;
+	}
+	
+	/**
+	 * 
+	 * @Description 获取首页分类中的二级和三级数据
+	 * @Author blue
+	 * @Time 2015-9-25
+	 */
+	public static List<ClassifyRank2> getClassifyDataRankOther(JSONObject object) {
+		List<ClassifyRank2> rank2s = new ArrayList<ClassifyRank2>();
+		Gson gson = new Gson();
+		try {
+			JSONArray array = object.getJSONArray("returnMap");
+			for (int i = 0; i < array.length(); i++) {
+				object = array.getJSONObject(i);
+				ClassifyRank2 rank2 = gson.fromJson(object.toString(), ClassifyRank2.class);
+				rank2s.add(rank2);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return rank2s;
+	}
+	
+	/**
+	 * 
+	 * @Description 获取商品列表-商品筛选页面的属性列表
+	 * @param addAllItem 是否添加“全部”选项
+	 * @Author blue
+	 * @Time 2015-9-25
+	 */
+	public static List<FilterGridItem> getFilterItem(JSONObject object, boolean addAllItem) {
+		List<FilterGridItem> items = new ArrayList<FilterGridItem>();
+		Gson gson = new Gson();
+		try {
+			
+			if (addAllItem) {
+				items.add(new FilterGridItem("全部"));
+			}
+			
+			JSONArray array = object.getJSONArray("returnMap");
+			for (int i = 0; i < array.length(); i++) {
+				object = array.getJSONObject(i);
+				FilterGridItem item = gson.fromJson(object.toString(), FilterGridItem.class);
+				items.add(item);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return items;
+	}
+	/**
+	 * 
+	 * @Description 获取商品列表-商品筛选页面的属性列表
+	 * @Author blue
+	 * @Time 2015-9-25
+	 */
+	public static List<TopProduct> getProductList(JSONObject object) {
+		List<TopProduct> items = new ArrayList<TopProduct>();
+		Gson gson = new Gson();
+		try {
+			object = object.getJSONObject("returnMap");
+			JSONArray array = object.getJSONArray("list");
+			for (int i = 0; i < array.length(); i++) {
+				object = array.getJSONObject(i);
+				TopProduct item = gson.fromJson(object.toString(), TopProduct.class);
+				items.add(item);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return items;
+	}
+	
+
+	/**
+	 * 获取品类推荐数据
+	 * @param response
+	 * @return
+	 */
+	public static List<Brand> getBrandDatas(JSONObject response) {
+		List<Brand> datas = new ArrayList<Brand>();
+
+		try {
+			JSONArray array = response.getJSONArray("returnMap");
+			for (int i = 0; i < array.length(); i++) {
+//				"categoryName": "hhx",
+//				"enable": 1,
+//				"flag": 0,
+//				"id": 7,
+//				"imgUrl": "http://d1-img.java.shovesoft.com/flie_upload/image/20150930/20150930101653_889.png",
+//				"level": 1,
+//				"sort": 0,
+//				"status": 1,
+//				"typeId": 96
+				
+				JSONObject object = array.getJSONObject(i);
+				String id = object.optString("typeId");
+				String level = object.optString("level");
+				String img_url = object.optString("imgUrl");
+				String categoryName = object.optString("categoryName");
+				
+				
+				Brand data = new Brand(id, level, categoryName, img_url);
+				datas.add(data);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return datas;
+	}
+	
+	
+	/**
+	 * 获取品类推荐数据
+	 * @param response
+	 * @return
+	 */
+	public static HotService getHotServiceData(JSONObject response) {
+
+		try {
+			JSONObject obj = response.optJSONObject("returnMap");
+			return new HotService(obj);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	/**
+	 * 解析首页-猜你喜欢
+	 * @param response
+	 * @return
+	 */
+	public static List<ProductMaybeLike> appGuessYouLike(JSONObject response) {
+		List<ProductMaybeLike> datas = new ArrayList<ProductMaybeLike>();
+
+		try {
+			response = response.optJSONObject("returnMap");
+			JSONArray array = response.getJSONArray("list");
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject object = array.getJSONObject(i);
+				ProductMaybeLike data = new ProductMaybeLike(object);
+				datas.add(data);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return datas;
+	}
+	
+	/**
+	 * 解析首页-猜你喜欢
+	 * @param response
+	 * @return
+	 */
+	public static List<CommonTicket> queryAppMemberTicketList(JSONObject response) {
+		List<CommonTicket> datas = new ArrayList<CommonTicket>();
+
+		try {
+			response = response.getJSONObject("returnMap");
+			JSONArray array = response.getJSONArray("MemberTicketList");
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject object = array.getJSONObject(i);
+				CommonTicket data = new CommonTicket(object);
+				datas.add(data);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return datas;
+	}
+	
+	
+	
+	/**
+	 * 解析订单列表数据
+	 * @param response
+	 * @return
+	 */
+	public static List<OrderItem> getOrderItems(JSONObject response) {
+		
+		List<OrderItem> datas = new ArrayList<OrderItem>();
+		Gson gson = new Gson();
+		
+		try {
+			JSONArray array = response.getJSONArray("returnMap");
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject object = array.getJSONObject(i);
+				OrderItem data = gson.fromJson(object.toString(), OrderItem.class);
+				datas.add(data);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return datas;
+	}
+	
+	/**
+	 * 解析用户信息
+	 * @param json
+	 * @return
+	 */
+	public static User parseUser(String json){
+		try {
+			JSONObject response = new JSONObject(json);
+			JSONObject obj = response.optJSONObject("returnMap");
+			
+			Gson gson = new Gson();
+			User user = gson.fromJson(obj.toString(), User.class);
+			return user;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	/**
+	 * 解析收藏商品列表
+	 * @param response
+	 * @return
+	 */
+	public static List<ProductCollect> getAppMemberGoodsCollectionList(JSONObject response) {
+		List<ProductCollect> datas = new ArrayList<ProductCollect>();
+
+		try {
+			JSONObject proList=response.getJSONObject("returnMap");
+			JSONArray array = proList.getJSONArray("MemberGoodsCollectionList");
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject object = array.getJSONObject(i);
+				ProductCollect data = new ProductCollect(object);
+				datas.add(data);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return datas;
+	}
+	
+	/**
+	 * 解析收藏商品列表
+	 * @param response
+	 * @return
+	 */
+	public static List<StoreCollect> queryAppSelectCollectList(JSONObject response) {
+		List<StoreCollect> datas = new ArrayList<StoreCollect>();
+
+		try {
+			JSONArray array = response.getJSONArray("returnMap");
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject object = array.getJSONObject(i);
+				StoreCollect data = new StoreCollect(object);
+				datas.add(data);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return datas;
+	}
+	
+	
+	/**
+	 * 解析收藏商品列表
+	 * @param response
+	 * @return
+	 */
+	public static List<ProductRecord> getAppSelectMyRecordList(JSONObject response) {
+		List<ProductRecord> datas = new ArrayList<ProductRecord>();
+
+		try {
+			response = response.optJSONObject("returnMap");
+			JSONArray array = response.getJSONArray("list");
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject object = array.getJSONObject(i);
+				ProductRecord data = new ProductRecord(object);
+				datas.add(data);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return datas;
+	}
+
+	/**
+	 * 解析发票
+	 * @param response
+	 * @return
+	 */
+	public static CommonTicket parseTicket(JSONObject response) {
+		try {
+			JSONObject obj = response.optJSONObject("returnMap");
+			CommonTicket ticket = new CommonTicket(obj);
+			return ticket;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	/**
+	 * 解析取消订单理由
+	 * @param response
+	 * @return
+	 */
+	public static List<CancelOrderReason> getCancelOrderReasons(JSONObject response) {
+		
+		List<CancelOrderReason> reasons = new ArrayList<CancelOrderReason>();
+		try {
+			Gson gson = new Gson();
+			JSONArray array = response.getJSONArray("returnMap");
+			for (int i = 0; i < array.length(); i++) {
+				CancelOrderReason reason = gson.fromJson(array.getJSONObject(i).toString(), CancelOrderReason.class);
+				reasons.add(reason);
+				Log.d("zhiheng", "reason name = "+reason.getName());
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return reasons;
+	}
+
+
+	/**
+	 * 将JSONArray转换成List
+	 * @param data
+	 * @param cls
+	 * @return
+	 */
+	public static <T> ArrayList<T> fromJsonArray(String data, Class<T> cls){
+		if(data==null||"".equals(data)){
+			return null;
+		}
+		ArrayList<T> list = new ArrayList<T>();
+		JSONArray arr = null;
+		try {
+			arr = new JSONArray(data);
+			for (int i = 0; i < arr.length(); i++) {
+				JSONObject obj = arr.getJSONObject(i);
+				list.add(fromJson(obj.toString(), cls));
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+
+	/**
+	 * 将给定的 {@code JSON} 字符串转换成指定的类型对象。<strong>此方法通常用来转换普通的 {@code JavaBean} 对象。</strong>
+	 *
+	 * @param <T> 要转换的目标类型。
+	 * @param json 给定的 {@code JSON} 字符串。
+	 * @param clazz 要转换的目标类。
+	 * @return 给定的 {@code JSON} 字符串表示的指定的类型对象。
+	 * @since 1.0
+	 */
+	public static <T> T fromJson(String json, Class<T> clazz) {
+		if (isBlank(json)) {
+			return null;
+		}
+		GsonBuilder builder = new GsonBuilder();
+		Gson gson = builder.create();
+		try {
+			return gson.fromJson(json, clazz);
+		} catch (Exception ex) {
+			Log.e(json + " 无法转换为 " + clazz.getName() + " 对象!", ex.getMessage());
+			return null;
+		}
+	}
+
+	private static boolean isBlank(String text) {
+		return null == text || "".equals(text.trim());
+	}
+
+	/**
+	 * 新增的地址
+	 * @param memberReceiveAddressJson
+	 * @return
+	 */
+	public static String getConsigneeInfo(MemberReceiveAddressJson memberReceiveAddressJson,String type ) {
+		JSONObject obj = new JSONObject();
+		if(null != memberReceiveAddressJson){
+
+			try {
+				obj.put("userId", memberReceiveAddressJson.getUserId());
+				obj.put("receiveUserRealName", memberReceiveAddressJson.getReceiveUserRealName());
+				obj.put("userTelephone", memberReceiveAddressJson.getUserTelephone());
+				obj.put("zipCode", memberReceiveAddressJson.getZipCode());
+				obj.put("provinceId", memberReceiveAddressJson.getProvinceId());
+				obj.put("cityId", memberReceiveAddressJson.getCityId());
+				obj.put("areaId", memberReceiveAddressJson.getAreaId());
+				obj.put("addressDetail", memberReceiveAddressJson.getAddressDetail());
+				obj.put("provinceName", memberReceiveAddressJson.getProvinceName());
+				obj.put("cityName", memberReceiveAddressJson.getCityName());
+				obj.put("areaName", memberReceiveAddressJson.getAreaName());
+				obj.put("isDefault", memberReceiveAddressJson.getIsDefault());
+				if(type.equals("update")){
+					obj.put("memberReceiveAddressId", memberReceiveAddressJson.getMemberReceiveAddressId());
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return obj.toString();
+	}
+
+	/**
+	 * 解析意见反馈类型列表
+	 * @param response
+	 * @return
+	 */
+	public static Map<String, String> queryAppFeedbackType(JSONObject response) {
+		Map<String, String> reasons = new HashMap<String, String>();
+		try {
+			JSONArray array = response.getJSONArray("returnMap");
+			JSONObject item = null;
+			String key,value;
+			for (int i = 0; i < array.length(); i++) {
+				item = array.optJSONObject(i);
+				key = item.optString("id");
+				value = item.optString("classify_name");
+				reasons.put(key, value);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return reasons;
+	}
+	
+	/**
+	 * 解析订单详情
+	 * @param response
+	 * @return
+	 */
+	public static OrderDetailData getOrderDetailData(JSONObject response) {
+		
+		OrderDetailData data = null;
+		try {
+			Gson gson = new Gson();
+			JSONObject object = response.getJSONObject("returnMap");
+			data = gson.fromJson(object.toString(), OrderDetailData.class);
+			
+			Log.d("zhiheng", "order name = "+data.getName()+", status = "+data.getStatus()+", price = "+data.getOrderAllPrice()+", good size = "+data.getGoodsInfoList().size());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return data;
+	}
+
+
+	/**
+	 * 提交订单的配送详细
+	 * @param orderInfo
+	 * @return
+	 */
+	public static String getOrderCommit(List<DeliverCommit> orderInfo) {
+		JSONArray array = new JSONArray();
+		if(null != orderInfo){
+			JSONObject obj = null;
+			for(int i=0; i<orderInfo.size(); i++){
+				obj = new JSONObject();
+				try {
+					obj.put("seller_id", orderInfo.get(i).getSeller_id());
+					obj.put("goods_ids", orderInfo.get(i).getGoods_ids());
+					obj.put("type", orderInfo.get(i).getType());
+					obj.put("siSnceSome_id", orderInfo.get(i).getSiSnceSome_id());
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				array.put(obj);
+			}
+		}
+		return array.toString();
+	}
+
+
+	/**
+	 * 获取模块下分类的数据
+	 * @param response
+	 * @return
+	 */
+	public static List<FastLinkData> getTypeFastLinkDatas(JSONObject response) {
+		List<FastLinkData> datas = new ArrayList<FastLinkData>();
+
+		try {
+			JSONArray array = response.getJSONArray("returnMap");
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject object = array.getJSONObject(i);
+				int id = object.optInt("id");
+				String img_url = object.optString("img_url");
+				String name = object.optString("name");
+				int flag = object.optInt("flag");
+				int goods_type_id = object.optInt("goods_type_id");
+				FastLinkData data = new FastLinkData(id, name, img_url,flag,goods_type_id);
+				datas.add(data);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return datas;
+	}
+
+
+}

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <FrameLayout
+            android:id="@+id/tab_content"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.0"
+            android:background="@color/white" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/dp_55"
+            android:layout_gravity="bottom"
+            android:background="#3b3b3b"
+            android:baselineAligned="false"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:id="@+id/tab_home_llayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="onClick"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:id="@+id/tab_home_imageview"
+                    android:layout_width="@dimen/dp_24"
+                    android:layout_height="@dimen/dp_24"
+                    android:background="@drawable/icon_home_in"
+                    android:contentDescription="@string/app_name" />
+
+                <TextView
+                    android:id="@+id/tab_home_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:text="@string/text_home"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_12" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tab_class_llayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="onClick"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:id="@+id/tab_class_imageview"
+                    android:layout_width="@dimen/dp_24"
+                    android:layout_height="@dimen/dp_24"
+                    android:background="@drawable/icon_class_on"
+                    android:contentDescription="@string/app_name" />
+
+                <TextView
+                    android:id="@+id/tab_aucscene_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:text="@string/text_class"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/sp_12" />
+            </LinearLayout>
+
+            
+            <RelativeLayout
+                android:id="@+id/tab_cart_llayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="onClick"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:id="@+id/tab_cart_imageview"
+                    android:layout_width="@dimen/dp_24"
+                    android:layout_height="@dimen/dp_24"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/icon_cart_on"
+                    android:contentDescription="@string/app_name" />
+
+                <TextView
+                    android:layout_below="@id/tab_cart_imageview"
+                    android:id="@+id/tab_setting_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:text="@string/text_cart"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/sp_12" />
+                
+                <TextView
+                    android:id="@+id/tab_cart_count_textview"
+                    android:layout_width="@dimen/dp_23"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dp_15"
+                    android:padding="@dimen/dp_1"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/white"
+                    android:singleLine="true"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:background="@drawable/shape_corner_5_red"
+                    android:textSize="@dimen/sp_10" />
+                
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/tab_my_llayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="onClick"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:id="@+id/tab_my_imageview"
+                    android:layout_width="@dimen/dp_24"
+                    android:layout_height="@dimen/dp_24"
+                    android:background="@drawable/icon_my_on"
+                    android:contentDescription="@string/app_name" />
+
+                <TextView
+                    android:id="@+id/tab_my_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:text="@string/text_my"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/sp_12" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

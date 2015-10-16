@@ -1,0 +1,155 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_160"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_healthy_people_hospital" >
+        </ImageView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="@dimen/dp_10"
+            android:text="上海人民医院"
+            android:textSize="@dimen/sp_15" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0.2"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:background="@color/gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="@dimen/dp_10" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/dp_5" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="地址："
+                    android:textColor="@color/black_light"
+                    android:textSize="@dimen/sp_14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="上海市宝山区梅普璐542号"
+                    android:textColor="@color/black_light"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/dp_5" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="电话："
+                    android:textColor="@color/black_light"
+                    android:textSize="@dimen/sp_14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="021-45667855（个人预约）"
+                    android:textColor="@color/black_light"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/dp_5" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="电话："
+                    android:textSize="@dimen/sp_14"
+                    android:textColor="@color/black_light"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="021-45667866（团体预约）"
+                    android:textColor="@color/black_light"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/dp_5" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="上班："
+                    android:textColor="@color/black_light"
+                    android:textSize="@dimen/sp_14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="周一至周六    8：00-18:00"
+                    android:textColor="@color/black_light"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0.2"
+            android:background="@color/gray" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0.2"
+            android:layout_marginTop="@dimen/dp_10"
+            android:background="@color/gray" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="@dimen/dp_10"
+            android:text="医院简介"
+            android:textSize="@dimen/sp_15" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="@dimen/dp_10"
+            android:text="上海市人民医院是国家三级甲等综合医院。始建于1984年，是一家集医疗、预防、保健、康复、科研、教学于一体的大型综合医院，是南方医科大学非直属医院，广东省高等医学院校教学医院，住院医师规范化培训基地，中山大学博士后流动站科研基地。医院占地面积6.3万平方米，建筑面积14.4万平方米，开设病床1050张，有固定资产7.6亿元。截止2012年底，全院有干部、职工1655人，其中博士后、博士、硕士研究生200多人，高级卫技人员365人。 2012年门急诊总诊疗病人250万人次，年出院病人3万多人次。医院现设职能科室26个，临床、医技科室51个，社康中心10个。"
+            android:textColor="@color/black_light"
+            android:textSize="@dimen/sp_14" />
+    </LinearLayout>
+
+</ScrollView>

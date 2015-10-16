@@ -1,0 +1,28 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_160"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_healthy_people_hospital" >
+        </ImageView>
+
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:padding="@dimen/dp_10"
+            android:text="1、每日体检时间为早上7:00 - 10:00\n2、体检前一天请勿饮酒\n3、体检日请勿携带贵重物品以免丢失"
+            android:textColor="@color/black_light"
+            android:textSize="@dimen/sp_14" />
+    </LinearLayout>
+
+</ScrollView>

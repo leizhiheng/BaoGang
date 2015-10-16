@@ -1,0 +1,407 @@
+package com.baosteel.qcsh.ui.fragment.cart;
+
+import java.util.List;
+
+import org.json.JSONObject;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.baosteel.qcsh.R;
+import com.baosteel.qcsh.api.RequestCallback;
+import com.baosteel.qcsh.api.RequestClient;
+import com.baosteel.qcsh.model.BaoGangData;
+import com.baosteel.qcsh.model.CarItem;
+import com.baosteel.qcsh.model.ShoppingCar;
+import com.baosteel.qcsh.ui.activity.MainActivity;
+import com.baosteel.qcsh.ui.activity.cart.ConfirmOrderActivity;
+import com.baosteel.qcsh.ui.activity.my.LoginActivity;
+import com.baosteel.qcsh.ui.adapter.ShoppingCarBusinessAdapter;
+import com.baosteel.qcsh.ui.adapter.ShoppingCarItemAdapter;
+import com.baosteel.qcsh.utils.JSONParseUtils;
+import com.baosteel.qcsh.utils.Preferences;
+import com.baosteel.qcsh.utils.Preferences.PreKey;
+import com.common.base.BaseFragment;
+import com.common.view.listview.MyListView;
+
+/**
+ * 购物车
+ *
+ * @author 江文思
+ * @todo TODO
+ * @date 2015-8-27
+ */
+public class CartFragment extends BaseFragment implements View.OnClickListener {
+    
+	/**购物车ListView**/
+	private MyListView mLv_shopping_car;
+    
+    /**底部全选checkbox**/
+    private ImageView mImg_check;
+    
+    /**提交订单**/
+    private Button mBtn_shopcar_commit;
+    
+    /**购物车适配器**/
+    private ShoppingCarBusinessAdapter adapter;
+    
+    /**总价**/
+    private TextView mTv_price;
+
+    /**登录提示**/
+    private LinearLayout mLin_islogin;
+
+    /**底部总价布局**/
+    private RelativeLayout rel_price;
+
+    private MainActivity mainActivity;
+
+    private CartFragmentLayout cartFragmentLayout;
+
+
+    private Button mBtn_login;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        fragmentView = inflater.inflate(R.layout.activity_shopping_car, null);
+        return fragmentView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        // 初始化数据
+        initViews();
+
+        // 加载购物车数据
+        loadData();
+    }
+
+
+
+
+
+    /**
+     * 初始化数据
+     */
+    private void initViews() {
+        mLv_shopping_car = (MyListView) findViewById(R.id.lv_shopping_car);
+        adapter = new ShoppingCarBusinessAdapter(mContext);
+        mLv_shopping_car.setAdapter(adapter);
+        
+        mBtn_shopcar_commit = (Button) findViewById(R.id.btn_shopcar_commit);
+        mBtn_login = (Button) findViewById(R.id.btn_login);
+        rel_price = (RelativeLayout) findViewById(R.id.rel_price);
+        mImg_check = (ImageView) findViewById(R.id.img_check);
+        mTv_price = (TextView) findViewById(R.id.tv_price);
+        mLin_islogin = (LinearLayout) findViewById(R.id.lin_islogin);
+    }
+
+    /**
+     * 加载数据
+     */
+    public void loadData() {
+        mBtn_shopcar_commit.setOnClickListener(this);
+        mImg_check.setOnClickListener(this);
+        mBtn_login.setOnClickListener(this);
+        loadCartData();
+        mainActivity = (MainActivity)getActivity();
+        cartFragmentLayout = (CartFragmentLayout)mainActivity.getFragment(2);
+    }
+
+
+    /**
+     * 加载购物车总价
+     * @return
+     */
+    private double loadShoppingCarPrice() {
+    	
+    	//获取购物车的所有商品
+    	double allPrice = adapter.loadShoppingCarPrice();
+        return allPrice;
+    }
+
+    /**
+     * 设置全选
+     */
+    private void setCheckALlImg(){
+    	//全选
+        if (isCheckAll()){
+        	mImg_check.setImageResource(R.drawable.test_check);
+        }else{
+        	mImg_check.setImageResource(R.drawable.test_no_check);
+        }
+    }
+
+    /**
+     * 判断购物车是否为全选
+     * @return
+     */
+    private boolean isCheckAll() {
+    	return adapter.isCheckAll();
+    }
+
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_shopcar_commit:
+
+                if(!userIsLogin()){
+                    showToast("请先进行登录");
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                }
+
+            	//非空判断
+            	if(adapter.getCount() == 0){
+            		return;
+            	}
+            	
+                String shoppingId = adapter.getCheckedPorductShoppingIds();
+                if(TextUtils.isEmpty(shoppingId)){
+                    showToast("请选择要提交订单的商品");
+                }else{
+                    Bundle bundle = new Bundle();
+                    bundle.putString("price",mTv_price.getText().toString());
+                    bundle.putString("shoppingId",shoppingId);
+                    startActivity(new Intent(getActivity(), ConfirmOrderActivity.class).putExtras(bundle));
+                }
+
+
+                break;
+            case R.id.img_check:
+            	
+            	//非空判断
+            	if(adapter.getCount() == 0){
+            		return;
+            	}
+            	
+                if (isCheckAll()) {
+                    
+                    //反选
+                	mImg_check.setImageResource(R.drawable.test_no_check);
+                    adapter.checkedAll(false);
+                   
+                } else {
+                    //全选
+                	mImg_check.setImageResource(R.drawable.test_check);
+                    adapter.checkedAll(true);
+                }
+                
+                mTv_price.setText(loadShoppingCarPrice() + "");
+                break;
+            case R.id.btn_login:
+                startActivity(new Intent(getActivity(),LoginActivity.class));
+                break;
+        }
+    }
+
+    boolean showDialog = true;
+    /**
+     * 加载购物车商品
+     */
+    private void loadCartData(){
+
+        String userId ="";
+        String shopping_id = "";
+        //用户id，购物车id
+        if(userIsLogin()){
+            userId = BaoGangData.getInstance().getUser().userId;
+        }else{
+            shopping_id = Preferences.getString(PreKey.SHOPPINGIDS);
+        }
+        RequestClient.queryAppShoppingCart(mContext, userId, shopping_id, new RequestCallback<JSONObject>(showDialog) {
+          
+        	@Override
+        	public void onFinish() {
+        		super.onFinish();
+        		showDialog = false;
+        	}
+        	
+        	@Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+                        Object returnMap =  response.optJSONObject("returnMap").get("shoppingCart");
+                        List<ShoppingCar> shoppingCarts = JSONParseUtils.fromJsonArray(returnMap.toString(), ShoppingCar.class);
+                        
+                        if (null != shoppingCarts && shoppingCarts.size() > 0) {
+                            setAdapterData(shoppingCarts);
+                            
+                            //设置全选图片
+                        	setCheckALlImg();
+                            
+                            //计算总价
+                            mTv_price.setText(loadShoppingCarPrice() + "");
+                            rel_price.setVisibility(View.VISIBLE);
+                            
+                        } else {
+                        	
+                        	//显示为空的fragment
+                            cartFragmentLayout.showEmptyFragment();
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    cartFragmentLayout.showEmptyFragment();
+                    rel_price.setVisibility(View.GONE);
+                    mImg_check.setImageResource(R.drawable.test_no_check);
+                    
+                    //购物车没有数据，则清空购物车数据
+                    setAdapterData(null);
+                }
+            }
+        });
+    }
+
+
+    /**
+     * 修改购物车商品购买数量
+     * @param sn_id			商品编号ID
+     * @param storeId		店铺id，用于后面数据刷新
+     * @param shopping_id   商品购物车id
+     * @param num			商品修改数量
+     */
+    private void updateAppShoppingCartNum(String sn_id, final String storeId, final String shopping_id, final int num) {
+    	
+    	String userId = BaoGangData.getInstance().getUserId();
+        RequestClient.updateAppShoppingCartNum(mContext, userId, sn_id, shopping_id, num, new RequestCallback<JSONObject>(false) {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                if (JSONParseUtils.isSuccessRequest(mContext, response)) {
+
+                	//修改成功，将数量同步到adapter里面
+                    adapter.updateProductCount(storeId, shopping_id, num);
+                    
+                    //计算总价
+                    mTv_price.setText(loadShoppingCarPrice() + "");
+                    
+                    //查询购物车总数量
+                    queryAppShoppingCartNum();
+                }
+            }
+        });
+    }
+    
+    /**
+     * 查询购物车总数量
+     * 在购物车本界面操作购物车数据，是不会刷新购物车数量的，需要手动调接口
+     */
+    private void queryAppShoppingCartNum(){
+    	mainActivity.queryAppShoppingCartNum();
+    }
+    
+    /**
+     * 设置购物车商品数据
+     * @param shoppingCarsList
+     */
+    private void setAdapterData(final List<ShoppingCar> shoppingCarsList){
+    	
+    	adapter.refreshData(shoppingCarsList, new ShoppingCarItemAdapter.ChangeNumOncliListener() {
+            @Override
+            public void addNum(CarItem product) {
+                Log.i("test", "按了加");
+                
+                int num = product.getNum();
+                int maxNum = product.getGoods_count();
+                if(num == maxNum){
+                	showToast("商品数量不能大于库存数量");
+                	return;
+                }
+                
+                //数量+1
+                num++;
+                
+                //修改数量
+                updateAppShoppingCartNum(product.getSn_id(), product.getSeller_id(), product.getId()+"", num);
+            }
+
+            @Override
+            public void cutNum(CarItem  product) {
+                Log.i("test", "按了減");
+                int num = product.getNum();
+                if(num <= 1){
+                	showToast("商品数量不能小于1");
+                	return;
+                }
+                
+                //数量-1
+                num--;
+                
+                //修改数量
+                updateAppShoppingCartNum(product.getSn_id(), product.getSeller_id(), product.getId()+"", num);
+            }
+
+        }, new ShoppingCarItemAdapter.CheckItemOncliListener() {
+            @Override
+            public void checkBusiness(int position) {
+            	
+            	//选择店铺
+            	adapter.checkBusiness(position);
+                
+            	//设置全选图片
+                setCheckALlImg();
+            	
+            	//计算总价
+                mTv_price.setText(loadShoppingCarPrice() + "");
+                
+                //查询购物车总数量
+                queryAppShoppingCartNum();
+            }
+
+            @Override
+            public void checkProduct(int businessPosition, int position) {
+            	
+                //选中当前商品
+                adapter.checkProduct(businessPosition, position);
+                
+                //设置全选图片
+                setCheckALlImg();
+                
+                //计算总价
+                mTv_price.setText(loadShoppingCarPrice() + "");
+            }
+        });
+    }
+
+    /**
+     * 获取购物车中要被删除的商品id
+     * @return
+     */
+	public String getCheckedPorductShoppingIds() {
+		String shoppingIds = adapter.getCheckedPorductShoppingIds();
+		return shoppingIds;
+	}
+
+	/**
+	 * 根据购物车id，清除商品
+	 * @param shopping_ids
+	 */
+	public void removeDeletedProduct(String shopping_ids) {
+		adapter.removeDeletedProduct();
+        cartFragmentLayout.showCartFragment();
+	}
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(userIsLogin()){
+            mLin_islogin.setVisibility(View.GONE);
+        }else{
+            mLin_islogin.setVisibility(View.VISIBLE);
+        }
+        loadCartData();
+    }
+}

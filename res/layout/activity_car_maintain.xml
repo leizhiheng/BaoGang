@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E5E2E4"
+    android:orientation="vertical">
+
+    <include
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_166"
+        layout="@layout/common_layout_carsafe_top"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_40"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <TextView
+            android:id="@+id/tv_zzby"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_weight="1"
+            android:background="@drawable/common_text_bg_with_greenline"
+            android:gravity="center"
+            android:text="自助保养"
+            android:textColor="@color/green_safetrip"
+            android:textSize="@dimen/commen_text_size_14" />
+
+        <TextView
+            android:id="@+id/tv_qcwx"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="汽车维修"
+            android:textColor="@color/black"
+            android:textSize="@dimen/commen_text_size_14" />
+
+        <TextView
+            android:id="@+id/tv_bytx"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="保养提醒"
+            android:textColor="@color/black"
+            android:textSize="@dimen/commen_text_size_14" />
+
+        <TextView
+            android:id="@+id/tv_byda"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="保养档案"
+            android:textColor="@color/black"
+            android:textSize="@dimen/commen_text_size_14" />
+
+    </LinearLayout>
+
+    <include
+        layout="@layout/common_line_gray"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <com.common.view.other.IndexViewPager
+        android:id="@+id/vp_fragments"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:overScrollMode="never"
+        android:persistentDrawingCache="animation" />
+
+</LinearLayout>

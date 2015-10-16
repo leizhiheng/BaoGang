@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
+
+    <RelativeLayout
+        android:id="@+id/rel_cash_background"
+        android:layout_width="@dimen/dp_120"
+        android:layout_height="@dimen/dp_65"
+        android:background="@drawable/cash_no_use"
+        android:layout_margin="@dimen/dp_5">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="现金卷"
+                android:textColor="@color/red"
+                android:textSize="@dimen/sp_14"/>
+            <TextView
+                android:id="@+id/tv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_16"
+                android:textColor="@color/red"
+                android:layout_gravity="center"
+                android:text="元"/>
+        </LinearLayout>
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_toRightOf="@+id/re"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/dp_5"
+        >
+        <TextView
+            android:id="@+id/tv_shop_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:textColor="@color/font_color"
+            android:textSize="@dimen/sp_14"
+            android:text="店铺现金卷 全场通用"/>
+        <TextView
+            android:id="@+id/tv_shop_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grayfont"
+            android:text="订满100.00元使用(不含邮费)"/>
+        <TextView
+            android:id="@+id/tv_user_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp_12"
+            android:textColor="@color/gr_l_color"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="2015.06.01-2015.06.07"/>
+    </LinearLayout>
+</LinearLayout>
+
